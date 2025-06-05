@@ -1,0 +1,23 @@
+### POST basic application registration
+POST {{base_url}}/applications/register
+Authorization: Basic {{basic_auth}}
+Content-Type: application/json
+
+{
+    "name": "Basic App",
+    "description": "This is my basic application",
+    "category": "basic"
+}
+
+### POST premium application registration
+POST {{base_url}}/applications/register
+Authorization: Basic {{basic_auth}}
+Content-Type: application/json
+
+{
+    "name": "Premium App",
+    "description": "This is my premium application",
+    "category": "premium"
+}
+
+###
