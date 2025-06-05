@@ -1,0 +1,15 @@
+### POST activity
+POST {{base_url}}/tracker
+X-API-Key: {{api_key}}
+Content-Type: application/json
+
+{
+  "username": "foo@bar.baz",
+  "activity": "running",
+  "duration": 950,
+  "calories": 320
+}
+
+### GET activities
+GET {{base_url}}/tracker
+X-API-Key: {{api_key}}
