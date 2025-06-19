@@ -38,7 +38,7 @@ public class ApplicationMapper {
         application.setDescription(request.description().trim());
         application.setApiKey(generateApiKey());
         application.setDeveloper(developer);
-        application.setCategory(request.category());
+        application.setCategory(Category.fromString(request.category()));
 
         return application;
     }

@@ -28,3 +28,4 @@ public enum Category {
         throw new IllegalArgumentException("No constant with text " + text + " found");
     }
 }
+
