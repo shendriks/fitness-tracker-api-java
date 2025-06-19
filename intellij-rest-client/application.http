@@ -4,9 +4,9 @@ Authorization: Basic {{basic_auth}}
 Content-Type: application/json
 
 {
-    "name": "Basic App",
+    "name": "Basic App33",
     "description": "This is my basic application",
-    "category": "basic"
+    "category": "basicx"
 }
 
 ### POST premium application registration

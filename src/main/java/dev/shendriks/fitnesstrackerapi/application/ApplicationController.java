@@ -23,11 +23,7 @@ public class ApplicationController {
             @AuthenticationPrincipal UserDetails details,
             @RequestBody @Valid ApplicationRegisterRequest request
     ) {
-        try {
-            var response = service.register(request, details);
-            return ResponseEntity.created(null).body(response);
-        } catch (ApplicationAlreadyExistsException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        var response = service.register(request, details);
+        return ResponseEntity.created(null).body(response);
     }
 }
