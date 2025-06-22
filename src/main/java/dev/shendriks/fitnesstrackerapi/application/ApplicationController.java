@@ -1,5 +1,17 @@
 package dev.shendriks.fitnesstrackerapi.application;
 
+import dev.shendriks.fitnesstrackerapi.error.ApiError;
+import dev.shendriks.fitnesstrackerapi.security.ApiKeyAuthenticationFilter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/applications")
+@SecurityRequirement(name = "Basic Auth")
+@SecurityScheme(
+    type = SecuritySchemeType.HTTP,
+    name = "Basic Auth",
+    scheme = "Basic"
+)
 public class ApplicationController {
     private final ApplicationService service;
 
@@ -18,12 +36,48 @@ public class ApplicationController {
         this.service = service;
     }
 
+    @Operation(summary = "Register an application")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Application registered",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApplicationRegisterResponse.class)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    })
     @PostMapping("/register")
     public ResponseEntity<ApplicationRegisterResponse> registerApplication(
-            @AuthenticationPrincipal UserDetails details,
-            @RequestBody @Valid ApplicationRegisterRequest request
+        @AuthenticationPrincipal UserDetails details,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "The application to register",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApplicationRegisterRequest.class),
+                examples = {
+                    @ExampleObject(
+                        value = """
+                            {
+                                "name": "My App",
+                                "description": "My shiny new application",
+                                "category": "basic"
+                            }
+                            """
+                    )
+                }
+            )
+        )
+        @RequestBody @Valid ApplicationRegisterRequest request
     ) {
-        var response = service.register(request, details);
-        return ResponseEntity.created(null).body(response);
+        ApplicationRegisterResponse response = service.register(request, details);
+        return ResponseEntity.ok(null);
     }
 }

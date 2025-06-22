@@ -1,8 +1,6 @@
-package dev.shendriks.fitnesstrackerapi;
+package dev.shendriks.fitnesstrackerapi.security;
 
 import dev.shendriks.fitnesstrackerapi.developer.DeveloperDetailsServiceImpl;
-import dev.shendriks.fitnesstrackerapi.security.ApiKeyAuthenticationFilter;
-import dev.shendriks.fitnesstrackerapi.security.ApiKeyAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -58,7 +56,7 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apiKeySecuredFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/api/tracker/**")
+            .securityMatcher("/api/activities/**")
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationProvider(apiKeyAuthenticationProvider)
             .addFilterAfter(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -97,10 +95,14 @@ public class SecurityConfig {
     public SecurityFilterChain unsecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
             "/api/developers/signup",
-            "/api/tracker",
+            "/api/activities",
             "/h2-console",
             "/actuator/shutdown",
-            "/error"
+            "/error",
+            "/api-docs",
+            "/api-docs/*",
+            "/swagger-ui",
+            "/swagger-ui/*",
         };
 
         http

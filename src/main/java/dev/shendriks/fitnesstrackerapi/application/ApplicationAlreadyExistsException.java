@@ -1,7 +1,10 @@
 package dev.shendriks.fitnesstrackerapi.application;
 
-public class ApplicationAlreadyExistsException extends RuntimeException {
-    public ApplicationAlreadyExistsException(String message) {
-        super(message);
+import dev.shendriks.fitnesstrackerapi.error.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class ApplicationAlreadyExistsException extends ApiException {
+    public ApplicationAlreadyExistsException() {
+        super(HttpStatus.BAD_REQUEST, "An application with this name already exists");
     }
 }

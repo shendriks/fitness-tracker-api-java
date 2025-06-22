@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -12,17 +14,22 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-    private static final String HEADER_API_KEY = "X-API-Key";
+    public static final String HEADER_API_KEY = "X-API-Key";
 
-    private final RequestMatcher matcher = PathPatternRequestMatcher.withDefaults().matcher("/api/tracker");
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+    
+    // todo fix this ("/api/activities")
+    private final RequestMatcher matcher = PathPatternRequestMatcher.withDefaults().matcher("/api/activities");
 
     private final AuthenticationEntryPoint authenticationEntryPoint = (request, response, ex) -> {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write(ex.getMessage());
+        resolver.resolveException(request, response, null, ex);
     };
 
     private final ApiKeyAuthenticationProvider provider;

@@ -9,6 +9,7 @@ public class Activity {
     @GeneratedValue
     private long id;
     @Column(nullable = false)
+    // note: user != developer!
     private String username;
     @Column(nullable = false)
     private String activity;

@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "name": "Basic App33",
     "description": "This is my basic application",
-    "category": "basicx"
+    "category": "basic"
 }
 
 ### POST premium application registration
