@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
-import dev.shendriks.fitnesstrackerapi.developer.DeveloperDetailsServiceImpl;
+import dev.shendriks.fitnesstrackerapi.developer.security.DeveloperDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
