@@ -58,22 +58,18 @@ public class ApplicationController {
             content = @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ApplicationRegisterRequest.class),
-                examples = {
-                    @ExampleObject(
-                        value = """
-                            {
-                                "name": "My App",
-                                "description": "My shiny new application",
-                                "category": "basic"
-                            }
-                            """
-                    )
-                }
+                examples = {@ExampleObject(value = """
+                    {
+                        "name": "My App",
+                        "description": "My shiny new application",
+                        "category": "basic"
+                    }
+                    """)}
             )
         )
         @RequestBody @Valid ApplicationRegisterRequest request
     ) {
         ApplicationRegisterResponse response = service.register(request, details);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(response);
     }
 }
