@@ -5,14 +5,12 @@ import dev.shendriks.fitnesstrackerapi.domain.application.dto.ApplicationRegiste
 import dev.shendriks.fitnesstrackerapi.domain.application.service.ApplicationService;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api/applications")
-@SecurityRequirement(name = "Basic Auth")
-@SecurityScheme(
-    type = SecuritySchemeType.HTTP,
-    name = "Basic Auth",
-    scheme = "Basic"
-)
 @Tag(name = "Application", description = "An application is an API client")
+@SecurityRequirement(name = "Basic Auth")
 public class ApplicationController {
     private final ApplicationService service;
 
