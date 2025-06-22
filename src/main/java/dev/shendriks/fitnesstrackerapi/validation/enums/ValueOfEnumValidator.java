@@ -3,9 +3,7 @@ package dev.shendriks.fitnesstrackerapi.validation.enums;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
-import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 
-import javax.xml.transform.Result;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

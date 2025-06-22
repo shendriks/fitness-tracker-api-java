@@ -16,11 +16,6 @@ public enum ActivityType {
         this.value = value;
     }
 
-    @JsonValue
-    public String getValue() {
-        return value;
-    }
-
     @JsonCreator
     public static ActivityType fromString(String text) {
         for (ActivityType type : ActivityType.values()) {
@@ -31,4 +26,8 @@ public enum ActivityType {
         throw new IllegalArgumentException("No constant with text " + text + " found");
     }
 
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
 }

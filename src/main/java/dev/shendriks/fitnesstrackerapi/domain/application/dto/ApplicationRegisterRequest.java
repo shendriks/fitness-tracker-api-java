@@ -2,9 +2,9 @@ package dev.shendriks.fitnesstrackerapi.domain.application.dto;
 
 import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
 import dev.shendriks.fitnesstrackerapi.validation.enums.ValueOfEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 public record ApplicationRegisterRequest(
     @NotBlank
@@ -12,7 +12,7 @@ public record ApplicationRegisterRequest(
     @NotNull
     String description,
     @NotBlank
-    @Pattern(regexp = "^(basic|premium)$")
+    @Schema(implementation = Category.class)
     @ValueOfEnum(enumClass = Category.class)
     String category
 ) {
