@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
-import dev.shendriks.fitnesstrackerapi.application.entity.Application;
-import dev.shendriks.fitnesstrackerapi.application.repository.ApplicationRepository;
+import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.application.repository.ApplicationRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

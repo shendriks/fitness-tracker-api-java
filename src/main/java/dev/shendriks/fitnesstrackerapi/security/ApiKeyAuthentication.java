@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
-import dev.shendriks.fitnesstrackerapi.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
