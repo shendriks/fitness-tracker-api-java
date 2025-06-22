@@ -8,10 +8,12 @@ import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimiterService;
 import dev.shendriks.fitnesstrackerapi.security.ApiKeyAuthenticationFilter;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,6 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +38,12 @@ import java.net.URI;
     name = "API Key",
     paramName = ApiKeyAuthenticationFilter.HEADER_API_KEY
 )
+@Tag(name = "Activity", description = "An activity is a record of a user's exercise, e.g. running or swimming")
+@OpenAPIDefinition(info = @Info(
+    title = "Fitness API",
+    version = "0.0.1",
+    description = "A simple API for tracking fitness activities"
+))
 public class ActivityController {
     private final ActivityService activityService;
     private final RateLimiterService rateLimiterService;
@@ -65,7 +74,7 @@ public class ActivityController {
         ),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Void> postActivity(
         @AuthenticationPrincipal Application application,
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -107,7 +116,7 @@ public class ActivityController {
         ),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Iterable<ActivityResponse>> getActivities(@AuthenticationPrincipal Application application) {
         if (!rateLimiterService.isRequestAllowed(application)) {
             throw new RateLimitExceededException();
