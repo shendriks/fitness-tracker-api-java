@@ -1,0 +1,10 @@
+package dev.shendriks.fitnesstrackerapi.developer;
+
+import dev.shendriks.fitnesstrackerapi.error.ApiException;
+import org.springframework.http.HttpStatus;
+
+public class DeveloperNotFoundException extends ApiException {
+    public DeveloperNotFoundException() {
+        super(HttpStatus.NOT_FOUND, "Developer not found");
+    }
+}

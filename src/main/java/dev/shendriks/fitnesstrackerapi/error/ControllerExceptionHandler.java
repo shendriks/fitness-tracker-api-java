@@ -1,11 +1,16 @@
 package dev.shendriks.fitnesstrackerapi.error;
 
 import dev.shendriks.fitnesstrackerapi.application.ApplicationAlreadyExistsException;
+import dev.shendriks.fitnesstrackerapi.developer.DeveloperNotFoundException;
+import dev.shendriks.fitnesstrackerapi.developer.EmailAlreadyRegisteredException;
+import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,11 +24,16 @@ import java.util.List;
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(ApplicationAlreadyExistsException.class)
-    public ResponseEntity<ApiError> handleFlightNotFound(ApplicationAlreadyExistsException e, WebRequest request) {
-
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiError> handle(ApiException e, WebRequest request) {
         ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiError, e.getStatus());
+    }
+    
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handle(AuthenticationException e, WebRequest request) {
+        ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
     
     @Override

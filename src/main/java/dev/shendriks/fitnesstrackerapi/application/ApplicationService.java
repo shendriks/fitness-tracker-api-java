@@ -19,7 +19,7 @@ public class ApplicationService {
 
     public ApplicationRegisterResponse register(ApplicationRegisterRequest request, UserDetails details) {
         if (applicationRepository.existsByName((request.name()))) {
-            throw new ApplicationAlreadyExistsException("An application with this name already exists");
+            throw new ApplicationAlreadyExistsException();
         }
 
         Developer developer = developerRepository.findByEmail(details.getUsername()).orElseThrow();
