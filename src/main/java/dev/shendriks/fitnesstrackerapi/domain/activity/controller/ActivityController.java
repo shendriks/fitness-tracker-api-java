@@ -25,7 +25,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/activities")
-@Tag(name = "Activity", description = "An activity is a record of a user's exercise, e.g. running or swimming")
+@Tag(name = "Activity", description = "An activityType is a record of a user's exercise, e.g. running or swimming")
 @SecurityRequirement(name = "API Key")
 public class ActivityController {
     private final ActivityService activityService;
@@ -36,7 +36,7 @@ public class ActivityController {
         this.rateLimiterService = rateLimiterService;
     }
 
-    @Operation(summary = "Create a new activity")
+    @Operation(summary = "Create a new activityType")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
@@ -45,7 +45,7 @@ public class ActivityController {
             headers = {
                 @Header(
                     name = "Location",
-                    description = "The URI of the created activity",
+                    description = "The URI of the created activityType",
                     schema = @Schema(type = "string")
                 )
             }
@@ -61,7 +61,7 @@ public class ActivityController {
     public ResponseEntity<Void> postActivity(
         @AuthenticationPrincipal Application application,
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "The activity to create",
+            description = "The activityType to create",
             required = true,
             content = @Content(
                 mediaType = "application/json",
@@ -69,7 +69,7 @@ public class ActivityController {
                 examples = @ExampleObject(value = """
                         {
                             "username": "user1",
-                            "activity": "running",
+                            "activityType": "running",
                             "duration": 60,
                             "calories": 450
                         }

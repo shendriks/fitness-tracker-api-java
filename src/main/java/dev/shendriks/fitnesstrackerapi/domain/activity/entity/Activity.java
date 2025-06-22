@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.entity;
 
+import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import jakarta.persistence.*;
 
@@ -12,7 +13,7 @@ public class Activity {
     // note: user != developer!
     private String username;
     @Column(nullable = false)
-    private String activity;
+    private ActivityType activityType;
     @Column(nullable = false)
     private int duration;
     @Column(nullable = false)
@@ -45,12 +46,12 @@ public class Activity {
         this.username = username;
     }
 
-    public String getActivity() {
-        return activity;
+    public ActivityType getActivityType() {
+        return activityType;
     }
 
-    public void setActivity(String activity) {
-        this.activity = activity;
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
     }
 
     public int getDuration() {
