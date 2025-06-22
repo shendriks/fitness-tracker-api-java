@@ -49,14 +49,14 @@ public class DeveloperController {
             }
         ),
         @ApiResponse(
-            responseCode = "400", 
-            description = "Invalid data", 
+            responseCode = "400",
+            description = "Invalid data",
             content = @Content(schema = @Schema(implementation = ApiError.class))
         )
     })
     @PostMapping("/signup")
     public ResponseEntity<Void> registerDeveloper(
-        @Valid 
+        @Valid
         @RequestBody
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "The developer account to create",
@@ -70,7 +70,7 @@ public class DeveloperController {
                             "password": "Sup3rS3cr3tPa$$w0rd!"
                         }
                     """))
-        )    
+        )
         DeveloperSignupRequest request
     ) {
         DeveloperResponse developer = service.findDeveloperByEmail(request.email());
@@ -80,7 +80,7 @@ public class DeveloperController {
 
         DeveloperResponse developerResponse = this.service.save(request);
         URI location = URI.create("/api/developers/" + developerResponse.id());
-        
+
         return ResponseEntity.created(location).build();
     }
 
@@ -101,13 +101,13 @@ public class DeveloperController {
     @GetMapping("/{id}")
     @SecurityRequirement(name = "Basic Auth")
     public ResponseEntity<DeveloperResponse> getDeveloper(
-        @AuthenticationPrincipal UserDetails details, 
+        @AuthenticationPrincipal UserDetails details,
         @PathVariable
         @Parameter(
             name = "id",
             description = "The developer id; must match the id of the authenticated developer",
             required = true
-        )    
+        )
         String id
     ) {
         DeveloperResponse developerResponse = this.service.findDeveloperById(id);

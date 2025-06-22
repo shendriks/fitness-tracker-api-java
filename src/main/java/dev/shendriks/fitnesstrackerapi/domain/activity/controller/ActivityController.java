@@ -43,13 +43,11 @@ public class ActivityController {
             responseCode = "201",
             description = "Activity created",
             content = @Content,
-            headers = {
-                @Header(
-                    name = "Location",
-                    description = "The URI of the created activityType",
-                    schema = @Schema(type = "string")
-                )
-            }
+            headers = {@Header(
+                name = "Location",
+                description = "The URI of the created activityType",
+                schema = @Schema(type = "string")
+            )}
         ),
         @ApiResponse(
             responseCode = "400",
