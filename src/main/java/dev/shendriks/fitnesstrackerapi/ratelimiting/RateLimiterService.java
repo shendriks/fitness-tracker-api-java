@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.ratelimiting;
 
-import dev.shendriks.fitnesstrackerapi.application.Application;
-import dev.shendriks.fitnesstrackerapi.application.Category;
+import dev.shendriks.fitnesstrackerapi.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.application.enums.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
