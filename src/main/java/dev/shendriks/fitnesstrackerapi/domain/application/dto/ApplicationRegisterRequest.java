@@ -7,12 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record ApplicationRegisterRequest(
-    @NotNull
     @NotBlank
     String name,
     @NotNull
     String description,
-    @NotNull
+    @NotBlank
     @Pattern(regexp = "^(basic|premium)$")
     @ValueOfEnum(enumClass = Category.class)
     String category

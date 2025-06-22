@@ -4,5 +4,9 @@ import dev.shendriks.fitnesstrackerapi.domain.application.dto.ApplicationRespons
 
 import java.util.List;
 
-public record DeveloperResponse(Long id, String email, List<ApplicationResponse> applications) {
+public record DeveloperResponse(
+    Long id, 
+    String email, 
+    List<ApplicationResponse> applications
+) {
 }

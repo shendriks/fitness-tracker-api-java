@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.mapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class ActivityMapper {
         return new ActivityResponse(
             activity.getId(),
             activity.getUsername(),
-            activity.getActivity(),
+            activity.getActivityType(),
             activity.getDuration(),
             activity.getCalories(),
             activity.getApplication().getName()
@@ -34,7 +35,7 @@ public class ActivityMapper {
     public Activity toEntity(ActivityRequest request, Application application) {
         Activity activity = new Activity();
         activity.setUsername(request.username().trim());
-        activity.setActivity(request.activity().trim());
+        activity.setActivityType(ActivityType.fromString(request.activityType().trim()));
         activity.setDuration(request.duration());
         activity.setCalories(request.calories());
         activity.setApplication(application);
