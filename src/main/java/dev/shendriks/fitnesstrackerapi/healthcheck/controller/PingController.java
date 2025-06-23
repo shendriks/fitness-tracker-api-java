@@ -16,6 +16,6 @@ public class PingController {
     @ApiResponse(responseCode = "200", description = "pong")
     @GetMapping
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("{\"message\": \"pong\"}");
+        return ResponseEntity.ok("{\"message\": \"Pong!\"}");
     }
 }
