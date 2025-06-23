@@ -4,8 +4,14 @@ import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
 import dev.shendriks.fitnesstrackerapi.domain.developer.entity.Developer;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Application {
     @Id
     @GeneratedValue
@@ -25,60 +31,4 @@ public class Application {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
-    public Developer getDeveloper() {
-        return developer;
-    }
-
-    public void setDeveloper(Developer developer) {
-        this.developer = developer;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getUlid() {
-        return ulid;
-    }
-
-    public void setUlid(String ulid) {
-        this.ulid = ulid;
-    }
 }
