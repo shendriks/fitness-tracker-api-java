@@ -21,6 +21,7 @@ public class ApplicationMapper {
 
     public ApplicationRegisterResponse toRegisterResponse(Application application) {
         return new ApplicationRegisterResponse(
+            application.getUlid(),
             application.getName(), 
             application.getApiKey(),
             application.getCategory()
@@ -29,7 +30,7 @@ public class ApplicationMapper {
 
     public ApplicationResponse toResponse(Application application) {
         return new ApplicationResponse(
-                application.getId(),
+                application.getUlid(),
                 application.getName(),
                 application.getDescription(),
                 application.getCategory(),

@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.application.entity;
 
 import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
 import dev.shendriks.fitnesstrackerapi.domain.developer.entity.Developer;
+import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +10,9 @@ public class Application {
     @Id
     @GeneratedValue
     private Long id;
+    @Ulid
+    @Column(nullable = false, unique = true, length = 26)
+    private String ulid;
     @Column(nullable = false, unique = true)
     private String name;
     @Column(nullable = false)
@@ -68,5 +72,13 @@ public class Application {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getUlid() {
+        return ulid;
+    }
+
+    public void setUlid(String ulid) {
+        this.ulid = ulid;
     }
 }

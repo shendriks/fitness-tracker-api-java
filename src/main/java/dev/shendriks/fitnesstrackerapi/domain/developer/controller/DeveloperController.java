@@ -18,11 +18,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+
+import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BASIC_AUTH;
 
 @RestController
 @RequestMapping("/api/developers")
@@ -40,13 +43,11 @@ public class DeveloperController {
             responseCode = "201",
             description = "Developer account created",
             content = @Content,
-            headers = {
-                @Header(
-                    name = "Location",
-                    description = "The URI of the developer account",
-                    schema = @Schema(type = "string")
-                )
-            }
+            headers = {@Header(
+                name = "Location",
+                description = "The URI of the developer account",
+                schema = @Schema(type = "string")
+            )}
         ),
         @ApiResponse(
             responseCode = "400",
@@ -99,9 +100,9 @@ public class DeveloperController {
         @ApiResponse(responseCode = "404", description = "The developer account was not found", content = @Content)
     })
     @GetMapping("/{id}")
-    @SecurityRequirement(name = "Basic Auth")
+    @SecurityRequirement(name = BASIC_AUTH)
     public ResponseEntity<DeveloperResponse> getDeveloper(
-        @AuthenticationPrincipal UserDetails details,
+        @AuthenticationPrincipal UserDetails userDetails,
         @PathVariable
         @Parameter(
             name = "id",
@@ -115,8 +116,8 @@ public class DeveloperController {
             throw new DeveloperNotFoundException();
         }
 
-        if (details == null || !details.getUsername().equals(developerResponse.email())) {
-            return ResponseEntity.status(403).build();
+        if (userDetails == null || !userDetails.getUsername().equals(developerResponse.email())) {
+            throw new AccessDeniedException("Not authorized to access the developer account");
         }
 
         return ResponseEntity.ok().body(developerResponse);

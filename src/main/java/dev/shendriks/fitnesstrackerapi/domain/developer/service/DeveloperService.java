@@ -25,7 +25,7 @@ public class DeveloperService {
     }
 
     public DeveloperResponse findDeveloperById(String id) {
-        var developer = repository.findById(Long.parseLong(id)).orElse(null);
+        var developer = repository.findByUlid(id).orElse(null);
         if (developer == null) {
             return null;
         }

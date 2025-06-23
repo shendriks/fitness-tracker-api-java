@@ -24,10 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.API_KEY;
+
 @RestController
 @RequestMapping("/api/activities")
 @Tag(name = "Activity", description = "An activityType is a record of a user's exercise, e.g. running or swimming")
-@SecurityRequirement(name = "API Key")
+@SecurityRequirement(name = API_KEY)
 public class ActivityController {
     private final ActivityService activityService;
     private final RateLimiterService rateLimiterService;
@@ -80,7 +82,7 @@ public class ActivityController {
         }
 
         ActivityResponse activityResponse = activityService.save(request, application);
-        URI location = URI.create("/api/activities" + activityResponse.id());
+        URI location = URI.create("/api/activities/" + activityResponse.id());
 
         return ResponseEntity.created(location).build();
     }
