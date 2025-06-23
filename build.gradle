@@ -52,9 +52,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-    test {
-        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
-    }
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
 
 tasks.register('integrationTest', Test) {
@@ -62,4 +60,6 @@ tasks.register('integrationTest', Test) {
     group = "verification"
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
+    jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
