@@ -27,7 +27,11 @@ public class DeveloperMapper {
     public DeveloperResponse toResponse(Developer developer) {
         var applications = applicationRepository.findByDeveloperOrderByIdDesc(developer);
         var applicationResponses = applicationMapper.toResponses(applications);
-        return new DeveloperResponse(developer.getId(), developer.getEmail(), applicationResponses);
+        return new DeveloperResponse(
+            developer.getUlid(), 
+            developer.getEmail(), 
+            applicationResponses
+        );
     }
 
     public Developer toEntity(DeveloperSignupRequest request) {

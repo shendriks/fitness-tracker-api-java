@@ -1,5 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.mapper;
 
+import com.github.f4b6a3.ulid.Ulid;
+import com.github.f4b6a3.ulid.UlidCreator;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
@@ -23,7 +25,7 @@ public class ActivityMapper {
 
     public ActivityResponse toResponse(Activity activity) {
         return new ActivityResponse(
-            activity.getId(),
+            activity.getUlid(),
             activity.getUsername(),
             activity.getActivityType(),
             activity.getDuration(),

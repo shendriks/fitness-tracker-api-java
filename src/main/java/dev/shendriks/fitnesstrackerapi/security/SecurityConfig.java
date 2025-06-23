@@ -71,7 +71,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
-            "/api/developers/{id:[0-9]+}",
+            "/api/developers/{id:[a-zA-Z0-9]+}",
             "/api/applications/register"
         };
         http
@@ -80,7 +80,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager())
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                .requestMatchers(HttpMethod.GET, "/api/developers/{id:[0-9]+}").hasRole("DEVELOPER")
+                .requestMatchers(HttpMethod.GET, "/api/developers/{id:[a-zA-Z0-9]+}").hasRole("DEVELOPER")
                 .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("DEVELOPER")
                 .anyRequest().denyAll()
             )

@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BASIC_AUTH;
+
+
 @Controller
 @RequestMapping("/api/applications")
 @Tag(name = "Application", description = "An application is an API client")
-@SecurityRequirement(name = "Basic Auth")
+@SecurityRequirement(name = BASIC_AUTH)
 public class ApplicationController {
     private final ApplicationService service;
 
