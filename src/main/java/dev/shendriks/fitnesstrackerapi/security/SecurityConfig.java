@@ -69,28 +69,6 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
-        String[] approvalsPaths = {
-            "/api/developers/{id:[a-zA-Z0-9]+}",
-            "/api/applications/register"
-        };
-        http
-            .securityMatcher(approvalsPaths)
-            .httpBasic(Customizer.withDefaults())
-            .csrf(AbstractHttpConfigurer::disable)
-            .authenticationManager(authenticationManager())
-            .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                .requestMatchers(HttpMethod.GET, "/api/developers/{id:[a-zA-Z0-9]+}").hasRole("DEVELOPER")
-                .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("DEVELOPER")
-                .anyRequest().denyAll()
-            )
-            .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        return http.build();
-    }
-
-    @Bean
-    @Order(3)
     public SecurityFilterChain unsecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
             "/api/developers/signup",
@@ -116,6 +94,28 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    @Order(3)
+    public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
+        String[] approvalsPaths = {
+            "/api/developers/{id:[a-zA-Z0-9]+}",
+            "/api/applications/register"
+        };
+        http
+            .securityMatcher(approvalsPaths)
+            .httpBasic(Customizer.withDefaults())
+            .csrf(AbstractHttpConfigurer::disable)
+            .authenticationManager(authenticationManager())
+            .authorizeHttpRequests(matcherRegistry -> matcherRegistry
+                .requestMatchers(HttpMethod.GET, "/api/developers/{id:[a-zA-Z0-9]+}").hasRole("DEVELOPER")
+                .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("DEVELOPER")
+                .anyRequest().denyAll()
+            )
+            .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        return http.build();
+    }
+    
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
         http
