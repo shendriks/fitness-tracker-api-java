@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.net.URI;
 
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.API_KEY;
 
+@Log
 @RestController
 @RequestMapping("/api/activities")
 @Tag(name = "Activity", description = "An activityType is a record of a user's exercise, e.g. running or swimming")
@@ -78,6 +80,7 @@ public class ActivityController {
         @RequestBody @Valid ActivityRequest request
     ) {
         if (!rateLimiterService.isRequestAllowed(application)) {
+            log.info("Rate limit exceeded for application " + application.getId() + " (" + application.getName() + ")");
             throw new RateLimitExceededException();
         }
 
@@ -103,6 +106,7 @@ public class ActivityController {
     @GetMapping
     public ResponseEntity<Iterable<ActivityResponse>> getActivities(@AuthenticationPrincipal Application application) {
         if (!rateLimiterService.isRequestAllowed(application)) {
+            log.info("Rate limit exceeded for application " + application.getId() + " (" + application.getName() + ")");
             throw new RateLimitExceededException();
         }
 

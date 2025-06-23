@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Getter 
@@ -31,4 +35,10 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
+    @CreationTimestamp
+    @Column(nullable = false)
+    private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 }

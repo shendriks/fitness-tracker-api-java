@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,12 @@ public class Developer {
     private String authority;
     @OneToMany(mappedBy = "developer")
     private List<Application> applications = new ArrayList<>();
+    @CreationTimestamp
+    @Column(nullable = false)
+    private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 
     public void addApplication(Application application) {
         this.applications.add(application);
