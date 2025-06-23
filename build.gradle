@@ -14,12 +14,23 @@ java {
     }
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
 configurations {
     mockitoAgent
+    integrationTestImplementation.extendsFrom(testImplementation)
+    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
 dependencies {
@@ -44,4 +55,11 @@ tasks.named('test') {
     test {
         jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
     }
+}
+
+tasks.register('integrationTest', Test) {
+    description = "Run integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
