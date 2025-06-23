@@ -71,6 +71,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain unsecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
+            "/api/ping",
             "/api/developers/signup",
             "/api/activities",
             "/h2-console",
