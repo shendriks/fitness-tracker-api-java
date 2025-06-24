@@ -63,3 +63,7 @@ tasks.register('integrationTest', Test) {
     useJUnitPlatform()
     jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
+
+tasks.named('check') {
+    dependsOn tasks.named('integrationTest')
+}

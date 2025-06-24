@@ -21,6 +21,6 @@ class HttpRequestTest {
     @Test
     void pingShouldReturnPongMessage() {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/api/ping", String.class))
-            .contains("{\"message\": \"Pong!\"}");
+            .contains("{\"message\": \"Pong!X\"}");
     }
 }
