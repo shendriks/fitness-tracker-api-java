@@ -17,7 +17,11 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper mapper;
 
-    public ApplicationService(DeveloperRepository developerRepository, ApplicationRepository applicationRepository, ApplicationMapper mapper) {
+    public ApplicationService(
+        DeveloperRepository developerRepository, 
+        ApplicationRepository applicationRepository, 
+        ApplicationMapper mapper
+    ) {
         this.developerRepository = developerRepository;
         this.applicationRepository = applicationRepository;
         this.mapper = mapper;
