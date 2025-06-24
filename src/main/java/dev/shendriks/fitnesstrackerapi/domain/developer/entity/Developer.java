@@ -3,9 +3,7 @@ package dev.shendriks.fitnesstrackerapi.domain.developer.entity;
 import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Developer {
     @Id
     @GeneratedValue
@@ -31,6 +31,7 @@ public class Developer {
     @Column(nullable = false)
     private String authority;
     @OneToMany(mappedBy = "developer")
+    @Builder.Default
     private List<Application> applications = new ArrayList<>();
     @CreationTimestamp
     @Column(nullable = false)

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -17,8 +18,7 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,6 +32,7 @@ public class DeveloperControllerTest {
     private DeveloperRepository developerRepository;
 
     @Test
+    @Transactional
     public void registerDeveloper_registersDeveloper() throws Exception {
         mvc
             .perform(post("/api/developers/signup")
@@ -57,6 +58,39 @@ public class DeveloperControllerTest {
                 Optional<Developer> developer = developerRepository.findByUlid(ulid);
                 assertTrue(developer.isPresent(), "Expected developer to be present in database for ULID " + ulid);
             })
+        ;
+    }
+
+    @Test
+    @Transactional
+    public void registerDeveloperReturnsErrorIfEmailIsAlreadyRegistered() throws Exception {
+        Developer developer = Developer
+            .builder()
+            .email("email@example.com")
+            .password("<PASSWORD>")
+            .authority("ROLE_DEVELOPER")
+            .build();
+        developerRepository.save(developer);
+
+        mvc
+            .perform(post("/api/developers/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content("""
+                    {
+                        "email": "email@example.com",
+                        "password": "sup3rS3cr37Pa$$w0rd"
+                    }
+                    """))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().json("""
+                {
+                    "message": "Email already registered",
+                    "errors": [
+                        "Email already registered"
+                    ]
+                }
+                """))
         ;
     }
 }
