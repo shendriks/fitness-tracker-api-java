@@ -18,7 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class Activity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
@@ -27,6 +27,7 @@ public class Activity {
     // note: user != developer!
     private String username;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ActivityType activityType;
     @Column(nullable = false)
     private int duration;

@@ -19,7 +19,7 @@ import java.util.List;
 @Builder
 public class Developer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Ulid
     @Column(nullable = false, unique = true, length = 26)

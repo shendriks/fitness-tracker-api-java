@@ -18,7 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class Application {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
