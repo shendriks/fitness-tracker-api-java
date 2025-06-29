@@ -3,7 +3,7 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimiterService;
@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
-import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.API_KEY;
+import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BEARER_TOKEN;
 
 @Log
 @RestController
 @RequestMapping("/api/activities")
-@Tag(name = "Activity", description = "An activityType is a record of a user's exercise, e.g. running or swimming")
-@SecurityRequirement(name = API_KEY)
+@Tag(name = "Activity", description = "An activity is a record of a user's exercise, e.g. running, walking or swimming")
+@SecurityRequirement(name = BEARER_TOKEN)
 public class ActivityController {
     private final ActivityService activityService;
     private final RateLimiterService rateLimiterService;
@@ -41,7 +41,7 @@ public class ActivityController {
         this.rateLimiterService = rateLimiterService;
     }
 
-    @Operation(summary = "Create a new activityType")
+    @Operation(summary = "Create a new activity")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
@@ -49,7 +49,7 @@ public class ActivityController {
             content = @Content,
             headers = {@Header(
                 name = "Location",
-                description = "The URI of the created activityType",
+                description = "The URI of the created activity",
                 schema = @Schema(type = "string")
             )}
         ),
@@ -62,16 +62,15 @@ public class ActivityController {
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @PostMapping
     public ResponseEntity<Void> postActivity(
-        @AuthenticationPrincipal Application application,
+        @AuthenticationPrincipal User user,
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "The activityType to create",
+            description = "The activity to create",
             required = true,
             content = @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = ActivityRequest.class),
                 examples = @ExampleObject(value = """
                         {
-                            "username": "user1",
                             "activityType": "running",
                             "duration": 60,
                             "calories": 450
@@ -79,12 +78,12 @@ public class ActivityController {
                     """)))
         @RequestBody @Valid ActivityRequest request
     ) {
-        if (!rateLimiterService.isRequestAllowed(application)) {
-            log.info("Rate limit exceeded for application " + application.getId() + " (" + application.getName() + ")");
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
             throw new RateLimitExceededException();
         }
 
-        ActivityResponse activityResponse = activityService.save(request, application);
+        ActivityResponse activityResponse = activityService.save(request, user);
         URI location = URI.create("/api/activities/" + activityResponse.id());
 
         return ResponseEntity.created(location).build();
@@ -104,13 +103,13 @@ public class ActivityController {
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @GetMapping
-    public ResponseEntity<Iterable<ActivityResponse>> getActivities(@AuthenticationPrincipal Application application) {
-        if (!rateLimiterService.isRequestAllowed(application)) {
-            log.info("Rate limit exceeded for application " + application.getId() + " (" + application.getName() + ")");
+    public ResponseEntity<Iterable<ActivityResponse>> getActivities(@AuthenticationPrincipal User user) {
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
             throw new RateLimitExceededException();
         }
 
-        Iterable<ActivityResponse> activities = activityService.getAllActivities();
+        Iterable<ActivityResponse> activities = activityService.getAllActivitiesByUser(user);
 
         return ResponseEntity.ok(activities);
     }

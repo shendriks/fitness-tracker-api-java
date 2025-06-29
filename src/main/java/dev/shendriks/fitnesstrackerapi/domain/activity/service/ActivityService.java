@@ -5,8 +5,7 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
-import org.springframework.data.domain.Sort;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,14 +18,14 @@ public class ActivityService {
         this.mapper = mapper;
     }
 
-    public ActivityResponse save(ActivityRequest request, Application application) {
-        Activity activity = mapper.toEntity(request, application);
+    public ActivityResponse save(ActivityRequest request, User user) {
+        Activity activity = mapper.toEntity(request, user);
         repository.save(activity);
         return mapper.toResponse(activity);
     }
 
-    public Iterable<ActivityResponse> getAllActivities() {
-        Iterable<Activity> activities = repository.findAll(Sort.by("id").descending());
+    public Iterable<ActivityResponse> getAllActivitiesByUser(User user) {
+        Iterable<Activity> activities = repository.findAllByUser(user);
 
         return mapper.toResponses(activities);
     }

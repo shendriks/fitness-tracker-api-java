@@ -1,7 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.entity;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+//import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,9 +24,9 @@ public class Activity {
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
     private String ulid;
-    @Column(nullable = false)
-    // note: user != developer!
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityType activityType;
@@ -33,9 +34,6 @@ public class Activity {
     private int duration;
     @Column(nullable = false)
     private int calories;
-    @ManyToOne
-    @JoinColumn(name = "application_id", nullable = false)
-    private Application application;
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;

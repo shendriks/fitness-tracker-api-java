@@ -11,7 +11,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -25,24 +24,24 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
         return new ResponseEntity<>(apiError, e.getStatus());
     }
-    
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiError> handle(AuthenticationException e, WebRequest request) {
         ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
-    
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
-        HttpMessageNotReadableException exception, 
-        HttpHeaders headers, 
-        HttpStatusCode status, 
+        HttpMessageNotReadableException exception,
+        HttpHeaders headers,
+        HttpStatusCode status,
         WebRequest request
     ) {
         ApiError apiError = new ApiError("Invalid data", exception.getCause().getMessage());
         return new ResponseEntity<>(apiError, status);
     }
-    
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException exception,

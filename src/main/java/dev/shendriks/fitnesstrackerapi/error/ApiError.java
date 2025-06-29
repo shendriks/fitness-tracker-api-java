@@ -1,8 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.error;
 
+import lombok.Getter;
+
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public class ApiError {
     private final String message;
     private final List<String> errors;
@@ -15,13 +18,5 @@ public class ApiError {
     public ApiError(String message, String error) {
         this.message = message;
         errors = Collections.singletonList(error);
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public List<String> getErrors() {
-        return errors;
     }
 }

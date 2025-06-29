@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
-import dev.shendriks.fitnesstrackerapi.domain.developer.security.DeveloperDetailsServiceImpl;
+import dev.shendriks.fitnesstrackerapi.domain.user.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -23,25 +23,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final ApiKeyAuthenticationProvider apiKeyAuthenticationProvider;
-    private final DeveloperDetailsServiceImpl developerDetailsService;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final UserDetailsServiceImpl userDetailsService;
 
     public SecurityConfig(
-        ApiKeyAuthenticationProvider apiKeyAuthenticationProvider,
-        DeveloperDetailsServiceImpl developerDetailsService
+        JwtAuthenticationProvider jwtAuthenticationProvider,
+        UserDetailsServiceImpl userDetailsService
     ) {
-        this.apiKeyAuthenticationProvider = apiKeyAuthenticationProvider;
-        this.developerDetailsService = developerDetailsService;
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+        this.userDetailsService = userDetailsService;
     }
 
     @Bean
-    public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
-        return new ApiKeyAuthenticationFilter(apiKeyAuthenticationProvider);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtAuthenticationProvider);
     }
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(developerDetailsService);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
@@ -57,8 +57,8 @@ public class SecurityConfig {
         http
             .securityMatcher("/api/activities/**")
             .csrf(AbstractHttpConfigurer::disable)
-            .authenticationProvider(apiKeyAuthenticationProvider)
-            .addFilterAfter(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+            .authenticationProvider(jwtAuthenticationProvider)
+            .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
                 .anyRequest().authenticated()
             )
@@ -72,7 +72,7 @@ public class SecurityConfig {
     public SecurityFilterChain unsecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
             "/api/ping",
-            "/api/developers/signup",
+            "/api/users/signup",
             "/api/activities",
             "/h2-console",
             "/actuator/shutdown",
@@ -99,7 +99,8 @@ public class SecurityConfig {
     @Order(3)
     public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
-            "/api/developers/{id:[a-zA-Z0-9]+}",
+            "/api/users/{id:[a-zA-Z0-9]+}",
+            "/api/access-token",
             "/api/applications/register"
         };
         http
@@ -108,15 +109,16 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager())
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                .requestMatchers(HttpMethod.GET, "/api/developers/{id:[a-zA-Z0-9]+}").hasRole("DEVELOPER")
-                .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("DEVELOPER")
+                .requestMatchers(HttpMethod.GET, "/api/users/{id:[a-zA-Z0-9]+}").hasRole("USER")
+                .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/access-token").hasRole("USER")
                 .anyRequest().denyAll()
             )
             .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
-    
+
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
         http

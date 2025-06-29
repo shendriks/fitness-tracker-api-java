@@ -12,5 +12,3 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
-  #      dialect: org.hibernate.dialect.H2Dialect
-  
