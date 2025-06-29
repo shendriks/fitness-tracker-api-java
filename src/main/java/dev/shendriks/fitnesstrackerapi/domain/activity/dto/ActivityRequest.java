@@ -8,8 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ActivityRequest(
     @NotBlank
-    String username,
-    @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)
     @Schema(implementation = ActivityType.class)
     String activityType,

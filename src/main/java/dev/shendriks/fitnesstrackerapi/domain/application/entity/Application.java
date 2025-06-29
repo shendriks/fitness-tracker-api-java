@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.application.entity;
 
-import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
-import dev.shendriks.fitnesstrackerapi.domain.developer.entity.Developer;
+import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
+//import dev.shendriks.fitnesstrackerapi.domain.developer.entity.Developer;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,12 +29,12 @@ public class Application {
     private String description;
     @Column(nullable = false, unique = true)
     private String apiKey;
-    @ManyToOne
-    @JoinColumn(name = "developer_id", nullable = false)
-    private Developer developer;
+//    @ManyToOne
+//    @JoinColumn(name = "developer_id", nullable = false)
+//    private Developer developer;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private AccountType accountType;
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;

@@ -1,19 +1,20 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
 import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
 
-public class ApiKeyAuthentication implements Authentication {
-    private final String apiKey;
+public class JwtAuthentication implements Authentication {
+    private final String jwt;
     private boolean authenticated = false;
-    private Application application;
+    private User user;
 
-    public ApiKeyAuthentication(String apiKey) {
-        this.apiKey = apiKey;
+    public JwtAuthentication(String jwt) {
+        this.jwt = jwt;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ApiKeyAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return apiKey;
+        return jwt;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ApiKeyAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return application;
+        return user;
     }
 
     @Override
@@ -46,16 +47,16 @@ public class ApiKeyAuthentication implements Authentication {
         authenticated = isAuthenticated;
     }
 
-    public Application getApplication() {
-        return application;
+    public User getUser() {
+        return user;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String getName() {
-        return application != null ? application.getName() : null;
+        return user != null ? user.getEmail() : null;
     }
 }

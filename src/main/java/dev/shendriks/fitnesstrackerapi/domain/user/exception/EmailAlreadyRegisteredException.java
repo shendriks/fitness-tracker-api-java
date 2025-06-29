@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.domain.developer.exception;
+package dev.shendriks.fitnesstrackerapi.domain.user.exception;
 
 import dev.shendriks.fitnesstrackerapi.error.ApiException;
 import org.springframework.http.HttpStatus;

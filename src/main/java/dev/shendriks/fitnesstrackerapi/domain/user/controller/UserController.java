@@ -1,10 +1,10 @@
-package dev.shendriks.fitnesstrackerapi.domain.developer.controller;
+package dev.shendriks.fitnesstrackerapi.domain.user.controller;
 
-import dev.shendriks.fitnesstrackerapi.domain.developer.dto.DeveloperResponse;
-import dev.shendriks.fitnesstrackerapi.domain.developer.dto.DeveloperSignupRequest;
-import dev.shendriks.fitnesstrackerapi.domain.developer.exception.DeveloperNotFoundException;
-import dev.shendriks.fitnesstrackerapi.domain.developer.exception.EmailAlreadyRegisteredException;
-import dev.shendriks.fitnesstrackerapi.domain.developer.service.DeveloperService;
+import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserResponse;
+import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserSignupRequest;
+import dev.shendriks.fitnesstrackerapi.domain.user.exception.UserNotFoundException;
+import dev.shendriks.fitnesstrackerapi.domain.user.exception.EmailAlreadyRegisteredException;
+import dev.shendriks.fitnesstrackerapi.domain.user.service.UserService;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,24 +28,24 @@ import java.net.URI;
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BASIC_AUTH;
 
 @RestController
-@RequestMapping("/api/developers")
-@Tag(name = "Developer", description = "A developer can register applications")
-public class DeveloperController {
-    private final DeveloperService service;
+@RequestMapping("/api/users")
+@Tag(name = "User", description = "A user can sign up, read and write activities")
+public class UserController {
+    private final UserService service;
 
-    public DeveloperController(DeveloperService service) {
+    public UserController(UserService service) {
         this.service = service;
     }
 
-    @Operation(summary = "Register a developer")
+    @Operation(summary = "Register a user")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
-            description = "Developer account created",
+            description = "User account created",
             content = @Content,
             headers = {@Header(
                 name = "Location",
-                description = "The URI of the developer account",
+                description = "The URI of the user account",
                 schema = @Schema(type = "string")
             )}
         ),
@@ -56,31 +56,33 @@ public class DeveloperController {
         )
     })
     @PostMapping("/signup")
-    public ResponseEntity<Void> registerDeveloper(
+    public ResponseEntity<Void> registerUser(
         @Valid
         @RequestBody
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "The developer account to create",
+            description = "The user account to create",
             required = true,
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = DeveloperSignupRequest.class),
+                schema = @Schema(implementation = UserSignupRequest.class),
                 examples = @ExampleObject(value = """
                         {
                             "email": "foo@bar.baz",
-                            "password": "Sup3rS3cr3tPa$$w0rd!"
+                            "password": "Sup3rS3cr3tPa$$w0rd!",
+                            "accountType": "basic"
                         }
                     """))
         )
-        DeveloperSignupRequest request
+        UserSignupRequest request
     ) {
-        DeveloperResponse developer = service.findDeveloperByEmail(request.email());
-        if (developer != null) {
+        String email = request.email().toLowerCase().trim();
+        UserResponse user = service.findDeveloperByEmail(email);
+        if (user != null) {
             throw new EmailAlreadyRegisteredException();
         }
 
-        DeveloperResponse developerResponse = this.service.save(request);
-        URI location = URI.create("/api/developers/" + developerResponse.id());
+        UserResponse userResponse = this.service.save(request);
+        URI location = URI.create("/api/users/" + userResponse.id());
 
         return ResponseEntity.created(location).build();
     }
@@ -92,7 +94,7 @@ public class DeveloperController {
             description = "The developer account including the list of applications this developer has registered",
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = DeveloperResponse.class)
+                schema = @Schema(implementation = UserResponse.class)
             )
         ),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
@@ -101,7 +103,7 @@ public class DeveloperController {
     })
     @GetMapping("/{id}")
     @SecurityRequirement(name = BASIC_AUTH)
-    public ResponseEntity<DeveloperResponse> getDeveloper(
+    public ResponseEntity<UserResponse> getDeveloper(
         @AuthenticationPrincipal UserDetails userDetails,
         @PathVariable
         @Parameter(
@@ -111,15 +113,15 @@ public class DeveloperController {
         )
         String id
     ) {
-        DeveloperResponse developerResponse = this.service.findDeveloperById(id);
-        if (developerResponse == null) {
-            throw new DeveloperNotFoundException();
+        UserResponse userResponse = this.service.findDeveloperById(id);
+        if (userResponse == null) {
+            throw new UserNotFoundException();
         }
 
-        if (userDetails == null || !userDetails.getUsername().equals(developerResponse.email())) {
+        if (userDetails == null || !userDetails.getUsername().equals(userResponse.email())) {
             throw new AccessDeniedException("Not authorized to access the developer account");
         }
 
-        return ResponseEntity.ok().body(developerResponse);
+        return ResponseEntity.ok().body(userResponse);
     }
 }

@@ -1,15 +1,15 @@
-package dev.shendriks.fitnesstrackerapi.domain.application.enums;
+package dev.shendriks.fitnesstrackerapi.domain.user.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Category {
+public enum AccountType {
     BASIC("basic"),
     PREMIUM("premium");
 
     private final String value;
 
-    Category(String value) {
+    AccountType(String value) {
         this.value = value;
     }
 
@@ -19,10 +19,10 @@ public enum Category {
     }
 
     @JsonCreator
-    public static Category fromString(String text) {
-        for (Category category : Category.values()) {
-            if (category.value.equalsIgnoreCase(text)) {
-                return category;
+    public static AccountType fromString(String text) {
+        for (AccountType accountType : AccountType.values()) {
+            if (accountType.value.equalsIgnoreCase(text)) {
+                return accountType;
             }
         }
         throw new IllegalArgumentException("No constant with text " + text + " found");

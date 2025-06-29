@@ -1,26 +1,26 @@
-package dev.shendriks.fitnesstrackerapi.domain.developer.security;
+package dev.shendriks.fitnesstrackerapi.domain.user.security;
 
-import dev.shendriks.fitnesstrackerapi.domain.developer.entity.Developer;
-import dev.shendriks.fitnesstrackerapi.domain.developer.repository.DeveloperRepository;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import dev.shendriks.fitnesstrackerapi.domain.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeveloperDetailsServiceImpl implements UserDetailsService {
-    private final DeveloperRepository repository;
+public class UserDetailsServiceImpl implements UserDetailsService {
+    private final UserRepository repository;
 
-    public DeveloperDetailsServiceImpl(DeveloperRepository repository) {
+    public UserDetailsServiceImpl(UserRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Developer developer = repository
+        User user = repository
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found"));
 
-        return new DeveloperAdapter(developer);
+        return new UserAdapter(user);
     }
 }

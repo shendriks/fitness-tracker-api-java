@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi;
 
-import dev.shendriks.fitnesstrackerapi.security.ApiKeyAuthenticationFilter;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -10,6 +9,8 @@ import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.*;
 
 @SpringBootApplication
 @EnableScheduling
@@ -22,12 +23,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     @SecurityScheme(
         type = SecuritySchemeType.APIKEY,
         in = SecuritySchemeIn.HEADER,
-        name = "API Key",
-        paramName = ApiKeyAuthenticationFilter.HEADER_API_KEY
+        name = BEARER_TOKEN,
+        paramName = "Authorization"
     ),
     @SecurityScheme(
         type = SecuritySchemeType.HTTP,
-        name = "Basic Auth",
+        name = BASIC_AUTH,
         scheme = "Basic"
     )
 })

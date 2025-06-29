@@ -1,6 +1,6 @@
-package dev.shendriks.fitnesstrackerapi.domain.developer.entity;
+package dev.shendriks.fitnesstrackerapi.domain.user.entity;
 
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,8 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Developer {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,17 +29,13 @@ public class Developer {
     private String password;
     @Column(nullable = false)
     private String authority;
-    @OneToMany(mappedBy = "developer")
-    @Builder.Default
-    private List<Application> applications = new ArrayList<>();
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;
     @UpdateTimestamp
     @Column(nullable = false)
     private Instant updatedAt;
-
-    public void addApplication(Application application) {
-        this.applications.add(application);
-    }
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 }

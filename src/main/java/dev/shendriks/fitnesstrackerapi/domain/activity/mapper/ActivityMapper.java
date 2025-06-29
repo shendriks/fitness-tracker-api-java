@@ -1,12 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.mapper;
 
-import com.github.f4b6a3.ulid.Ulid;
-import com.github.f4b6a3.ulid.UlidCreator;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import dev.shendriks.fitnesstrackerapi.domain.user.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +13,12 @@ import java.util.List;
 
 @Component
 public class ActivityMapper {
+    private final UserMapper userMapper;
+
+    public ActivityMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     public List<ActivityResponse> toResponses(Iterable<Activity> activities) {
         List<ActivityResponse> activityResponses = new ArrayList<>();
         for (Activity activity : activities) {
@@ -26,21 +31,20 @@ public class ActivityMapper {
     public ActivityResponse toResponse(Activity activity) {
         return new ActivityResponse(
             activity.getUlid(),
-            activity.getUsername(),
+            userMapper.toResponse(activity.getUser()),
             activity.getActivityType(),
             activity.getDuration(),
             activity.getCalories(),
-            activity.getApplication().getName()
+            ""
         );
     }
 
-    public Activity toEntity(ActivityRequest request, Application application) {
+    public Activity toEntity(ActivityRequest request, User user) {
         Activity activity = new Activity();
-        activity.setUsername(request.username().trim());
+        activity.setUser(user);
         activity.setActivityType(ActivityType.fromString(request.activityType().trim()));
         activity.setDuration(request.duration());
         activity.setCalories(request.calories());
-        activity.setApplication(application);
         return activity;
     }
 }

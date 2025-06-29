@@ -1,11 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.domain.application.dto;
 
-import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
+import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 
 public record ApplicationRegisterResponse(
     String id,
     String name,
     String apiKey,
-    Category category
+    AccountType accountType
 ) {
 }

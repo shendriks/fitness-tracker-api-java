@@ -1,5 +1,5 @@
-### POST developer signup
-POST {{base_url}}/developers/signup
+### POST user signup
+POST {{base_url}}/users/signup
 Content-Type: application/json
 
 {
@@ -7,8 +7,8 @@ Content-Type: application/json
   "password": "12345"
 }
 
-### GET developer by id
-GET {{base_url}}/developers/1
+### GET user by id
+GET {{base_url}}/users/1
 Content-Type: application/json
 Authorization: Basic {{basic_auth}}
 

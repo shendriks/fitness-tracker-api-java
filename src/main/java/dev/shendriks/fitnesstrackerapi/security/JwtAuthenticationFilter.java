@@ -18,8 +18,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
-public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-    public static final String HEADER_API_KEY = "X-API-Key";
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    public static final String HEADER_ACCESS_TOKEN = "Authorization";
 
     @Autowired
     @Qualifier("handlerExceptionResolver")
@@ -32,9 +32,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         resolver.resolveException(request, response, null, ex);
     };
 
-    private final ApiKeyAuthenticationProvider provider;
+    private final JwtAuthenticationProvider provider;
 
-    public ApiKeyAuthenticationFilter(ApiKeyAuthenticationProvider provider) {
+    public JwtAuthenticationFilter(JwtAuthenticationProvider provider) {
         this.provider = provider;
     }
 
@@ -50,12 +50,13 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         }
         
         try {
-            var apiKey = request.getHeader(HEADER_API_KEY);
-            if (apiKey == null) {
-                throw new BadCredentialsException("API Key is required");
+            var authorizationHeader = request.getHeader(HEADER_ACCESS_TOKEN);
+            var jwt = authorizationHeader != null ? authorizationHeader.replace("Bearer ", "") : null;  
+            if (jwt == null) {
+                throw new BadCredentialsException("Access token is required");
             }
             
-            Authentication authentication = new ApiKeyAuthentication(apiKey);
+            Authentication authentication = new JwtAuthentication(jwt);
             authentication = provider.authenticate(authentication);
             
             SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.ratelimiting;
 
 import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
-import dev.shendriks.fitnesstrackerapi.domain.application.enums.Category;
+import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 @Service
 public class RateLimiterService {
 
-    private final Map<Category, RateLimiter> rateLimiters;
+    private final Map<AccountType, RateLimiter> rateLimiters;
 
     /**
      * Creates a new RateLimiterService with the specified rate limiters.
@@ -27,9 +27,9 @@ public class RateLimiterService {
         TokenBucketRateLimiter tokenBucketRateLimiter,
         AlwaysAllowRateLimiter alwaysAllowRateLimiter
     ) {
-        rateLimiters = new EnumMap<>(Category.class);
-        rateLimiters.put(Category.BASIC, tokenBucketRateLimiter);
-        rateLimiters.put(Category.PREMIUM, alwaysAllowRateLimiter);
+        rateLimiters = new EnumMap<>(AccountType.class);
+        rateLimiters.put(AccountType.BASIC, tokenBucketRateLimiter);
+        rateLimiters.put(AccountType.PREMIUM, alwaysAllowRateLimiter);
     }
 
     /**
@@ -39,7 +39,7 @@ public class RateLimiterService {
      * @return false if rate limited, true otherwise
      */
     public boolean isRequestAllowed(Application application) {
-        RateLimiter rateLimiter = rateLimiters.get(application.getCategory());
+        RateLimiter rateLimiter = rateLimiters.get(application.getAccountType());
         return rateLimiter == null || rateLimiter.tryConsume(application.getApiKey());
     }
 }

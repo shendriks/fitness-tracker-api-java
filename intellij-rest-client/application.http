@@ -6,7 +6,7 @@ Content-Type: application/json
 {
     "name": "Basic App33",
     "description": "This is my basic application",
-    "category": "basic"
+    "accountType": "basic"
 }
 
 ### POST premium application registration
@@ -17,7 +17,7 @@ Content-Type: application/json
 {
     "name": "Premium App",
     "description": "This is my premium application",
-    "category": "premium"
+    "accountType": "premium"
 }
 
 ###

@@ -1,19 +1,20 @@
-package dev.shendriks.fitnesstrackerapi.domain.application.dto;
+package dev.shendriks.fitnesstrackerapi.domain.user.dto;
 
 import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.validation.enums.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
-public record ApplicationRegisterRequest(
+public record UserSignupRequest(
     @NotBlank
-    String name,
-    @NotNull
-    String description,
+    @Email
+    String email,
+    @NotBlank
+    String password,
     @NotBlank
     @Schema(implementation = AccountType.class)
     @ValueOfEnum(enumClass = AccountType.class)
-    String category
+    String accountType
 ) {
 }
