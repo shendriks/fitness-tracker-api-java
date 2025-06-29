@@ -26,7 +26,9 @@ public class ActivityMapper {
             activity.getUlid(),
             activity.getActivityType(),
             activity.getDuration(),
-            activity.getCalories()
+            activity.getCalories(),
+            activity.getCreatedAt(),
+            activity.getUpdatedAt()
         );
     }
 
