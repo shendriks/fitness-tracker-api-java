@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.ratelimiting;
 
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
+import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Service that manages rate limiting for the application.
+ * Service that manages rate limiting for the user.
  */
 @Service
 public class RateLimiterService {
@@ -19,8 +19,8 @@ public class RateLimiterService {
     /**
      * Creates a new RateLimiterService with the specified rate limiters.
      *
-     * @param tokenBucketRateLimiter The token bucket rate limiter for BASIC applications
-     * @param alwaysAllowRateLimiter The no-op rate limiter for PREMIUM applications
+     * @param tokenBucketRateLimiter The token bucket rate limiter for BASIC user accounts
+     * @param alwaysAllowRateLimiter The no-op rate limiter for PREMIUM user accounts
      */
     @Autowired
     public RateLimiterService(
@@ -33,13 +33,13 @@ public class RateLimiterService {
     }
 
     /**
-     * Checks if a request from the given application should be rate limited.
+     * Checks if a request from the given user should be rate limited.
      *
-     * @param application The application making the request
+     * @param user The user making the request
      * @return false if rate limited, true otherwise
      */
-    public boolean isRequestAllowed(Application application) {
-        RateLimiter rateLimiter = rateLimiters.get(application.getAccountType());
-        return rateLimiter == null || rateLimiter.tryConsume(application.getApiKey());
+    public boolean isRequestAllowed(User user) {
+        RateLimiter rateLimiter = rateLimiters.get(user.getAccountType());
+        return rateLimiter == null || rateLimiter.tryConsume(user.getUlid());
     }
 }

@@ -6,7 +6,6 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service

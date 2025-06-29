@@ -3,13 +3,11 @@ package dev.shendriks.fitnesstrackerapi.domain.user.controller;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.user.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.util.BasicAuthHelper;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,16 +25,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class UserControllerTest {
-    @Autowired
-    private BasicAuthHelper basicAuthHelper;
-    @Autowired
-    private MockMvc mvc;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final BasicAuthHelper basicAuthHelper;
+    private final MockMvc mvc;
+    private final UserRepository userRepository;
+
+    public UserControllerTest(
+        @Autowired BasicAuthHelper basicAuthHelper,
+        @Autowired MockMvc mvc,
+        @Autowired UserRepository userRepository
+    ) {
+        this.basicAuthHelper = basicAuthHelper;
+        this.mvc = mvc;
+        this.userRepository = userRepository;
+    }
 
     @Test
     public void registerUser_registersUser() throws Exception {
@@ -47,7 +48,8 @@ public class UserControllerTest {
                 .content("""
                     {
                         "email": "email@example.com",
-                        "password": "sup3rS3cr37Pa$$w0rd"
+                        "password": "sup3rS3cr37Pa$$w0rd",
+                        "accountType": "basic"
                     }
                     """))
             .andExpect(status().isCreated())
@@ -75,7 +77,8 @@ public class UserControllerTest {
                 .content("""
                     {
                         "email": "foo@bar.baz",
-                        "password": "sup3rS3cr37Pa$$w0rd"
+                        "password": "sup3rS3cr37Pa$$w0rd",
+                        "accountType": "basic"
                     }
                     """))
             .andExpect(status().isBadRequest())
@@ -103,7 +106,8 @@ public class UserControllerTest {
             .andExpect(content().json("""
                     {
                         "id": "%s",
-                        "email": "%s"
+                        "email": "%s",
+                        "accountType": "basic"
                 }
                 """.formatted(userId, email)
             ));

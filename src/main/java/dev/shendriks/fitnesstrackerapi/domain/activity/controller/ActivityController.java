@@ -4,8 +4,8 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
-import dev.shendriks.fitnesstrackerapi.domain.user.security.UserAdapter;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
+import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimiterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -78,10 +78,10 @@ public class ActivityController {
                     """)))
         @RequestBody @Valid ActivityRequest request
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getName() + ")");
-//            throw new RateLimitExceededException();
-//        }
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
+            throw new RateLimitExceededException();
+        }
 
         ActivityResponse activityResponse = activityService.save(request, user);
         URI location = URI.create("/api/activities/" + activityResponse.id());
@@ -104,10 +104,10 @@ public class ActivityController {
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @GetMapping
     public ResponseEntity<Iterable<ActivityResponse>> getActivities(@AuthenticationPrincipal User user) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
+            throw new RateLimitExceededException();
+        }
 
         Iterable<ActivityResponse> activities = activityService.getAllActivitiesByUser(user);
 

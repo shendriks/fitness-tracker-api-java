@@ -1,7 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.security;
 
-import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public class JwtAuthentication implements Authentication {
     private final String jwt;
     private boolean authenticated = false;
+    @Setter
+    @Getter
     private User user;
 
     public JwtAuthentication(String jwt) {
@@ -45,14 +48,6 @@ public class JwtAuthentication implements Authentication {
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
         authenticated = isAuthenticated;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override
