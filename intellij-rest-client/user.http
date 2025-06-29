@@ -3,13 +3,32 @@ POST {{base_url}}/users/signup
 Content-Type: application/json
 
 {
-  "email": "foo@bar.baz",
-  "password": "12345"
+  "email": "foo3@bar.baz",
+  "password": "12345",
+  "accountType": "basic"
 }
 
+> {% 
+    client.global.set("user_id", response.headers.valueOf("Location").split("/").pop());
+    client.global.set(
+        "basic_auth", 
+        Window.btoa(
+            JSON.parse(request.body()).email + ":" 
+            + JSON.parse(request.body()).password
+        )
+    );
+%}
+
 ### GET user by id
-GET {{base_url}}/users/1
+GET {{base_url}}/users/{{user_id}}
 Content-Type: application/json
 Authorization: Basic {{basic_auth}}
 
-###
+### GET access token
+GET {{base_url}}/access-token
+Content-Type: application/json
+Authorization: Basic {{basic_auth}}
+
+> {%
+    client.global.set("access_token", JSON.parse(response.body.toString()).token);
+%}

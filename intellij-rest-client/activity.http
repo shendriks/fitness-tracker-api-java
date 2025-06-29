@@ -1,15 +1,14 @@
 ### POST activity
 POST {{base_url}}/activities
-X-API-Key: {{api_key}}
+Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "username": "foo@bar.baz",
-  "activity": "running",
+  "activityType": "running",
   "duration": 950,
   "calories": 320
 }
 
 ### GET activities
 GET {{base_url}}/activities
-X-API-Key: {{api_key}}
+Authorization: Bearer {{access_token}}
