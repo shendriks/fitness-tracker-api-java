@@ -5,7 +5,6 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
-import dev.shendriks.fitnesstrackerapi.domain.user.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,12 +12,6 @@ import java.util.List;
 
 @Component
 public class ActivityMapper {
-    private final UserMapper userMapper;
-
-    public ActivityMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
     public List<ActivityResponse> toResponses(Iterable<Activity> activities) {
         List<ActivityResponse> activityResponses = new ArrayList<>();
         for (Activity activity : activities) {
@@ -31,11 +24,9 @@ public class ActivityMapper {
     public ActivityResponse toResponse(Activity activity) {
         return new ActivityResponse(
             activity.getUlid(),
-            userMapper.toResponse(activity.getUser()),
             activity.getActivityType(),
             activity.getDuration(),
-            activity.getCalories(),
-            ""
+            activity.getCalories()
         );
     }
 
