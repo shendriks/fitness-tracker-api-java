@@ -1,7 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.entity;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
-//import dev.shendriks.fitnesstrackerapi.domain.application.entity.Application;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
@@ -14,8 +13,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 
 @Entity
-@Getter 
-@Setter 
+@Getter
+@Setter
 @NoArgsConstructor
 public class Activity {
     @Id

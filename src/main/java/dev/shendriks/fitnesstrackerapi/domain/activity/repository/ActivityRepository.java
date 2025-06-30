@@ -9,4 +9,5 @@ public interface ActivityRepository extends
     CrudRepository<Activity, Long>,
     PagingAndSortingRepository<Activity, Long> {
     Iterable<Activity> findAllByUser(User user);
+    long countByUser(User user);
 }

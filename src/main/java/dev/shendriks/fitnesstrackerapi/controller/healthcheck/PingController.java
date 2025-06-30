@@ -1,5 +1,6 @@
-package dev.shendriks.fitnesstrackerapi.healthcheck.controller;
+package dev.shendriks.fitnesstrackerapi.controller.healthcheck;
 
+import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/ping")
-@Tag(name = "Ping", description = "Health check")
+@Tag(name = OpenApiTagName.PING, description = "Health check")
 public class PingController {
     @Operation(summary = "Ping the API")
     @ApiResponse(responseCode = "200", description = "pong")

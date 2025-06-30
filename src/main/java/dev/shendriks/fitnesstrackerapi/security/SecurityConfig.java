@@ -54,8 +54,17 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain apiKeySecuredFilterChain(HttpSecurity http) throws Exception {
+        String[] approvalPaths = {
+//            "/api/activities",
+//            "/api/challenges",
+//            "/api/achievements",
+            "/api/activities/**",
+            "/api/challenges/**",
+            "/api/achievements/**"
+        };
+        
         http
-            .securityMatcher("/api/activities/**")
+            .securityMatcher(approvalPaths)
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationProvider(jwtAuthenticationProvider)
             .addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -70,10 +79,9 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain unsecuredFilterChain(HttpSecurity http) throws Exception {
-        String[] approvalsPaths = {
+        String[] approvalPaths = {
             "/api/ping",
             "/api/users/signup",
-            "/api/activities",
             "/h2-console",
             "/actuator/shutdown",
             "/error",
@@ -84,7 +92,7 @@ public class SecurityConfig {
         };
 
         http
-            .securityMatcher(approvalsPaths)
+            .securityMatcher(approvalPaths)
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
@@ -100,8 +108,7 @@ public class SecurityConfig {
     public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
             "/api/users/{id:[a-zA-Z0-9]+}",
-            "/api/access-token",
-            "/api/applications/register"
+            "/api/access-token"
         };
         http
             .securityMatcher(approvalsPaths)
@@ -110,7 +117,6 @@ public class SecurityConfig {
             .authenticationManager(authenticationManager())
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
                 .requestMatchers(HttpMethod.GET, "/api/users/{id:[a-zA-Z0-9]+}").hasRole("USER")
-                .requestMatchers(HttpMethod.POST, "/api/applications/register").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/api/access-token").hasRole("USER")
                 .anyRequest().denyAll()
             )

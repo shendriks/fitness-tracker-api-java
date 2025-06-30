@@ -6,6 +6,7 @@ import dev.shendriks.fitnesstrackerapi.domain.user.exception.UserNotFoundExcepti
 import dev.shendriks.fitnesstrackerapi.domain.user.exception.EmailAlreadyRegisteredException;
 import dev.shendriks.fitnesstrackerapi.domain.user.service.UserService;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
+import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -29,7 +30,7 @@ import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.B
 
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "User", description = "A user can sign up, read and write activities")
+@Tag(name = OpenApiTagName.USERS, description = "A user can sign up, read and write activities")
 public class UserController {
     private final UserService service;
 

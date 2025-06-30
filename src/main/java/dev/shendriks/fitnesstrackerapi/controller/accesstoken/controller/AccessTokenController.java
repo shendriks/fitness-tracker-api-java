@@ -1,9 +1,10 @@
-package dev.shendriks.fitnesstrackerapi.supportive.accesstoken.controller;
+package dev.shendriks.fitnesstrackerapi.controller.accesstoken.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import dev.shendriks.fitnesstrackerapi.domain.user.security.UserAdapter;
+import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +25,7 @@ import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.B
 
 @Controller
 @RequestMapping("/api/access-token")
-@Tag(name = "Access Token", description = "An access token is needed to access secured endpoints")
+@Tag(name = OpenApiTagName.ACCESS_TOKENS, description = "An access token is needed to access secured endpoints")
 @SecurityRequirement(name = BASIC_AUTH)
 public class AccessTokenController {
     @Operation(summary = "Get an access token")

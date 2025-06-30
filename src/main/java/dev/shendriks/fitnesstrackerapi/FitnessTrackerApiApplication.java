@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.*;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableAsync
 @OpenAPIDefinition(info = @Info(
     title = "Fitness API",
     version = "0.0.1",

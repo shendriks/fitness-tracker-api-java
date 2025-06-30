@@ -2,9 +2,11 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
+import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
+import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimiterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +33,21 @@ import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.B
 @Log
 @RestController
 @RequestMapping("/api/activities")
-@Tag(name = "Activity", description = "An activity is a record of a user's exercise, e.g. running, walking or swimming")
+@Tag(name = OpenApiTagName.ACTIVITIES, description = "An activity is a record of a user's exercise, e.g. running, walking or swimming")
 @SecurityRequirement(name = BEARER_TOKEN)
 public class ActivityController {
     private final ActivityService activityService;
     private final RateLimiterService rateLimiterService;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ActivityController(ActivityService activityService, RateLimiterService rateLimiterService) {
+    public ActivityController(
+        ActivityService activityService, 
+        RateLimiterService rateLimiterService,
+        ApplicationEventPublisher eventPublisher
+        ) {
         this.activityService = activityService;
         this.rateLimiterService = rateLimiterService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Operation(summary = "Create a new activity")
@@ -84,12 +93,15 @@ public class ActivityController {
         }
 
         ActivityResponse activityResponse = activityService.save(request, user);
+        
+        eventPublisher.publishEvent(new ActivityUploadedEvent(this, user.getId()));
+        
         URI location = URI.create("/api/activities/" + activityResponse.id());
 
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get all activities")
+    @Operation(summary = "Get user's activities")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",

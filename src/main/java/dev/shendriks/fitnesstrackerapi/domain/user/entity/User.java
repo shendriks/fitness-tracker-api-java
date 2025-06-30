@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.entity;
 
+import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
 import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -38,4 +40,6 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Achievement> achievements;
 }
