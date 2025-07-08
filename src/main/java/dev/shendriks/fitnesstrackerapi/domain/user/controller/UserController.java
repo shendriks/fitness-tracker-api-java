@@ -88,19 +88,19 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get a developer by id")
+    @Operation(summary = "Get a user by id")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "The developer account including the list of applications this developer has registered",
+            description = "The user account",
             content = @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = UserResponse.class)
             )
         ),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Not authorized to access the developer account", content = @Content),
-        @ApiResponse(responseCode = "404", description = "The developer account was not found", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Not authorized to access the user account", content = @Content),
+        @ApiResponse(responseCode = "404", description = "The user account was not found", content = @Content)
     })
     @GetMapping("/{id}")
     @SecurityRequirement(name = BASIC_AUTH)
@@ -109,7 +109,7 @@ public class UserController {
         @PathVariable
         @Parameter(
             name = "id",
-            description = "The developer id; must match the id of the authenticated developer",
+            description = "The user id; must match the id of the authenticated user",
             required = true
         )
         String id
@@ -120,7 +120,7 @@ public class UserController {
         }
 
         if (userDetails == null || !userDetails.getUsername().equals(userResponse.email())) {
-            throw new AccessDeniedException("Not authorized to access the developer account");
+            throw new AccessDeniedException("Not authorized to access the user account");
         }
 
         return ResponseEntity.ok().body(userResponse);

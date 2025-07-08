@@ -8,6 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface ActivityRepository extends
     CrudRepository<Activity, Long>,
     PagingAndSortingRepository<Activity, Long> {
-    Iterable<Activity> findAllByUser(User user);
+    Iterable<Activity> findAllByUserOrderByUlidDesc(User user);
     long countByUser(User user);
 }

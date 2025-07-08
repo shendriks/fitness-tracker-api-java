@@ -25,7 +25,7 @@ public class ActivityService {
     }
 
     public Iterable<ActivityResponse> getAllActivitiesByUser(User user) {
-        Iterable<Activity> activities = repository.findAllByUser(user);
+        Iterable<Activity> activities = repository.findAllByUserOrderByUlidDesc(user);
 
         return mapper.toResponses(activities);
     }

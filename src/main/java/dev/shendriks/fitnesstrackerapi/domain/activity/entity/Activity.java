@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.entity;
 
+import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -39,4 +41,8 @@ public class Activity {
     @UpdateTimestamp
     @Column(nullable = false)
     private Instant updatedAt;
+    @OneToMany(mappedBy = "activity", orphanRemoval = true)
+    private Set<GPSPosition> gpsPositions;
+    @Column(nullable = false)
+    private ActivityState state = ActivityState.STARTED;
 }

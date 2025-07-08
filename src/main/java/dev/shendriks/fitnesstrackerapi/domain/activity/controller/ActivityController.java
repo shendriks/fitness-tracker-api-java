@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
@@ -124,5 +125,23 @@ public class ActivityController {
         Iterable<ActivityResponse> activities = activityService.getAllActivitiesByUser(user);
 
         return ResponseEntity.ok(activities);
+    }
+    
+    @PostMapping("/start")
+    public ResponseEntity<Void> startActivity(
+        @AuthenticationPrincipal User user, 
+        @RequestBody @Valid StartActivityRequest request
+    ) {
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/finish")
+    public ResponseEntity<Void> finishActivity(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/gps-position")
+    public ResponseEntity<Void> createGPSPositionForActivity(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().build();
     }
 }
