@@ -42,16 +42,16 @@ public class ActivityController {
     private final ApplicationEventPublisher eventPublisher;
 
     public ActivityController(
-        ActivityService activityService, 
+        ActivityService activityService,
         RateLimiterService rateLimiterService,
         ApplicationEventPublisher eventPublisher
-        ) {
+    ) {
         this.activityService = activityService;
         this.rateLimiterService = rateLimiterService;
         this.eventPublisher = eventPublisher;
     }
 
-    @Operation(summary = "Create a new activity")
+    @Operation(summary = "Manually create a new activity")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
@@ -94,9 +94,9 @@ public class ActivityController {
         }
 
         ActivityResponse activityResponse = activityService.save(request, user);
-        
+
         eventPublisher.publishEvent(new ActivityUploadedEvent(this, user.getId()));
-        
+
         URI location = URI.create("/api/activities/" + activityResponse.id());
 
         return ResponseEntity.created(location).build();
@@ -126,10 +126,40 @@ public class ActivityController {
 
         return ResponseEntity.ok(activities);
     }
-    
+
+    @Operation(summary = "Start recording a new activity")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "201",
+            description = "Activity created",
+            content = @Content,
+            headers = {@Header(
+                name = "Location",
+                description = "The URI of the created activity",
+                schema = @Schema(type = "string")
+            )}
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @PostMapping("/start")
     public ResponseEntity<Void> startActivity(
-        @AuthenticationPrincipal User user, 
+        @AuthenticationPrincipal User user,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "The activity to start recording",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = StartActivityRequest.class),
+                examples = @ExampleObject(value = """
+                        {
+                            "activityType": "running"
+                        }
+                    """)))
         @RequestBody @Valid StartActivityRequest request
     ) {
         return ResponseEntity.ok().build();
