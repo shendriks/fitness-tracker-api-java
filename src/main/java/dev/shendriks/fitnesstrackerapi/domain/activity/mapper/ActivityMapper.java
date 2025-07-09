@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.mapper;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.GPSPositionResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ActivityMapper {
@@ -29,7 +31,15 @@ public class ActivityMapper {
             activity.getDuration(),
             activity.getCalories(),
             activity.getCreatedAt(),
-            activity.getUpdatedAt()
+            activity.getUpdatedAt(),
+            activity
+                .getGpsPositions()
+                .stream()
+                .map(gpsPosition -> new GPSPositionResponse(
+                    gpsPosition.getTimestamp(),
+                    gpsPosition.getLatitude(),
+                    gpsPosition.getLongitude()
+                )).collect(Collectors.toList())
         );
     }
 

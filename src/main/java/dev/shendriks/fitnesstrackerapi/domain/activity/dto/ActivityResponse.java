@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.dto;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 
 import java.time.Instant;
+import java.util.List;
 
 public record ActivityResponse(
     String id,
@@ -10,6 +11,7 @@ public record ActivityResponse(
     int duration,
     int calories,
     Instant createdAt,
-    Instant updatedAt
+    Instant updatedAt,
+    List<GPSPositionResponse> gpsPositions
 ) {
 }

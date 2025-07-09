@@ -164,7 +164,6 @@ public class ActivityController {
     ) {
         return ResponseEntity.ok().build();
     }
-
     @PostMapping("/{id}/finish")
     public ResponseEntity<Void> finishActivity(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok().build();

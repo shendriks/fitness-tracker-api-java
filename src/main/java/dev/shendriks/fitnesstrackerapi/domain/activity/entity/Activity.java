@@ -12,7 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Getter
@@ -42,7 +42,8 @@ public class Activity {
     @Column(nullable = false)
     private Instant updatedAt;
     @OneToMany(mappedBy = "activity", orphanRemoval = true)
-    private Set<GPSPosition> gpsPositions;
+    private List<GPSPosition> gpsPositions = List.of();
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ActivityState state = ActivityState.STARTED;
 }

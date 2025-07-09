@@ -18,13 +18,13 @@ public class GPSPosition {
     @Column(nullable = false)
     private Instant timestamp;
     @Column(nullable = false)
-    private double latitude;
+    private Double latitude;
     @Column(nullable = false)
-    private double longitude;
+    private Double longitude;
     @Column()
-    private double altitude;
-    @Column(nullable = false)
-    private double accuracy;
+    private Double altitude;
+    @Column()
+    private Double accuracy;
     @ManyToOne
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
