@@ -25,6 +25,8 @@ public class User {
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
     private String ulid;
+    @Column(nullable = false)
+    private String name;
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)

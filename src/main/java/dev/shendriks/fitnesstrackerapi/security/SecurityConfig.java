@@ -60,7 +60,8 @@ public class SecurityConfig {
 //            "/api/achievements",
             "/api/activities/**",
             "/api/challenges/**",
-            "/api/achievements/**"
+            "/api/achievements/**",
+            "/api/users/me"
         };
         
         http
@@ -107,7 +108,7 @@ public class SecurityConfig {
     @Order(3)
     public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
-            "/api/users/{id:[a-zA-Z0-9]+}",
+            "/api/users/{id:[a-zA-Z0-9]{26}}",
             "/api/access-token"
         };
         http
@@ -116,7 +117,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager())
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
-                .requestMatchers(HttpMethod.GET, "/api/users/{id:[a-zA-Z0-9]+}").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api/users/{id:[a-zA-Z0-9]{26}}").hasRole("USER")
                 .requestMatchers(HttpMethod.GET, "/api/access-token").hasRole("USER")
                 .anyRequest().denyAll()
             )

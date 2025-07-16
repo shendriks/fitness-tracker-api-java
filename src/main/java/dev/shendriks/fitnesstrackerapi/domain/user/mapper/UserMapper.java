@@ -16,7 +16,8 @@ public class UserMapper {
 
     public UserResponse toResponse(User user) {
         return new UserResponse(
-            user.getUlid(), 
+            user.getUlid(),
+            user.getName(),
             user.getEmail(),
             user.getAccountType(),
             user.getCreatedAt(),
@@ -26,6 +27,7 @@ public class UserMapper {
 
     public User toEntity(UserSignupRequest request) {
         User user = new User();
+        user.setName(request.name());
         user.setEmail(request.email().toLowerCase().trim());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setAuthority("ROLE_USER");

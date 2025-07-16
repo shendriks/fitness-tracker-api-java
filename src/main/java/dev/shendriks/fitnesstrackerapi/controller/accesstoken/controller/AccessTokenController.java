@@ -45,7 +45,8 @@ public class AccessTokenController {
             String token = JWT.create()
                 .withIssuer("fitness-tracker-api")
                 .withSubject(userAdapter.getUser().getUlid())
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(4)))
+//                .withExpiresAt(Instant.now().plus(Duration.ofSeconds(10)))
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(24)))
                 .sign(algorithm);
             return ResponseEntity.ok("{\"token\": \"" + token + "\"}");
         } catch (JWTCreationException exception) {

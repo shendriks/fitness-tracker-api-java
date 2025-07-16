@@ -12,6 +12,9 @@ public record ActivityResponse(
     int calories,
     Instant createdAt,
     Instant updatedAt,
+    String title,
+    String description,
+    int distance,
     List<GPSPositionResponse> gpsPositions
 ) {
 }

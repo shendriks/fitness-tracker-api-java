@@ -32,6 +32,9 @@ public class ActivityMapper {
             activity.getCalories(),
             activity.getCreatedAt(),
             activity.getUpdatedAt(),
+            "Activity Title",
+            "Relaxed activity with no description.",
+            123,
             activity
                 .getGpsPositions()
                 .stream()

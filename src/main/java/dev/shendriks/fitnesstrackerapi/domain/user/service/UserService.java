@@ -24,21 +24,21 @@ public class UserService {
         return mapper.toResponse(user);
     }
 
-    public UserResponse findDeveloperById(String id) {
-        var developer = repository.findByUlid(id).orElse(null);
-        if (developer == null) {
+    public UserResponse findUserById(String id) {
+        var user = repository.findByUlid(id).orElse(null);
+        if (user == null) {
             return null;
         }
         
-        return mapper.toResponse(developer); 
+        return mapper.toResponse(user); 
     }
 
-    public UserResponse findDeveloperByEmail(String email) {
-        var developer = repository.findByEmail(email).orElse(null);
-        if (developer == null) {
+    public UserResponse findUserByEmail(String email) {
+        var user = repository.findByEmail(email).orElse(null);
+        if (user == null) {
             return null;
         }
         
-        return mapper.toResponse(developer);
+        return mapper.toResponse(user);
     }
 }
