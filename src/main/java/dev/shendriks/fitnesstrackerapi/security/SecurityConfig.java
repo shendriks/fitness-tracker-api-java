@@ -55,9 +55,6 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apiKeySecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalPaths = {
-//            "/api/activities",
-//            "/api/challenges",
-//            "/api/achievements",
             "/api/activities/**",
             "/api/challenges/**",
             "/api/achievements/**",

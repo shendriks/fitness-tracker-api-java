@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
@@ -125,6 +126,31 @@ public class ActivityController {
         Iterable<ActivityResponse> activities = activityService.getAllActivitiesByUser(user);
 
         return ResponseEntity.ok(activities);
+    }
+    
+    @Operation(summary = "Get user's activity count")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Activity count",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ActivityCountResponse.class)))
+            }
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
+    @GetMapping("/count")
+    public ResponseEntity<ActivityCountResponse> getActivityCount(@AuthenticationPrincipal User user) {
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
+            throw new RateLimitExceededException();
+        }
+
+        ActivityCountResponse activityCount = activityService.getActivityCountByUser(user);
+
+        return ResponseEntity.ok(activityCount);
     }
 
     @Operation(summary = "Start recording a new activity")

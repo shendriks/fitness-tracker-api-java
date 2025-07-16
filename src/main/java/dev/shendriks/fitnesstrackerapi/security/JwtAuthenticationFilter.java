@@ -23,9 +23,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String HEADER_ACCESS_TOKEN = "Authorization";
     // todo fix hard-coded paths
     private final RequestMatcher matcher = new OrRequestMatcher(
-        PathPatternRequestMatcher.withDefaults().matcher("/api/activities"),
-        PathPatternRequestMatcher.withDefaults().matcher("/api/challenges"),
-        PathPatternRequestMatcher.withDefaults().matcher("/api/achievements"),
+        PathPatternRequestMatcher.withDefaults().matcher("/api/activities/**"),
+        PathPatternRequestMatcher.withDefaults().matcher("/api/challenges/**"),
+        PathPatternRequestMatcher.withDefaults().matcher("/api/achievements/**"),
         PathPatternRequestMatcher.withDefaults().matcher("/api/users/me")
     );
     private final JwtAuthenticationProvider provider;
