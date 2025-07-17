@@ -9,6 +9,8 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityReposi
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ActivityService {
     private final ActivityRepository repository;
@@ -34,5 +36,10 @@ public class ActivityService {
     public ActivityCountResponse getActivityCountByUser(User user) {
         long activityCount = repository.countByUser(user);
         return new ActivityCountResponse(activityCount);
+    }
+
+    public Optional<ActivityResponse> findActivityByUserAndId(User user, String id) {
+        Optional<Activity> activity = repository.findByUserAndUlid(user, id);
+        return activity.map(mapper::toResponse);
     }
 }

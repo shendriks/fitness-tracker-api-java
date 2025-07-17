@@ -32,9 +32,9 @@ public class ActivityMapper {
             activity.getCalories(),
             activity.getCreatedAt(),
             activity.getUpdatedAt(),
-            "Activity Title",
-            "Relaxed activity with no description.",
-            123,
+            activity.getTitle(),
+            activity.getDescription(), 
+            activity.getDistance(),
             activity
                 .getGpsPositions()
                 .stream()
@@ -52,6 +52,9 @@ public class ActivityMapper {
         activity.setActivityType(ActivityType.fromString(request.activityType().trim()));
         activity.setDuration(request.duration());
         activity.setCalories(request.calories());
+        activity.setTitle(request.title());
+        activity.setDescription(request.description());
+        activity.setDistance(request.distance());
         activity.setState(ActivityState.FINISHED);
         return activity;
     }

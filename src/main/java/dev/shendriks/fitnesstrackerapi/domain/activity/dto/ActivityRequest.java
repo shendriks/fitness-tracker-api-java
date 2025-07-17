@@ -14,6 +14,12 @@ public record ActivityRequest(
     @Min(0)
     int duration,
     @Min(0)
-    int calories
-) {
+    int calories,
+    @NotBlank
+    String title,
+    @NotBlank
+    String description,
+    @Min(0)
+    int distance
+    ) {
 }

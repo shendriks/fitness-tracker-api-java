@@ -5,6 +5,7 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
+import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
@@ -12,6 +13,7 @@ import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
 import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimiterService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +31,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BEARER_TOKEN;
 
@@ -84,7 +87,10 @@ public class ActivityController {
                         {
                             "activityType": "running",
                             "duration": 60,
-                            "calories": 450
+                            "calories": 450,
+                            "title": "Morning Run",
+                            "description": "Some description.",
+                            "distance": 2500
                         }
                     """)))
         @RequestBody @Valid ActivityRequest request
@@ -126,6 +132,42 @@ public class ActivityController {
         Iterable<ActivityResponse> activities = activityService.getAllActivitiesByUser(user);
 
         return ResponseEntity.ok(activities);
+    }
+    
+    @Operation(summary = "Get a user's activity")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Activities",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ActivityResponse.class))
+            }
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityResponse> getActivities(
+        @AuthenticationPrincipal User user, 
+        @PathVariable
+        @Parameter(
+            name = "id",
+            description = "The activity id",
+            required = true,
+            examples = @ExampleObject(value = "01JZQZZYETYBWQV7KF0BHGMBDJ")
+        )
+        String id
+    ) {
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
+            throw new RateLimitExceededException();
+        }
+
+        Optional<ActivityResponse> activity = activityService.findActivityByUserAndId(user, id);
+
+        return activity.map(ResponseEntity::ok).orElseThrow(ActivityNotFoundException::new);
     }
     
     @Operation(summary = "Get user's activity count")

@@ -46,4 +46,10 @@ public class Activity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityState state = ActivityState.STARTED;
+    @Column(nullable = false)
+    private String title;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private int distance;
 }
