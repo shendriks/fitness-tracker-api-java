@@ -15,6 +15,7 @@ public record ActivityResponse(
     String title,
     String description,
     int distance,
+    Instant startDate,
     List<GPSPositionResponse> gpsPositions
 ) {
 }

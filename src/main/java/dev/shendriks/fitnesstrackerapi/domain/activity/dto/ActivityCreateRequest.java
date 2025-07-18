@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-public record ActivityRequest(
+import java.time.Instant;
+
+public record ActivityCreateRequest(
     @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)
     @Schema(implementation = ActivityType.class)
@@ -17,9 +19,9 @@ public record ActivityRequest(
     int calories,
     @NotBlank
     String title,
-    @NotBlank
     String description,
     @Min(0)
-    int distance
+    int distance,
+    Instant startDate
     ) {
 }

@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.service;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
@@ -21,7 +21,7 @@ public class ActivityService {
         this.mapper = mapper;
     }
 
-    public ActivityResponse save(ActivityRequest request, User user) {
+    public ActivityResponse save(ActivityCreateRequest request, User user) {
         Activity activity = mapper.toEntity(request, user);
         repository.save(activity);
         return mapper.toResponse(activity);

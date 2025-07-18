@@ -52,4 +52,6 @@ public class Activity {
     private String description;
     @Column(nullable = false)
     private int distance;
+    @Column(nullable = false)
+    private Instant startDate;
 }

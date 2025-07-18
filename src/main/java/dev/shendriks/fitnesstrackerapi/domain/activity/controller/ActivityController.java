@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
@@ -82,7 +82,7 @@ public class ActivityController {
             required = true,
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ActivityRequest.class),
+                schema = @Schema(implementation = ActivityCreateRequest.class),
                 examples = @ExampleObject(value = """
                         {
                             "activityType": "running",
@@ -90,10 +90,11 @@ public class ActivityController {
                             "calories": 450,
                             "title": "Morning Run",
                             "description": "Some description.",
-                            "distance": 2500
+                            "distance": 2500,
+                            "startDate": "2025-07-18T21:08:00+02:00"
                         }
                     """)))
-        @RequestBody @Valid ActivityRequest request
+        @RequestBody @Valid ActivityCreateRequest request
     ) {
         if (!rateLimiterService.isRequestAllowed(user)) {
             log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");

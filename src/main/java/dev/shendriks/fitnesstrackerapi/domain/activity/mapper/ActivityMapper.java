@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.mapper;
 
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityRequest;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.GPSPositionResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
@@ -35,6 +35,7 @@ public class ActivityMapper {
             activity.getTitle(),
             activity.getDescription(), 
             activity.getDistance(),
+            activity.getStartDate(),
             activity
                 .getGpsPositions()
                 .stream()
@@ -46,7 +47,7 @@ public class ActivityMapper {
         );
     }
 
-    public Activity toEntity(ActivityRequest request, User user) {
+    public Activity toEntity(ActivityCreateRequest request, User user) {
         Activity activity = new Activity();
         activity.setUser(user);
         activity.setActivityType(ActivityType.fromString(request.activityType().trim()));
@@ -55,6 +56,7 @@ public class ActivityMapper {
         activity.setTitle(request.title());
         activity.setDescription(request.description());
         activity.setDistance(request.distance());
+        activity.setStartDate(request.startDate());
         activity.setState(ActivityState.FINISHED);
         return activity;
     }
