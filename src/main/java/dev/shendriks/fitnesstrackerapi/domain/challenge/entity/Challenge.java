@@ -26,4 +26,6 @@ public class Challenge {
     private String ruleJson;
     @OneToMany(mappedBy = "challenge")
     private Set<Achievement> achievements;
+    @Column(nullable = false)
+    private String imageFilePath;
 }
