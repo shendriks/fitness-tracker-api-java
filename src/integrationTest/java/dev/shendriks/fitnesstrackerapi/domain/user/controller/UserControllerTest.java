@@ -49,7 +49,8 @@ public class UserControllerTest {
                     {
                         "email": "email@example.com",
                         "password": "sup3rS3cr37Pa$$w0rd",
-                        "accountType": "basic"
+                        "accountType": "basic",
+                        "name": "John Doe"
                     }
                     """))
             .andExpect(status().isCreated())
@@ -78,7 +79,8 @@ public class UserControllerTest {
                     {
                         "email": "foo@bar.baz",
                         "password": "sup3rS3cr37Pa$$w0rd",
-                        "accountType": "basic"
+                        "accountType": "basic",
+                        "name": "John Doe"
                     }
                     """))
             .andExpect(status().isBadRequest())

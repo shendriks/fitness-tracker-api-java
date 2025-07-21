@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.achievement.eventlistener;
 
 import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
 import dev.shendriks.fitnesstrackerapi.domain.achievement.repository.AchievementRepository;
+import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
@@ -59,6 +60,8 @@ public class AchievementChecker {
             ? challengeRepository.findAll()
             : challengeRepository.findByIdNotIn(alreadyAchievedAchievementIds);
         
+        Activity activity = activityRepository.findById(event.getActivityId()).orElseThrow();
+        
         for (var challenge : challenges) {
             JsonLogic jsonLogic = new JsonLogic();
             try {
@@ -67,7 +70,7 @@ public class AchievementChecker {
                     Achievement achievement = new Achievement();
                     achievement.setUser(user);
                     achievement.setChallenge(challenge);
-                    achievement.setAchievedAt(Instant.now());
+                    achievement.setActivity(activity);
                     achievementRepository.save(achievement);
                 }
             } catch (JsonLogicException | RuntimeException e) {

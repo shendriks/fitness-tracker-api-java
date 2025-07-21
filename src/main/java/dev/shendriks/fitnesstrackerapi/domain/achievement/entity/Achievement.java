@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.achievement.entity;
 
+import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
@@ -26,6 +27,7 @@ public class Achievement {
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
     private String ulid;
-    @Column(nullable = false)
-    private Instant achievedAt;
+    @OneToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 }

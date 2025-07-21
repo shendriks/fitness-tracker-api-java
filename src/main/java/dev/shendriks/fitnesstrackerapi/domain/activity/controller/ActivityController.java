@@ -4,7 +4,6 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
-import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
@@ -25,7 +24,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -43,16 +41,13 @@ import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.B
 public class ActivityController {
     private final ActivityService activityService;
     private final RateLimiterService rateLimiterService;
-    private final ApplicationEventPublisher eventPublisher;
 
     public ActivityController(
         ActivityService activityService,
-        RateLimiterService rateLimiterService,
-        ApplicationEventPublisher eventPublisher
+        RateLimiterService rateLimiterService
     ) {
         this.activityService = activityService;
         this.rateLimiterService = rateLimiterService;
-        this.eventPublisher = eventPublisher;
     }
 
     @Operation(summary = "Manually create a new activity")
@@ -103,8 +98,6 @@ public class ActivityController {
 
         ActivityResponse activityResponse = activityService.save(request, user);
 
-        eventPublisher.publishEvent(new ActivityUploadedEvent(this, user.getId()));
-
         URI location = URI.create("/api/activities/" + activityResponse.id());
 
         return ResponseEntity.created(location).build();
@@ -134,7 +127,7 @@ public class ActivityController {
 
         return ResponseEntity.ok(activities);
     }
-    
+
     @Operation(summary = "Get a user's activity")
     @ApiResponses(value = {
         @ApiResponse(
@@ -151,7 +144,7 @@ public class ActivityController {
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @GetMapping("/{id}")
     public ResponseEntity<ActivityResponse> getActivities(
-        @AuthenticationPrincipal User user, 
+        @AuthenticationPrincipal User user,
         @PathVariable
         @Parameter(
             name = "id",
@@ -170,7 +163,7 @@ public class ActivityController {
 
         return activity.map(ResponseEntity::ok).orElseThrow(ActivityNotFoundException::new);
     }
-    
+
     @Operation(summary = "Get user's activity count")
     @ApiResponses(value = {
         @ApiResponse(
@@ -233,6 +226,7 @@ public class ActivityController {
     ) {
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/{id}/finish")
     public ResponseEntity<Void> finishActivity(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok().build();

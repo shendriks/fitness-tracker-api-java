@@ -4,9 +4,11 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUploadedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,15 +17,22 @@ import java.util.Optional;
 public class ActivityService {
     private final ActivityRepository repository;
     private final ActivityMapper mapper;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ActivityService(ActivityRepository repository, ActivityMapper mapper) {
+    public ActivityService(
+        ActivityRepository repository,
+        ActivityMapper mapper,
+        ApplicationEventPublisher eventPublisher
+    ) {
         this.repository = repository;
         this.mapper = mapper;
+        this.eventPublisher = eventPublisher;
     }
 
     public ActivityResponse save(ActivityCreateRequest request, User user) {
         Activity activity = mapper.toEntity(request, user);
         repository.save(activity);
+        eventPublisher.publishEvent(new ActivityUploadedEvent(this, user.getId(), activity.getId()));
         return mapper.toResponse(activity);
     }
 
