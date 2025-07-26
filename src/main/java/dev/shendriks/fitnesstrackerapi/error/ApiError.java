@@ -15,6 +15,11 @@ public class ApiError {
         this.errors = errors;
     }
 
+    public ApiError(String message) {
+        this.message = message;
+        errors = Collections.singletonList(message);
+    }
+
     public ApiError(String message, String error) {
         this.message = message;
         errors = Collections.singletonList(error);

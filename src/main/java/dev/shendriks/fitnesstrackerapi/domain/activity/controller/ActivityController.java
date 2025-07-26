@@ -1,11 +1,13 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
+import dev.shendriks.fitnesstrackerapi.domain.activity.view.View;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
@@ -132,7 +134,7 @@ public class ActivityController {
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Activities",
+            description = "Activity",
             content = {
                 @Content(
                     mediaType = "application/json",
@@ -143,7 +145,8 @@ public class ActivityController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityResponse> getActivities(
+//    @JsonView(View.WithGpsPositions.class)
+    public ResponseEntity<ActivityResponse> getActivity(
         @AuthenticationPrincipal User user,
         @PathVariable
         @Parameter(

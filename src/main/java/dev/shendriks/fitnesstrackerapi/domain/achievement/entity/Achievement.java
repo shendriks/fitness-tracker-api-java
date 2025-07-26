@@ -1,33 +1,46 @@
 package dev.shendriks.fitnesstrackerapi.domain.achievement.entity;
 
-import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
-import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
-import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "challenge_id"}))
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Achievement {
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;
-    @ManyToOne
-    @JoinColumn(name = "challenge_id")
-    Challenge challenge;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Ulid
     @Column(nullable = false, unique = true, length = 26)
     private String ulid;
-    @OneToOne
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false, length = 1023)
+    private String description;
+    @Column(nullable = false)
+    private String imageFilePath;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ActivityType activityType;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ActivityMetric activityMetric;
+    @Column(nullable = false)
+    private Long completionThreshold;
+    @CreationTimestamp
+    @Column(nullable = false)
+    private Instant createdAt;
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private Instant updatedAt;
 }

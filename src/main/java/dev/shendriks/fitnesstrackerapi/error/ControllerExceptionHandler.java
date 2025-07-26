@@ -1,5 +1,9 @@
 package dev.shendriks.fitnesstrackerapi.error;
 
+import dev.shendriks.fitnesstrackerapi.domain.exception.InvalidDataException;
+import dev.shendriks.fitnesstrackerapi.domain.exception.ObjectNotFoundException;
+import dev.shendriks.fitnesstrackerapi.ratelimiting.RateLimitExceededException;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -9,26 +13,40 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(ApiException.class)
-    public ResponseEntity<ApiError> handle(ApiException e, WebRequest request) {
-        ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
-        return new ResponseEntity<>(apiError, e.getStatus());
+    @ExceptionHandler(InvalidDataException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handle(InvalidDataException e) {
+        return new ApiError(e.getMessage());
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handle(ObjectNotFoundException e) {
+        return new ApiError(e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handle(AuthenticationException e, WebRequest request) {
-        ApiError apiError = new ApiError(e.getMessage(), e.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handle(AuthenticationException e) {
+        return new ApiError(e.getMessage());
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ApiError handle(RateLimitExceededException e) {
+        return new ApiError(e.getMessage());
     }
 
     @Override

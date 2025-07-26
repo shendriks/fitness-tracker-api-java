@@ -1,10 +1,9 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.exception;
 
-import dev.shendriks.fitnesstrackerapi.error.ApiException;
-import org.springframework.http.HttpStatus;
+import dev.shendriks.fitnesstrackerapi.domain.exception.InvalidDataException;
 
-public class EmailAlreadyRegisteredException extends ApiException {
+public class EmailAlreadyRegisteredException extends InvalidDataException {
     public EmailAlreadyRegisteredException() {
-        super(HttpStatus.BAD_REQUEST, "Email already registered");
+        super("Email already registered");
     }
 }

@@ -1,10 +1,9 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.exception;
 
-import dev.shendriks.fitnesstrackerapi.error.ApiException;
-import org.springframework.http.HttpStatus;
+import dev.shendriks.fitnesstrackerapi.domain.exception.ObjectNotFoundException;
 
-public class UserNotFoundException extends ApiException {
+public class UserNotFoundException extends ObjectNotFoundException {
     public UserNotFoundException() {
-        super(HttpStatus.NOT_FOUND, "User not found");
+        super("User not found");
     }
 }

@@ -1,8 +1,9 @@
-package dev.shendriks.fitnesstrackerapi.domain.achievement.controller;
+package dev.shendriks.fitnesstrackerapi.domain.challenge.controller;
 
-import dev.shendriks.fitnesstrackerapi.domain.achievement.dto.AchievementResponse;
-import dev.shendriks.fitnesstrackerapi.domain.achievement.service.AchievementService;
+import dev.shendriks.fitnesstrackerapi.domain.challenge.dto.ChallengeParticipationResponse;
+import dev.shendriks.fitnesstrackerapi.domain.challenge.service.ChallengeService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -21,31 +22,31 @@ import org.springframework.web.bind.annotation.RestController;
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BEARER_TOKEN;
 
 @RestController
-@Tag(name = OpenApiTagName.ACHIEVEMENTS, description = "A user's achievements")
-@RequestMapping("/api/achievements")
+@Tag(name = OpenApiTagName.CHALLENGES, description = "Challenges the user is participating in")
+@RequestMapping("/api/challenge-participations")
 @SecurityRequirement(name = BEARER_TOKEN)
-public class AchievementController {
-    private final AchievementService achievementService;
+public class ChallengeParticipationController {
+    private final ChallengeService challengeService;
 
-    public AchievementController(AchievementService achievementService) {
-        this.achievementService = achievementService;
+    public ChallengeParticipationController(ChallengeService challengeService) {
+        this.challengeService = challengeService;
     }
 
-    @Operation(summary = "Get user's achievements")
+    @Operation(summary = "Get the user's challenge participations")
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "The user's achievements",
+            description = "All challenge participations",
             content = {
                 @Content(
                     mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = AchievementResponse.class)))
+                    array = @ArraySchema(schema = @Schema(implementation = ChallengeParticipationResponse.class)))
             }
         ),
-        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ApiError.class))),
     })
     @GetMapping
-    public ResponseEntity<Iterable<AchievementResponse>> getAchievements(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(achievementService.getAllAchievementsByUser(user));
+    public ResponseEntity<Iterable<ChallengeParticipationResponse>> getChallenges(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(challengeService.getAllChallengeParticipations(user));
     }
 }

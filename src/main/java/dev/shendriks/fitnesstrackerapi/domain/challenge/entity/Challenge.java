@@ -1,31 +1,24 @@
 package dev.shendriks.fitnesstrackerapi.domain.challenge.entity;
 
 import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
-import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Challenge {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Ulid
-    @Column(nullable = false, unique = true, length = 26)
-    private String ulid;
+public class Challenge extends Achievement {
     @Column(nullable = false)
-    private String name;
-    @Column(nullable = false, length = 1023)
-    private String description;
+    private Instant startDate;
     @Column(nullable = false)
-    private String ruleJson;
-    @OneToMany(mappedBy = "challenge")
-    private Set<Achievement> achievements;
-    @Column(nullable = false)
-    private String imageFilePath;
+    private Instant endDate;
+    @OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER)
+    private Set<ChallengeParticipation> challengeParticipations;
 }

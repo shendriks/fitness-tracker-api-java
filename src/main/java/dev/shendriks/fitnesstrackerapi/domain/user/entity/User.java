@@ -1,6 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.entity;
 
-import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
+import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.ChallengeParticipation;
+import dev.shendriks.fitnesstrackerapi.domain.trophy.entity.Trophy;
 import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.supportive.ulid.Ulid;
 import jakarta.persistence.*;
@@ -43,5 +44,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<Achievement> achievements;
+    private Set<Trophy> trophies;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<ChallengeParticipation> challengeParticipations;
 }

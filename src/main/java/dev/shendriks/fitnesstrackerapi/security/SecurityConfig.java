@@ -57,8 +57,9 @@ public class SecurityConfig {
         String[] approvalPaths = {
             "/api/activities/**",
             "/api/challenges/**",
-            "/api/achievements/**",
-            "/api/users/me"
+            "/api/trophies/**",
+            "/api/users/me",
+            "/api/challenge-participations"
         };
         
         http

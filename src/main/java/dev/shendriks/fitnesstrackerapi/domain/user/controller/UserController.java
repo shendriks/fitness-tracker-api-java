@@ -82,13 +82,7 @@ public class UserController {
         )
         UserSignupRequest request
     ) {
-        String email = request.email().toLowerCase().trim();
-        UserResponse user = service.findUserByEmail(email);
-        if (user != null) {
-            throw new EmailAlreadyRegisteredException();
-        }
-
-        UserResponse userResponse = this.service.save(request);
+        UserResponse userResponse = service.signUp(request);
         URI location = URI.create("/api/users/" + userResponse.id());
 
         return ResponseEntity.created(location).build();
