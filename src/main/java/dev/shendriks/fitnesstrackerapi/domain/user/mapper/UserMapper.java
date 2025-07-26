@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.mapper;
 
+import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserUpdateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.user.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserResponse;
 import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserSignupRequest;
@@ -30,6 +31,15 @@ public class UserMapper {
         user.setName(request.name());
         user.setEmail(request.email().toLowerCase().trim());
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setAuthority("ROLE_USER");
+        user.setAccountType(AccountType.fromString(request.accountType()));
+        return user;
+    }    
+    
+    public User updateEntity(User user, UserUpdateRequest request) {
+        user.setName(request.name());
+        user.setEmail(request.email().toLowerCase().trim());
+        user.setPassword(passwordEncoder.encode(request.newPassword()));
         user.setAuthority("ROLE_USER");
         user.setAccountType(AccountType.fromString(request.accountType()));
         return user;

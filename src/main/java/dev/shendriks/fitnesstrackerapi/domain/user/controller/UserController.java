@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.user.controller;
 
 import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserResponse;
 import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserSignupRequest;
+import dev.shendriks.fitnesstrackerapi.domain.user.dto.UserUpdateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.user.exception.UserNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.user.exception.EmailAlreadyRegisteredException;
@@ -86,6 +87,53 @@ public class UserController {
         URI location = URI.create("/api/users/" + userResponse.id());
 
         return ResponseEntity.created(location).build();
+    }    
+    
+    @Operation(summary = "Update user")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "User account updated",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        ),        
+        @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        )
+    })
+    @PatchMapping("/me")
+    @SecurityRequirement(name = BEARER_TOKEN)
+    public ResponseEntity<Void> updateUser(
+        @AuthenticationPrincipal User user,
+        @Valid
+        @RequestBody
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "The user account update",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = UserUpdateRequest.class),
+                examples = @ExampleObject(value = """
+                        {
+                            "name": "John Doe",
+                            "email": "foo@bar.baz",
+                            "currentPassword": "Sup3rS3cr3tPa$$w0rd!",
+                            "newPassword": "An0th3rP4$$w0rd*",
+                            "accountType": "basic"
+                        }
+                    """))
+        )
+        UserUpdateRequest request
+    ) {
+        service.updateUser(user, request);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Get a user by id")
