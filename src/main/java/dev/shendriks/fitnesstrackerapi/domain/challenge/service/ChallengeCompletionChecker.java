@@ -39,7 +39,7 @@ public class ChallengeCompletionChecker {
 
     public void checkCompletionForUser(User user) {
         // 1. fetch all current unfinished challenges the user is participating in
-        Iterable<ChallengeParticipation> challengeParticipations = challengeParticipationRepository.findUnfinished(user, Instant.now());
+        Iterable<ChallengeParticipation> challengeParticipations = challengeParticipationRepository.findCurrent(user, Instant.now());
 
         // 2. iterate over challenges
         for (ChallengeParticipation challengeParticipation : challengeParticipations) {

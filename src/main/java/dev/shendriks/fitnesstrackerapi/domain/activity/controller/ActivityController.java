@@ -1,10 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
-import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
-import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.*;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
@@ -29,7 +25,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Optional;
 
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BEARER_TOKEN;
 
@@ -96,7 +91,7 @@ public class ActivityController {
             throw new RateLimitExceededException();
         }
 
-        ActivityResponse activityResponse = activityService.save(request, user);
+        ActivityResponse activityResponse = activityService.save(user, request);
 
         URI location = URI.create("/api/activities/" + activityResponse.id());
 
@@ -197,11 +192,72 @@ public class ActivityController {
         @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivity(@AuthenticationPrincipal User user, String id) {
+    public ResponseEntity<Void> deleteActivity(
+        @AuthenticationPrincipal User user,
+        @PathVariable
+        @Parameter(
+            name = "id",
+            description = "The activity id",
+            required = true,
+            examples = @ExampleObject(value = "01JZQZZYETYBWQV7KF0BHGMBDJ")
+        )
+        String id
+    ) {
         activityService.deleteActivity(user, id);
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Update activity")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "Activity updated",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Not fodun", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> patchActivity(
+        @AuthenticationPrincipal User user,
+        @PathVariable
+        @Parameter(
+            name = "id",
+            description = "The activity id",
+            required = true,
+            examples = @ExampleObject(value = "01JZQZZYETYBWQV7KF0BHGMBDJ")
+        )
+        String id,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "The activity update",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ActivityUpdateRequest.class),
+                examples = @ExampleObject(value = """
+                        {
+                            "activityType": "running",
+                            "title": "Morning Run",
+                            "description": "Some description."
+                        }
+                    """)))
+        @RequestBody @Valid ActivityUpdateRequest request
+    ) {
+        if (!rateLimiterService.isRequestAllowed(user)) {
+            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
+            throw new RateLimitExceededException();
+        }
+
+        activityService.update(user, id, request);
+        
+        return ResponseEntity.noContent().build();
+    }
+    
     @Operation(summary = "Start recording a new activity")
     @ApiResponses(value = {
         @ApiResponse(

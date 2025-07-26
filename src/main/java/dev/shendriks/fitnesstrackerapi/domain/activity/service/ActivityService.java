@@ -3,13 +3,17 @@ package dev.shendriks.fitnesstrackerapi.domain.activity.service;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
+import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityUpdateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityDeletedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivitySavedEvent;
+import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityUpdatedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
+import jakarta.validation.Valid;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +35,7 @@ public class ActivityService {
         this.eventPublisher = eventPublisher;
     }
 
-    public ActivityResponse save(ActivityCreateRequest request, User user) {
+    public ActivityResponse save(User user, ActivityCreateRequest request) {
         Activity activity = mapper.toEntity(request, user);
         repository.save(activity);
         eventPublisher.publishEvent(new ActivitySavedEvent(this, activity.getId()));
@@ -49,16 +53,22 @@ public class ActivityService {
     }
 
     public ActivityResponse findActivityByUserAndId(User user, String id) {
-        Optional<Activity> activity = repository.findByUserAndUlid(user, id);
-        return activity.map(mapper::toResponse).orElseThrow(ActivityNotFoundException::new);
+        Activity activity = repository.findByUserAndUlid(user, id).orElseThrow(ActivityNotFoundException::new);
+        return mapper.toResponse(activity);
     }
 
     public void deleteActivity(User user, String id) {
-        Optional<Activity> activity = repository.findByUserAndUlid(user, id);
-        if (activity.isEmpty()) {
-            throw new ActivityNotFoundException();
-        }
-        repository.delete(activity.get());
+        Activity activity = repository.findByUserAndUlid(user, id).orElseThrow(ActivityNotFoundException::new);
+        repository.delete(activity);
         eventPublisher.publishEvent(new ActivityDeletedEvent(this, user.getId()));
+    }
+
+    public void update(User user, String id, ActivityUpdateRequest request) {
+        Activity activity = repository.findByUserAndUlid(user, id).orElseThrow(ActivityNotFoundException::new);
+        activity.setActivityType(ActivityType.fromString(request.activityType().trim()));
+        activity.setTitle(request.title());
+        activity.setDescription(request.description());
+        repository.save(activity);
+        eventPublisher.publishEvent(new ActivityUpdatedEvent(this, activity.getId()));
     }
 }
