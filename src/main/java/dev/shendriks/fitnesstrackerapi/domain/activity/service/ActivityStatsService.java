@@ -10,6 +10,7 @@ import dev.shendriks.fitnesstrackerapi.supportive.TimeRange;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,6 +51,10 @@ public class ActivityStatsService {
                 activityStat.getMaxDuration()
             ));
         }
+
+        Arrays
+            .stream(ActivityType.values())
+            .forEach(activityType -> activityStatsByType.computeIfAbsent(activityType, key -> new ActivityAggregationImpl()));
 
         return activityStatsByType;
     }

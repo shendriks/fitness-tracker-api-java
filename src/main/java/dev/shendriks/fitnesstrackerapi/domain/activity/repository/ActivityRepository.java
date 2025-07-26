@@ -30,10 +30,10 @@ public interface ActivityRepository extends
         SELECT
                 activityType AS type,
                 COUNT(id) AS count,
-                SUM(distance) AS totalDistance,
-                SUM(duration) AS totalDuration,
-                MAX(distance) AS maxDistance,
-                MAX(duration) AS maxDuration
+                COALESCE(SUM(distance), 0) AS totalDistance,
+                COALESCE(SUM(duration), 0) AS totalDuration,
+                COALESCE(MAX(distance), 0) AS maxDistance,
+                COALESCE(MAX(duration), 0) AS maxDuration
         FROM Activity
         WHERE user = :user
         AND (:from IS NULL OR startDate >= :from)
@@ -49,10 +49,10 @@ public interface ActivityRepository extends
     @Query("""
         SELECT
                 COUNT(id) AS count,
-                SUM(distance) AS totalDistance,
-                SUM(duration) AS totalDuration,
-                MAX(distance) AS maxDistance,
-                MAX(duration) AS maxDuration
+                COALESCE(SUM(distance), 0) AS totalDistance,
+                COALESCE(SUM(duration), 0) AS totalDuration,
+                COALESCE(MAX(distance), 0) AS maxDistance,
+                COALESCE(MAX(duration), 0) AS maxDuration
         FROM Activity
         WHERE user = :user
         AND (:from IS NULL OR startDate >= :from)

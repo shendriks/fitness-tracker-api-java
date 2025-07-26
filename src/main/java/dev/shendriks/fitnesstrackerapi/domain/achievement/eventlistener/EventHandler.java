@@ -58,7 +58,7 @@ public class EventHandler {
     public void handleChallengeLeft(ChallengeLeftEvent event) {
         User user = userRepository.findById(event.getUserId()).orElseThrow();
         Challenge challenge = challengeRepository.findById(event.getChallengeId()).orElseThrow();
-        trophyService.deleteTrophyForUserAndChallenge(user, challenge);
+        trophyService.deleteTrophyIfExists(user, challenge);
     }
 
     @EventListener
@@ -85,8 +85,7 @@ public class EventHandler {
     @Synchronized
     @Async
     public void handleDeletedActivity(ActivityDeletedEvent event) {
-        Activity activity = activityRepository.findById(event.getActivityId()).orElseThrow();
-        User user = activity.getUser();
+        User user = userRepository.findById(event.getUserId()).orElseThrow();
         milestoneCompletionChecker.checkCompletionForUser(user);
         challengeCompletionChecker.checkCompletionForUser(user);
     }

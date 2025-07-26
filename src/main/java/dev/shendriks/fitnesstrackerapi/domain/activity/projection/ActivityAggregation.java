@@ -1,13 +1,13 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.projection;
 
 public interface ActivityAggregation {
-    Long getCount();
+    long getCount();
 
-    Long getTotalDistance();
+    long getTotalDistance();
 
-    Long getTotalDuration();
+    long getTotalDuration();
 
-    Long getMaxDistance();
+    long getMaxDistance();
 
-    Long getMaxDuration();
+    long getMaxDuration();
 }

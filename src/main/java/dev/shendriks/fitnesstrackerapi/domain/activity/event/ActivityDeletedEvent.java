@@ -5,10 +5,10 @@ import org.springframework.context.ApplicationEvent;
 
 public class ActivityDeletedEvent extends ApplicationEvent {
     @Getter
-    private final Long activityId;
+    private final Long userId;
 
-    public ActivityDeletedEvent(Object source, Long activityId) {
+    public ActivityDeletedEvent(Object source, Long userId) {
         super(source);
-        this.activityId = activityId;
+        this.userId = userId;
     }
 }

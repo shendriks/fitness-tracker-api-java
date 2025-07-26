@@ -1,7 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.trophy.service;
 
 import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
-import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.trophy.dto.TrophyResponse;
 import dev.shendriks.fitnesstrackerapi.domain.trophy.entity.Trophy;
 import dev.shendriks.fitnesstrackerapi.domain.trophy.event.TrophyLostEvent;
@@ -32,7 +31,12 @@ public class TrophyService {
         return mapper.toResponses(trophies);
     }
     
-    public void createTrophyForUserAndChallenge(User user, Achievement achievement) {
+    public void createTrophyIfNotExists(User user, Achievement achievement) {
+        Optional<Trophy> existingTrophy = repository.findByUserAndAchievement(user, achievement);
+        if (existingTrophy.isPresent()) {
+            return;
+        }
+        
         Trophy trophy = new Trophy();
         trophy.setUser(user);
         trophy.setAchievement(achievement);
@@ -40,7 +44,7 @@ public class TrophyService {
         eventPublisher.publishEvent(new TrophyUnlockedEvent(this, trophy.getId()));
     }
 
-    public void deleteTrophyForUserAndChallenge(User user, Achievement achievement) {
+    public void deleteTrophyIfExists(User user, Achievement achievement) {
         Optional<Trophy> trophy = repository.findByUserAndAchievement(user, achievement);
         if (trophy.isEmpty()) {
             return;

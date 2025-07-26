@@ -1,13 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.StartActivityRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityService;
-import dev.shendriks.fitnesstrackerapi.domain.activity.view.View;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.error.ApiError;
 import dev.shendriks.fitnesstrackerapi.openapi.OpenApiTagName;
@@ -162,9 +160,9 @@ public class ActivityController {
             throw new RateLimitExceededException();
         }
 
-        Optional<ActivityResponse> activity = activityService.findActivityByUserAndId(user, id);
-
-        return activity.map(ResponseEntity::ok).orElseThrow(ActivityNotFoundException::new);
+        ActivityResponse activity = activityService.findActivityByUserAndId(user, id);
+        
+        return ResponseEntity.ok(activity);
     }
 
     @Operation(summary = "Get user's activity count")
@@ -190,6 +188,18 @@ public class ActivityController {
         ActivityCountResponse activityCount = activityService.getActivityCountByUser(user);
 
         return ResponseEntity.ok(activityCount);
+    }
+
+    @Operation(summary = "Delete activity")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Activity deleted", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActivity(@AuthenticationPrincipal User user, String id) {
+        activityService.deleteActivity(user, id);
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Start recording a new activity")

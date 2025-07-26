@@ -4,7 +4,9 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCountResponse
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityCreateRequest;
 import dev.shendriks.fitnesstrackerapi.domain.activity.dto.ActivityResponse;
 import dev.shendriks.fitnesstrackerapi.domain.activity.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivityDeletedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.activity.event.ActivitySavedEvent;
+import dev.shendriks.fitnesstrackerapi.domain.activity.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.activity.mapper.ActivityMapper;
 import dev.shendriks.fitnesstrackerapi.domain.activity.repository.ActivityRepository;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
@@ -38,7 +40,6 @@ public class ActivityService {
 
     public Iterable<ActivityResponse> getAllActivitiesByUser(User user) {
         Iterable<Activity> activities = repository.findAllByUserOrderByUlidDesc(user);
-
         return mapper.toResponses(activities);
     }
 
@@ -47,8 +48,17 @@ public class ActivityService {
         return new ActivityCountResponse(activityCount);
     }
 
-    public Optional<ActivityResponse> findActivityByUserAndId(User user, String id) {
+    public ActivityResponse findActivityByUserAndId(User user, String id) {
         Optional<Activity> activity = repository.findByUserAndUlid(user, id);
-        return activity.map(mapper::toResponse);
+        return activity.map(mapper::toResponse).orElseThrow(ActivityNotFoundException::new);
+    }
+
+    public void deleteActivity(User user, String id) {
+        Optional<Activity> activity = repository.findByUserAndUlid(user, id);
+        if (activity.isEmpty()) {
+            throw new ActivityNotFoundException();
+        }
+        repository.delete(activity.get());
+        eventPublisher.publishEvent(new ActivityDeletedEvent(this, user.getId()));
     }
 }

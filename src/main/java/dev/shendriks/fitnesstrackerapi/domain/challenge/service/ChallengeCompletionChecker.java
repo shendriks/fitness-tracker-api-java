@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.domain.challenge.service;
 import dev.shendriks.fitnesstrackerapi.domain.achievement.service.AchievementProgressCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.activity.projection.ActivityAggregation;
+import dev.shendriks.fitnesstrackerapi.domain.activity.projection.ActivityAggregationImpl;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityStatsService;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.ChallengeParticipation;
@@ -56,10 +57,7 @@ public class ChallengeCompletionChecker {
             if (challenge.getActivityType() == null) {
                 percentageCompleted = achievementProgressCalculator.calculateCompletionPercentage(challenge, activityStats);
             } else {
-                ActivityAggregation activityStatsForType = activityStatsByType.get(challenge.getActivityType());
-                if (activityStatsForType == null) {
-                    continue;
-                }
+                ActivityAggregation activityStatsForType = activityStatsByType.getOrDefault(challenge.getActivityType(), new ActivityAggregationImpl());
                 percentageCompleted = achievementProgressCalculator.calculateCompletionPercentage(challenge, activityStatsForType);
             }
             
@@ -74,12 +72,12 @@ public class ChallengeCompletionChecker {
 
             if (isCompleted) {
                 // 5a. create trophy
-                trophyService.createTrophyForUserAndChallenge(user, challenge);
+                trophyService.createTrophyIfNotExists(user, challenge);
                 continue;
             }
 
             // 5b. trophy lost :-(
-            trophyService.deleteTrophyForUserAndChallenge(user, challenge);
+            trophyService.deleteTrophyIfExists(user, challenge);
         }
     }
 }

@@ -1,20 +1,18 @@
 package dev.shendriks.fitnesstrackerapi.domain.milestone.service;
 
-import dev.shendriks.fitnesstrackerapi.domain.achievement.entity.Achievement;
 import dev.shendriks.fitnesstrackerapi.domain.achievement.service.AchievementProgressCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.activity.projection.ActivityAggregation;
+import dev.shendriks.fitnesstrackerapi.domain.activity.projection.ActivityAggregationImpl;
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityStatsService;
 import dev.shendriks.fitnesstrackerapi.domain.milestone.entity.Milestone;
 import dev.shendriks.fitnesstrackerapi.domain.milestone.repository.MilestoneRepository;
-import dev.shendriks.fitnesstrackerapi.domain.trophy.entity.Trophy;
 import dev.shendriks.fitnesstrackerapi.domain.trophy.service.TrophyService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 
 @Log
 @Service
@@ -37,16 +35,16 @@ public class MilestoneCompletionChecker {
     }
 
     public void checkCompletionForUser(User user) {
-        List<Long> completedMilestoneIds = user
-            .getTrophies()
-            .stream()
-            .map(Trophy::getAchievement)
-            .filter(achievement -> achievement instanceof Milestone)
-            .map(Achievement::getId)
-            .toList();
+//        List<Long> completedMilestoneIds = user
+//            .getTrophies()
+//            .stream()
+//            .map(Trophy::getAchievement)
+//            .filter(achievement -> achievement instanceof Milestone)
+//            .map(Achievement::getId)
+//            .toList();
 
         // 1. fetch all milestones
-        Iterable<Milestone> milestones = milestoneRepository.findByIdNotIn(completedMilestoneIds);
+        Iterable<Milestone> milestones = milestoneRepository.findAll();
 
         // 2. iterate over challenges
         for (Milestone milestone : milestones) {
@@ -58,21 +56,18 @@ public class MilestoneCompletionChecker {
             if (milestone.getActivityType() == null) {
                 progress = achievementProgressCalculator.calculateCompletionPercentage(milestone, activityStats);
             } else {
-                ActivityAggregation activityStatsForType = activityStatsByType.get(milestone.getActivityType());
-                if (activityStatsForType == null) {
-                    continue;
-                }
+                ActivityAggregation activityStatsForType = activityStatsByType.getOrDefault(milestone.getActivityType(), new ActivityAggregationImpl());
                 progress = achievementProgressCalculator.calculateCompletionPercentage(milestone, activityStatsForType);
             }
 
             if (progress >= 100) {
                 // 5a. create trophy
-                trophyService.createTrophyForUserAndChallenge(user, milestone);
+                trophyService.createTrophyIfNotExists(user, milestone);
                 continue;
             }
 
             // 5b. trophy lost :-(
-            trophyService.deleteTrophyForUserAndChallenge(user, milestone);
+            trophyService.deleteTrophyIfExists(user, milestone);
         }
     }
 }
