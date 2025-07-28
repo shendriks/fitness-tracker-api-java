@@ -12,7 +12,6 @@ import dev.shendriks.fitnesstrackerapi.domain.challenge.mapper.ChallengeParticip
 import dev.shendriks.fitnesstrackerapi.domain.challenge.repository.ChallengeParticipationRepository;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.repository.ChallengeRepository;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
-import lombok.extern.java.Log;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class ChallengeService {
     }
 
     public Iterable<ChallengeResponse> getAllChallenges(User user) {
-        Iterable<Challenge> challenges = challengeRepository.findAll();
+        Iterable<Challenge> challenges = challengeRepository.findAllByOrderByCreatedAtDesc();
 
         return challengeMapper.toResponses(challenges, user);
     }
@@ -69,7 +68,7 @@ public class ChallengeService {
     }
 
     public Iterable<ChallengeParticipationResponse> getAllChallengeParticipations(User user) {
-        Iterable<ChallengeParticipation> challengeParticipations = this.participationRepository.findByUser(user);
+        Iterable<ChallengeParticipation> challengeParticipations = this.participationRepository.findByUserOrderByCreatedAtDesc(user);
 
         return participationMapper.toResponses(challengeParticipations, user);
     }

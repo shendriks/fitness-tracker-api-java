@@ -16,7 +16,7 @@ public interface ChallengeParticipationRepository extends CrudRepository<Challen
 
     boolean existsByChallengeAndUser(Challenge challenge, User user);
 
-    Iterable<ChallengeParticipation> findByUser(User user);
+    Iterable<ChallengeParticipation> findByUserOrderByCreatedAtDesc(User user);
 
     Iterable<ChallengeParticipation> findByUserAndChallengeStartDateBeforeAndChallengeEndDateAfter(User user, Instant now, Instant now1);
 

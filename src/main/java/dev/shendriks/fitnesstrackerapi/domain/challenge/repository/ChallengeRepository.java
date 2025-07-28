@@ -11,4 +11,5 @@ public interface ChallengeRepository extends CrudRepository<Challenge, Long> {
     Iterable<Challenge> findByStartDateBeforeAndEndDateAfter(Instant startDateBefore, Instant endDateAfter);
     Iterable<Challenge> findByIdNotInAndStartDateBeforeAndEndDateAfter(List<Long> challengeIds, Instant startDateBefore, Instant endDateAfter);
     Optional<Challenge> findByUlid(String ulid);
+    Iterable<Challenge> findAllByOrderByCreatedAtDesc();
 }

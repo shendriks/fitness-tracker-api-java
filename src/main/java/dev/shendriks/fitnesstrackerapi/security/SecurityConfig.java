@@ -57,11 +57,12 @@ public class SecurityConfig {
         String[] approvalPaths = {
             "/api/activities/**",
             "/api/challenges/**",
+            "/api/challenge-participations",
+            "/api/milestones/**",
             "/api/trophies/**",
             "/api/users/me",
-            "/api/challenge-participations"
         };
-        
+
         http
             .securityMatcher(approvalPaths)
             .csrf(AbstractHttpConfigurer::disable)

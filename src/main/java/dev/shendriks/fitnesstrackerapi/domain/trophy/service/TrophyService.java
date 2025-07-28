@@ -26,7 +26,7 @@ public class TrophyService {
     }
 
     public Iterable<TrophyResponse> getAllTrophiesByUser(User user) {
-        Iterable<Trophy> trophies = repository.findAllByUser(user);
+        Iterable<Trophy> trophies = repository.findAllByUserOrderByCreatedAtDesc(user);
 
         return mapper.toResponses(trophies);
     }
