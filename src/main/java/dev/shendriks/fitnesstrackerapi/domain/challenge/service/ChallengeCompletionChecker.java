@@ -7,11 +7,13 @@ import dev.shendriks.fitnesstrackerapi.domain.activity.projection.ActivityAggreg
 import dev.shendriks.fitnesstrackerapi.domain.activity.service.ActivityStatsService;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.entity.ChallengeParticipation;
+import dev.shendriks.fitnesstrackerapi.domain.challenge.event.ChallengeCompletedEvent;
 import dev.shendriks.fitnesstrackerapi.domain.challenge.repository.ChallengeParticipationRepository;
 import dev.shendriks.fitnesstrackerapi.domain.trophy.service.TrophyService;
 import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
 import dev.shendriks.fitnesstrackerapi.supportive.TimeRange;
 import lombok.extern.java.Log;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,17 +26,20 @@ public class ChallengeCompletionChecker {
     private final ActivityStatsService activityStatsService;
     private final TrophyService trophyService;
     private final AchievementProgressCalculator achievementProgressCalculator;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ChallengeCompletionChecker(
         ChallengeParticipationRepository challengeParticipationRepository,
         ActivityStatsService activityStatsService,
         TrophyService trophyService,
-        AchievementProgressCalculator achievementProgressCalculator 
+        AchievementProgressCalculator achievementProgressCalculator,
+        ApplicationEventPublisher eventPublisher
     ) {
         this.challengeParticipationRepository = challengeParticipationRepository;
         this.activityStatsService = activityStatsService;
         this.trophyService = trophyService;
         this.achievementProgressCalculator = achievementProgressCalculator;
+        this.eventPublisher = eventPublisher;
     }
 
     public void checkCompletionForUser(User user) {
@@ -72,6 +77,7 @@ public class ChallengeCompletionChecker {
 
             if (isCompleted) {
                 // 5a. create trophy
+                eventPublisher.publishEvent(new ChallengeCompletedEvent(this, user.getId(), challenge.getId()));
                 trophyService.createTrophyIfNotExists(user, challenge);
                 continue;
             }

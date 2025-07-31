@@ -41,7 +41,7 @@ public class TrophyService {
         trophy.setUser(user);
         trophy.setAchievement(achievement);
         repository.save(trophy);
-        eventPublisher.publishEvent(new TrophyUnlockedEvent(this, trophy.getId()));
+        eventPublisher.publishEvent(new TrophyUnlockedEvent(this, user.getId(), trophy.getId()));
     }
 
     public void deleteTrophyIfExists(User user, Achievement achievement) {
@@ -50,6 +50,6 @@ public class TrophyService {
             return;
         }
         repository.delete(trophy.get());
-        eventPublisher.publishEvent(new TrophyLostEvent(this, trophy.get().getId()));
+        eventPublisher.publishEvent(new TrophyLostEvent(this, user.getId(), trophy.get().getId()));
     }
 }

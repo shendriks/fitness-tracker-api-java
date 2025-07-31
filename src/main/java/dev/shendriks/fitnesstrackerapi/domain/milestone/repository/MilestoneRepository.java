@@ -10,7 +10,30 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MilestoneRepository extends CrudRepository<Milestone, Long> {
-    Iterable<Milestone> findByIdNotIn(List<Long> milestoneIds);
+    @Query("""
+        SELECT m
+        FROM Milestone m
+        JOIN Achievement a ON (a.id = m.id)
+        LEFT JOIN Trophy t ON (
+            t.achievement = m
+            AND t.user = :user
+        )
+        WHERE t.id IS NULL
+        ORDER BY m.id ASC
+        """)
+    Iterable<Milestone> findIncompleteByUser(@Param("user") User user);    
+    
+    @Query("""
+        SELECT m
+        FROM Milestone m
+        JOIN Achievement a ON (a.id = m.id)
+        JOIN Trophy t ON (
+            t.achievement = m
+            AND t.user = :user
+        )
+        ORDER BY m.id ASC
+        """)
+    Iterable<Milestone> findCompletedByUser(@Param("user") User user);
 
     @Query("""
         SELECT

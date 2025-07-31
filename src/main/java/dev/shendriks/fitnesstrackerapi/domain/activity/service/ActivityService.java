@@ -60,7 +60,7 @@ public class ActivityService {
     public void deleteActivity(User user, String id) {
         Activity activity = repository.findByUserAndUlid(user, id).orElseThrow(ActivityNotFoundException::new);
         repository.delete(activity);
-        eventPublisher.publishEvent(new ActivityDeletedEvent(this, user.getId()));
+        eventPublisher.publishEvent(new ActivityDeletedEvent(this, user.getId(), activity.getTitle()));
     }
 
     public void update(User user, String id, ActivityUpdateRequest request) {

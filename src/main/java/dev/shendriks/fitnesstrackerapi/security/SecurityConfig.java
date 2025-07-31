@@ -60,6 +60,7 @@ public class SecurityConfig {
             "/api/challenge-participations",
             "/api/milestones/**",
             "/api/trophies/**",
+            "/api/notifications/**",
             "/api/users/me",
         };
 

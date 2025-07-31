@@ -7,5 +7,6 @@ public class OpenApiTagName {
     public static final String CHALLENGES = "03. Challenge";
     public static final String MILESTONES = "04. Milestone";
     public static final String TROPHIES = "05. Trophy";
-    public static final String PING = "06. Ping";
+    public static final String NOTIFICATIONS = "06. Notifications";
+    public static final String PING = "07. Ping";
 }

@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         PathPatternRequestMatcher.withDefaults().matcher("/api/challenge-participations"),
         PathPatternRequestMatcher.withDefaults().matcher("/api/trophies/**"),
         PathPatternRequestMatcher.withDefaults().matcher("/api/milestones/**"),
+        PathPatternRequestMatcher.withDefaults().matcher("/api/notifications/**"),
         PathPatternRequestMatcher.withDefaults().matcher("/api/users/me")
     );
     private final JwtAuthenticationProvider provider;
