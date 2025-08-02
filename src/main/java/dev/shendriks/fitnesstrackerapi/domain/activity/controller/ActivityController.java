@@ -20,10 +20,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 
 import static dev.shendriks.fitnesstrackerapi.security.SecurityRequirementName.BEARER_TOKEN;
@@ -156,7 +158,7 @@ public class ActivityController {
         }
 
         ActivityResponse activity = activityService.findActivityByUserAndId(user, id);
-        
+
         return ResponseEntity.ok(activity);
     }
 
@@ -254,11 +256,49 @@ public class ActivityController {
         }
 
         activityService.update(user, id, request);
-        
+
         return ResponseEntity.noContent().build();
     }
-    
-    @Operation(summary = "Start recording a new activity")
+
+    @Operation(summary = "Upload a new activity")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "GPX file processed successfully",
+            content = {
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ActivityResponse.class))
+            }
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data",
+            content = @Content(schema = @Schema(implementation = ApiError.class))
+        ),
+        @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+        @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ActivityResponse> uploadActivity(
+        @AuthenticationPrincipal User user,
+        @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            required = true,
+            content = @Content(
+                mediaType = "multipart/form-data",
+                schema = @Schema(implementation = ActivityUploadRequest.class)
+            ))
+        @ModelAttribute
+        @Valid
+        ActivityUploadRequest request
+    ) {
+        try {
+            ActivityResponse activity = activityService.upload(user, request);
+            return ResponseEntity.ok(activity);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",

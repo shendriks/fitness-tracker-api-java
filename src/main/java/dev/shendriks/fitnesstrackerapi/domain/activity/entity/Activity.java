@@ -41,7 +41,7 @@ public class Activity {
     @UpdateTimestamp
     @Column(nullable = false)
     private Instant updatedAt;
-    @OneToMany(mappedBy = "activity", orphanRemoval = true)
+    @OneToMany(mappedBy = "activity", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<GPSPosition> gpsPositions = List.of();
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
