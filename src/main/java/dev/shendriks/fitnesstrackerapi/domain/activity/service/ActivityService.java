@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 @Service
 @Log
@@ -78,17 +77,22 @@ public class ActivityService {
         eventPublisher.publishEvent(new ActivityUpdatedEvent(this, activity.getId()));
     }
 
-    public ActivityResponse upload(User user, ActivityUploadRequest request) throws IOException {
-        Path tempFile = Files.createTempFile("activity-upload-", ".gpx");
+    public ActivityResponse upload(User user, ActivityUploadRequest request) {
         try {
-            Files.copy(request.file().getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-            GpxMetricsResponse metrics = gpxService.processGpxFile(tempFile);
-            Activity activity = mapper.toEntity(request, metrics, user);
-            repository.save(activity);
-            eventPublisher.publishEvent(new ActivitySavedEvent(this, activity.getId()));
-            return mapper.toResponse(activity);
-        } finally {
-            Files.deleteIfExists(tempFile);
+            Path tempFile = Files.createTempFile("activity-upload-", ".gpx");
+            try {
+                request.file().transferTo(tempFile);
+                GpxMetricsResponse metrics = gpxService.processGpxFile(tempFile);
+                Activity activity = mapper.toEntity(request, metrics, user);
+                repository.save(activity);
+                eventPublisher.publishEvent(new ActivitySavedEvent(this, activity.getId()));
+                return mapper.toResponse(activity);
+            } finally {
+                Files.deleteIfExists(tempFile);
+            }
+        } catch (IOException e) {
+            log.severe("Failed to process uploaded file: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

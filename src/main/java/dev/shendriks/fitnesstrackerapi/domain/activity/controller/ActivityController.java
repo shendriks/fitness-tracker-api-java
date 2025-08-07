@@ -291,12 +291,8 @@ public class ActivityController {
         @Valid
         ActivityUploadRequest request
     ) {
-        try {
-            ActivityResponse activity = activityService.upload(user, request);
-            return ResponseEntity.ok(activity);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ActivityResponse activity = activityService.upload(user, request);
+        return ResponseEntity.ok(activity);
     }
 
     @ApiResponses(value = {

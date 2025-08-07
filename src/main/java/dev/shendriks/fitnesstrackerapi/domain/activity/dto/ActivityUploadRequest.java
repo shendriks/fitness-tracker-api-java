@@ -1,6 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.domain.activity.dto;
 
 import dev.shendriks.fitnesstrackerapi.domain.activity.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.gpx.validator.GPXFile;
 import dev.shendriks.fitnesstrackerapi.validation.enums.ValueOfEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +17,7 @@ public record ActivityUploadRequest(
     String title,
     String description,
     @NotNull
+    @GPXFile
     MultipartFile file
 ) {
 }
