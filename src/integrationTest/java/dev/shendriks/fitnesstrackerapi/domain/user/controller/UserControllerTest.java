@@ -1,7 +1,9 @@
 package dev.shendriks.fitnesstrackerapi.domain.user.controller;
 
-import dev.shendriks.fitnesstrackerapi.domain.user.entity.User;
-import dev.shendriks.fitnesstrackerapi.domain.user.repository.UserRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.util.BasicAuthHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+
 public class UserControllerTest {
     private final BasicAuthHelper basicAuthHelper;
     private final MockMvc mvc;
@@ -64,7 +68,7 @@ public class UserControllerTest {
                 assertTrue(matcher.matches(), "Expected " + location + " to match " + locationPattern.pattern());
 
                 String ulid = matcher.group("ulid");
-                Optional<User> user = userRepository.findByUlid(ulid);
+                Optional<UserDbEntity> user = userRepository.findByUlid(ulid);
                 assertTrue(user.isPresent(), "Expected user to be present in database for ULID " + ulid);
             });
     }
@@ -100,18 +104,34 @@ public class UserControllerTest {
         String email = "foo@bar.baz";
         String password = "Sup3rS3cr3tPa$$w0rd!";
 
-        String basicAuthHeader = basicAuthHelper.createBasicAuthHeader(email, password);
+        String accessToken = getAccessToken(email, password);
 
-        mvc.perform(get("/api/users/" + userId)
-                .header("Authorization", "Basic " + basicAuthHeader))
+        mvc
+            .perform(get("/api/users/me").header("Authorization", "Bearer " + accessToken))
             .andExpect(status().isOk())
             .andExpect(content().json("""
-                    {
-                        "id": "%s",
-                        "email": "%s",
-                        "accountType": "basic"
+                {
+                    "id": "%s",
+                    "email": "%s",
+                    "accountType": "basic"
                 }
                 """.formatted(userId, email)
             ));
+    }
+
+    private String getAccessToken(String email, String password) throws Exception {
+        String basicAuthHeader = basicAuthHelper.createBasicAuthHeader(email, password);
+
+        String accessTokenJson = mvc
+            .perform(get("/api/access-token").header("Authorization", "Basic " + basicAuthHeader))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> tokenMap = mapper.readValue(accessTokenJson, new TypeReference<>() {
+        });
+        return (String) tokenMap.get("token");
     }
 }

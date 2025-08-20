@@ -13,3 +13,7 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
+jwt:
+  secret: test-token-secret
+  expiration: 86400
+  issuer: test-fitnesstrackerapi

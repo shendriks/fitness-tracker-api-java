@@ -15,3 +15,7 @@ tbd
 ## Swagger UI
 
 Go to http://localhost:8080/swagger-ui/index.html
+
+## Architecure Decision Log
+
+See [ADL](./docs/adl)
