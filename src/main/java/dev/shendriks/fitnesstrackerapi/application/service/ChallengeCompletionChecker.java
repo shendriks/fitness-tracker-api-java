@@ -6,8 +6,10 @@ import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingChalleng
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAggregatingActivities;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
+import dev.shendriks.fitnesstrackerapi.domain.service.AchievementCompletionCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.value.AchievementCompletionRequest;
+import dev.shendriks.fitnesstrackerapi.domain.value.AchievementCompletionResult;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregationMap;
-import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
@@ -23,6 +25,7 @@ public class ChallengeCompletionChecker {
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
     private final ForAggregatingActivities forAggregatingActivities;
+    private final AchievementCompletionCalculator achievementCompletionCalculator;
 
     public void checkCompletionForUser(UserId userId) {
         List<ChallengeParticipation> challengeParticipations = forAccessingChallengeParticipations.findCurrentByUser(userId);
@@ -33,28 +36,36 @@ public class ChallengeCompletionChecker {
     }
 
     public void updateChallengeCompletion(ChallengeParticipation challengeParticipation) {
-        Challenge challenge = challengeParticipation.getChallenge();
-        UserId userId = challengeParticipation.getUserId();
-        
+        Challenge challenge = challengeParticipation.challenge();
+        UserId userId = challengeParticipation.userId();
+
         ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserByTypeInTimeRange(
             userId,
             challenge.getStartDate(),
             challenge.getEndDate()
         );
 
-        challengeParticipation.updateCompletionPercentage(activityAggregationMap);
-
-        forAccessingChallengeParticipations.updatePercentageCompleted(
-            challengeParticipation.getId(),
-            challengeParticipation.getPercentageCompleted()
+        AchievementCompletionRequest request = new AchievementCompletionRequest(
+            activityAggregationMap,
+            challenge.getActivityType(),
+            challenge.getActivityMetric(),
+            challengeParticipation.percentageCompleted(),
+            challenge.getCompletionThreshold()
         );
 
-        if (challengeParticipation.isBecameComplete()) {
+        AchievementCompletionResult result = achievementCompletionCalculator.calculateAchievementCompletion(request);
+
+        forAccessingChallengeParticipations.updatePercentageCompleted(
+            challengeParticipation.id(),
+            result.percentageCompleted()
+        );
+
+        if (result.becameComplete()) {
             eventPublisher.publishEvent(new ChallengeCompletedEvent(this, userId, challenge.getId()));
             return;
         }
 
-        if (challengeParticipation.isBecameIncomplete()) {
+        if (result.becameIncomplete()) {
             eventPublisher.publishEvent(new ChallengeBecameIncompleteEvent(this, userId, challenge.getId()));
         }
     }

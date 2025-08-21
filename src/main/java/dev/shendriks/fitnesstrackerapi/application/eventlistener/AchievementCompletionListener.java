@@ -19,25 +19,25 @@ public class AchievementCompletionListener {
 
     @EventListener
     @Synchronized
-    public void handleChallengeCompletedEvent(ChallengeCompletedEvent event) {
+    public void handle(ChallengeCompletedEvent event) {
         trophyManagementService.createTrophyIfNotExists(event.getUserId(), event.getChallengeId());
     }
 
     @EventListener
     @Synchronized
-    public void handleChallengeCompletedEvent(ChallengeBecameIncompleteEvent event) {
+    public void handle(ChallengeBecameIncompleteEvent event) {
         trophyManagementService.deleteTrophyIfExists(event.getUserId(), event.getChallengeId());
     }
 
     @EventListener
     @Synchronized
-    public void handleChallengeCompletedEvent(MilestoneCompletedEvent event) {
+    public void handle(MilestoneCompletedEvent event) {
         trophyManagementService.createTrophyIfNotExists(event.getUserId(), event.getMilestoneId());
     }
 
     @EventListener
     @Synchronized
-    public void handleChallengeCompletedEvent(MilestoneBecameIncompleteEvent event) {
+    public void handle(MilestoneBecameIncompleteEvent event) {
         trophyManagementService.deleteTrophyIfExists(event.getUserId(), event.getMilestoneId());
     }
 }

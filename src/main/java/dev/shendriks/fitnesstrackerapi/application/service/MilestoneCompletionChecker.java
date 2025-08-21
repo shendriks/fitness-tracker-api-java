@@ -5,6 +5,9 @@ import dev.shendriks.fitnesstrackerapi.application.event.MilestoneCompletedEvent
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingMilestones;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAggregatingActivities;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Milestone;
+import dev.shendriks.fitnesstrackerapi.domain.service.AchievementCompletionCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.value.AchievementCompletionRequest;
+import dev.shendriks.fitnesstrackerapi.domain.value.AchievementCompletionResult;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregationMap;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
@@ -21,16 +24,25 @@ public class MilestoneCompletionChecker {
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingMilestones forAccessingMilestones;
     private final ForAggregatingActivities forAggregatingActivities;
+    private final AchievementCompletionCalculator achievementCompletionCalculator;
 
     public void checkCompletionForUser(UserId userId) {
         List<Milestone> milestones = forAccessingMilestones.findAllWithCompletedByUser(userId);
         ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserByType(userId);
 
         for (Milestone milestone : milestones) {
-            milestone.updateCompletionPercentage(activityAggregationMap);
-            if (milestone.isBecameComplete()) {
+            AchievementCompletionRequest request = new AchievementCompletionRequest(
+                activityAggregationMap,
+                milestone.getActivityType(),
+                milestone.getActivityMetric(),
+                milestone.isCompleted() ? 100 : 0,
+                milestone.getCompletionThreshold()
+            );
+
+            AchievementCompletionResult result = achievementCompletionCalculator.calculateAchievementCompletion(request);
+            if (result.becameComplete()) {
                 eventPublisher.publishEvent(new MilestoneCompletedEvent(this, userId, milestone.getId()));
-            } else if (milestone.isBecameIncomplete()) {
+            } else if (result.becameIncomplete()) {
                 eventPublisher.publishEvent(new MilestoneBecameIncompleteEvent(this, userId, milestone.getId()));
             }
         }
