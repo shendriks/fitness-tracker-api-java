@@ -25,6 +25,7 @@ public class MilestoneCompletionChecker {
     private final ForAccessingMilestones forAccessingMilestones;
     private final ForAggregatingActivities forAggregatingActivities;
     private final AchievementCompletionCalculator achievementCompletionCalculator;
+    private final TrophyManagementService trophyManagementService;
 
     public void checkCompletionForUser(UserId userId) {
         List<Milestone> milestones = forAccessingMilestones.findAllWithCompletedByUser(userId);
@@ -40,11 +41,13 @@ public class MilestoneCompletionChecker {
             );
 
             AchievementCompletionResult result = achievementCompletionCalculator.calculateAchievementCompletion(request);
-            
+
             if (result.becameComplete()) {
                 eventPublisher.publishEvent(new MilestoneCompletedEvent(this, userId, milestone.getId()));
+                trophyManagementService.createTrophyIfNotExists(userId, milestone.getId());
             } else if (result.becameIncomplete()) {
                 eventPublisher.publishEvent(new MilestoneBecameIncompleteEvent(this, userId, milestone.getId()));
+                trophyManagementService.deleteTrophyIfExists(userId, milestone.getId());
             }
         }
     }

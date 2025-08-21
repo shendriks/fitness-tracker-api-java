@@ -26,6 +26,7 @@ public class ChallengeCompletionChecker {
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
     private final ForAggregatingActivities forAggregatingActivities;
     private final AchievementCompletionCalculator achievementCompletionCalculator;
+    private final TrophyManagementService trophyManagementService;
 
     public void checkCompletionForUser(UserId userId) {
         List<ChallengeParticipation> challengeParticipations = forAccessingChallengeParticipations.findCurrentByUser(userId);
@@ -62,8 +63,11 @@ public class ChallengeCompletionChecker {
 
         if (result.becameComplete()) {
             eventPublisher.publishEvent(new ChallengeCompletedEvent(this, userId, challenge.getId()));
+            trophyManagementService.createTrophyIfNotExists(userId, challenge.getId());
+
         } else if (result.becameIncomplete()) {
             eventPublisher.publishEvent(new ChallengeBecameIncompleteEvent(this, userId, challenge.getId()));
+            trophyManagementService.deleteTrophyIfExists(userId, challenge.getId());
         }
     }
 }
