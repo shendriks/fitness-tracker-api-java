@@ -32,17 +32,10 @@ public class ChallengeCompletionChecker {
         }
     }
 
-    public void checkCompletion(UserId userId, ChallengeUlid challengeUlid) {
-        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations
-            .findByUserAndChallenge(userId, challengeUlid)
-            .orElseThrow();
-        updateChallengeCompletion(challengeParticipation);
-    }
-
-    private void updateChallengeCompletion(ChallengeParticipation challengeParticipation) {
+    public void updateChallengeCompletion(ChallengeParticipation challengeParticipation) {
         Challenge challenge = challengeParticipation.getChallenge();
         UserId userId = challengeParticipation.getUserId();
-        // todo: cache based on time range
+        
         ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserByTypeInTimeRange(
             userId,
             challenge.getStartDate(),

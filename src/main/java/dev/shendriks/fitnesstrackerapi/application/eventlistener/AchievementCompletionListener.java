@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Transactional
 @AllArgsConstructor
-public class ChallengeCompletionListener {
+public class AchievementCompletionListener {
     private final TrophyManagementService trophyManagementService;
 
     @EventListener
