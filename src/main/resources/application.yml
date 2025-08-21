@@ -9,7 +9,9 @@ spring:
   sql:
     init:
       mode: always
-#      data-locations: classpath:data.sql
+      data-locations: 
+          - optional:classpath:data.sql
+          - optional:classpath:fixtures.sql
   jpa:
     defer-datasource-initialization: true
     hibernate:
