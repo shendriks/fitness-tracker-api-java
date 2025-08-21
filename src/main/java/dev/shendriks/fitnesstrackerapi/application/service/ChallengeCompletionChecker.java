@@ -62,10 +62,7 @@ public class ChallengeCompletionChecker {
 
         if (result.becameComplete()) {
             eventPublisher.publishEvent(new ChallengeCompletedEvent(this, userId, challenge.getId()));
-            return;
-        }
-
-        if (result.becameIncomplete()) {
+        } else if (result.becameIncomplete()) {
             eventPublisher.publishEvent(new ChallengeBecameIncompleteEvent(this, userId, challenge.getId()));
         }
     }

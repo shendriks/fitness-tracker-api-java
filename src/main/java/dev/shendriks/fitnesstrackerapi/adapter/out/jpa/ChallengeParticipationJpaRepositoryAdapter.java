@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -55,12 +54,6 @@ public class ChallengeParticipationJpaRepositoryAdapter implements ForAccessingC
             .findByUlid(challengeUlid.getValue())
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
         repository.findByChallengeAndUser(challenge, user).ifPresent(repository::delete);
-    }
-
-    @Override
-    public Optional<ChallengeParticipation> findByUserAndChallenge(UserId userId, ChallengeUlid challengeUlid) {
-        Optional<ChallengeParticipationDbEntity> entity = repository.findByUserIdAndChallengeUlid(userId.value(), challengeUlid.getValue());
-        return entity.map(mapper::toChallengeParticipation);
     }
 
     @Override

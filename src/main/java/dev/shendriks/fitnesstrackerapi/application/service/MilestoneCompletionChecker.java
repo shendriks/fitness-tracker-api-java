@@ -40,6 +40,7 @@ public class MilestoneCompletionChecker {
             );
 
             AchievementCompletionResult result = achievementCompletionCalculator.calculateAchievementCompletion(request);
+            
             if (result.becameComplete()) {
                 eventPublisher.publishEvent(new MilestoneCompletedEvent(this, userId, milestone.getId()));
             } else if (result.becameIncomplete()) {
