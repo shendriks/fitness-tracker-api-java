@@ -8,10 +8,10 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public abstract class TrophyDTOMapper {
-    public abstract List<TrophyResponseDTO> toTrophyResponseDTOs(List<Trophy> trophies);
+public interface TrophyDTOMapper {
+    List<TrophyResponseDTO> toTrophyResponseDTOs(List<Trophy> trophies);
 
     @Mapping(target = "id", source = "ulid.value")
     @Mapping(target = "achievement.id", source = "achievement.ulid.value")
-    public abstract TrophyResponseDTO toTrophyResponseDTO(Trophy trophy);
+    TrophyResponseDTO toTrophyResponseDTO(Trophy trophy);
 }
