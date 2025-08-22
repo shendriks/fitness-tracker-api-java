@@ -2,10 +2,8 @@ package dev.shendriks.fitnesstrackerapi.adapter.in.rest.validation.gpx;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lombok.extern.java.Log;
 import org.springframework.web.multipart.MultipartFile;
 
-@Log
 public class GPXFileConstraintValidator implements ConstraintValidator<GPXFile, MultipartFile> {
     private final GPXFileValidator validator;
 
