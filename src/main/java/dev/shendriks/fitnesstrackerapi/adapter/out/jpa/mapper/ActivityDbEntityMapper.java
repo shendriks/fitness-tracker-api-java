@@ -50,11 +50,11 @@ public abstract class ActivityDbEntityMapper {
         );
         return activity;
     }
-    
+
     public ActivityId mapActivityId(Long id) {
         return new ActivityId(id);
     }
-    
+
     public ActivityUlid mapActivityUlid(String ulid) {
         return new ActivityUlid(ulid);
     }

@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid;
 
-import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.UlidGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;

@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa;
 
-import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ChallengeDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper.ChallengeDbEntityMapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection.ChallengeProjection;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ChallengeDbEntityRepository;
@@ -31,7 +30,7 @@ public class ChallengeJpaRepositioryAdapter implements ForAccessingChallenges {
 
     @Override
     public Optional<Challenge> findByUlid(ChallengeUlid challengeUlid) {
-        Optional<ChallengeDbEntity> entity = challengeDbEntityRepository.findByUlid(challengeUlid.getValue());
+        Optional<ChallengeProjection> entity = challengeDbEntityRepository.findWithUserJoinedByUlid(challengeUlid.getValue());
         return entity.map(mapper::toChallenge);
     }
 

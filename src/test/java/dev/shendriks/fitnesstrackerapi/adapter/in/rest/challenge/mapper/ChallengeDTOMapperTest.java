@@ -15,7 +15,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChallengeDTOMapperTest {
-
     private final ChallengeDTOMapper mapper = Mappers.getMapper(ChallengeDTOMapper.class);
 
     private static Challenge buildChallenge(String ulid, boolean hasUserJoined) {

@@ -31,14 +31,14 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
         if (forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }
-        
+
         Challenge challenge = forAccessingChallenges
             .findByUlid(challengeUlid)
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
-        
+
         ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.create(userId, challenge);
         challengeCompletionChecker.updateChallengeCompletion(challengeParticipation);
-        
+
         eventPublisher.publishEvent(new ChallengeJoinedEvent(this, userId, challengeUlid));
     }
 
@@ -47,10 +47,10 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
         if (!forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }
-        
+
         forAccessingChallengeParticipations.leaveChallenge(userId, challengeUlid);
         trophyManagementService.deleteTrophyIfExists(userId, challengeUlid);
-        
+
         eventPublisher.publishEvent(new ChallengeLeftEvent(this, userId, challengeUlid));
     }
 }
