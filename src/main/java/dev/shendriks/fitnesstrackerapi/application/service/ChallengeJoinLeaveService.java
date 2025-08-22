@@ -11,27 +11,34 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinChallengeUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingChallenges forAccessingChallenges;
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
+    private final ChallengeCompletionChecker challengeCompletionChecker;
+    private final TrophyManagementService trophyManagementService;
 
     @Override
     public void joinChallenge(UserId userId, ChallengeUlid challengeUlid) {
         if (forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }
+        
         Challenge challenge = forAccessingChallenges
             .findByUlid(challengeUlid)
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
-        ChallengeParticipation challengeParticipation = ChallengeParticipation.createNew(userId, challenge);
-        forAccessingChallengeParticipations.create(challengeParticipation);
+        
+        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.create(userId, challenge);
+        challengeCompletionChecker.updateChallengeCompletion(challengeParticipation);
+        
         eventPublisher.publishEvent(new ChallengeJoinedEvent(this, userId, challengeUlid));
     }
 
@@ -40,7 +47,10 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
         if (!forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }
+        
         forAccessingChallengeParticipations.leaveChallenge(userId, challengeUlid);
+        trophyManagementService.deleteTrophyIfExists(userId, challengeUlid);
+        
         eventPublisher.publishEvent(new ChallengeLeftEvent(this, userId, challengeUlid));
     }
 }

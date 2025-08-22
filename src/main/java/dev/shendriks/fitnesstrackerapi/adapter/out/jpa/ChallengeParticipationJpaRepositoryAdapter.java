@@ -10,6 +10,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository
 import dev.shendriks.fitnesstrackerapi.application.exception.ChallengeNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.exception.UserNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingChallengeParticipations;
+import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeParticipationId;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -57,22 +57,16 @@ public class ChallengeParticipationJpaRepositoryAdapter implements ForAccessingC
     }
 
     @Override
-    public void create(ChallengeParticipation participation) {
-        UserDbEntity user = userRepository.findById(participation.getUserId().value()).orElseThrow(UserNotFoundException::new);
-        String challengeUlid = participation.getChallenge().getUlid().getValue();
+    public ChallengeParticipation create(UserId userId, Challenge challenge) {
+        UserDbEntity user = userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new);
+        String challengeUlid = challenge.getUlid().getValue();
         ChallengeDbEntity challengeDbEntity = challengeRepository
             .findByUlid(challengeUlid)
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid));
         ChallengeParticipationDbEntity participationDbEntity = new ChallengeParticipationDbEntity();
         participationDbEntity.setChallenge(challengeDbEntity);
         participationDbEntity.setUser(user);
-        participationDbEntity.setPercentageCompleted(participation.getPercentageCompleted());
-        repository.save(participationDbEntity);
-    }
-
-    @Override
-    public Optional<ChallengeParticipation> findByUserAndChallenge(UserId userId, ChallengeUlid challengeUlid) {
-        Optional<ChallengeParticipationDbEntity> entity = repository.findByUserIdAndChallengeUlid(userId.value(), challengeUlid.getValue());
-        return entity.map(mapper::toChallengeParticipation);
+        participationDbEntity = repository.save(participationDbEntity);
+        return mapper.toChallengeParticipation(participationDbEntity);
     }
 }

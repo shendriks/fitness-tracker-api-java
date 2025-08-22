@@ -1,5 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.domain.value;
 
+import lombok.Builder;
+
+@Builder
 public record ActivityAggregation(
     long count,
     long totalDistance,
