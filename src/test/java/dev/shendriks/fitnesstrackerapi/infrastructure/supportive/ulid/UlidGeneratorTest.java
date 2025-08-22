@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.supportive.ulid;
+package dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid;
 
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.UlidGenerator;
 import org.junit.jupiter.api.Test;

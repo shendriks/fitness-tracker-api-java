@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.util;
+package dev.shendriks.fitnesstrackerapi;
 
 import org.springframework.stereotype.Component;
 

@@ -1,10 +1,10 @@
-package dev.shendriks.fitnesstrackerapi.domain.user.controller;
+package dev.shendriks.fitnesstrackerapi.adapter.in.rest.user.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
-import dev.shendriks.fitnesstrackerapi.util.BasicAuthHelper;
+import dev.shendriks.fitnesstrackerapi.BasicAuthHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
