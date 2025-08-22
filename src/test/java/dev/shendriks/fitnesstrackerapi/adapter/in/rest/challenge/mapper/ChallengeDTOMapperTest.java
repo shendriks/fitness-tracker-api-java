@@ -42,8 +42,8 @@ class ChallengeDTOMapperTest {
 
         assertNotNull(dto);
         assertEquals("TESTULID000000000000000000", dto.id());
-        assertEquals("30 Day Run", dto.name());
-        assertEquals("Run every day for 30 days", dto.description());
+        assertEquals("Run 100km in 2025", dto.name());
+        assertEquals("Put on your running shoes and run 100km in 2025", dto.description());
         assertEquals(Instant.parse("2025-01-01T00:00:00Z"), dto.startDate());
         assertEquals(Instant.parse("2026-01-01T00:00:00Z"), dto.endDate());
         assertEquals("/images/challenges/run.png", dto.imageFilePath());
