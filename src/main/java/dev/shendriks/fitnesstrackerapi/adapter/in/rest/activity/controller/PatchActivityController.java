@@ -86,13 +86,13 @@ public class PatchActivityController {
 //            throw new RateLimitExceededException();
 //        }
 //
-        ActivityUpdateData activityUpdateData = activityMapper.activityUpdateRequestToActivityUpdateData(request);
+        ActivityUpdateData activityUpdateData = activityMapper.toActivityUpdateData(request);
         Activity activity = updateActivityUseCase.updateActivityForUser(
             user.id(),
             new ActivityUlid(id),
             activityUpdateData
         );
-        ActivityResponseDTO response = activityMapper.activityToActivityResponse(activity);
+        ActivityResponseDTO response = activityMapper.toActivityResponse(activity);
 
         return ResponseEntity.ok(response);
     }

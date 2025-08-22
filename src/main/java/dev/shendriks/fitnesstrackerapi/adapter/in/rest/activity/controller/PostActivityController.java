@@ -80,9 +80,9 @@ public class PostActivityController {
 //            throw new RateLimitExceededException();
 //        }
 //
-        ActivityCreationData activityCreationData = activityMapper.activityCreationRequestToActivityCreationData(request);
+        ActivityCreationData activityCreationData = activityMapper.toActivityCreationData(request);
         Activity activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
-        ActivityResponseDTO activityResponse = activityMapper.activityToActivityResponse(activity);
+        ActivityResponseDTO activityResponse = activityMapper.toActivityResponse(activity);
 
         return ResponseEntity.ok(activityResponse);
     }

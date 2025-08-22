@@ -58,7 +58,7 @@ public class GetActivitiesController {
 //        }
 //
         List<Activity> activities = getAllActivitiesUseCase.getAllActivitiesByUser(user.id());
-        List<ActivityResponseDTO> activityResponses = activityMapper.activitiesToActivityResponses(activities);
+        List<ActivityResponseDTO> activityResponses = activityMapper.toActivityResponses(activities);
         return ResponseEntity.ok(activityResponses);
     }
 }

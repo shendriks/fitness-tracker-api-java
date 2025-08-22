@@ -13,20 +13,20 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ActivityDTOMapper {
     @Mapping(target = "id", source = "ulid.value")
-    ActivityResponseDTO activityToActivityResponse(Activity activity);
+    ActivityResponseDTO toActivityResponse(Activity activity);
 
     @Mapping(target = "id", source = "ulid.value")
-    List<ActivityResponseDTO> activitiesToActivityResponses(List<Activity> activities);
+    List<ActivityResponseDTO> toActivityResponses(List<Activity> activities);
 
     @Mapping(target = "id", source = "ulid.value")
-    ActivityDetailsResponseDTO activityToActivityDetailsResponse(Activity activity);
+    ActivityDetailsResponseDTO toActivityDetailsResponse(Activity activity);
 
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")
-    ActivityCreationData activityCreationRequestToActivityCreationData(ActivityCreateRequestDTO request);
+    ActivityCreationData toActivityCreationData(ActivityCreateRequestDTO request);
 
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")
-    ActivityUpdateData activityUpdateRequestToActivityUpdateData(ActivityUpdateRequestDTO request);
+    ActivityUpdateData toActivityUpdateData(ActivityUpdateRequestDTO request);
 
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")
-    ActivityUploadData activityUploadRequestToActivityUploadData(ActivityUploadRequestDTO request);
+    ActivityUploadData toActivityUploadData(ActivityUploadRequestDTO request);
 }

@@ -68,9 +68,9 @@ public class PostActivityUploadController {
         @Valid
         ActivityUploadRequestDTO request
     ) {
-        ActivityUploadData activityUploadData = activityMapper.activityUploadRequestToActivityUploadData(request);
+        ActivityUploadData activityUploadData = activityMapper.toActivityUploadData(request);
         Activity activity = uploadActivityUseCase.uploadActivityForUser(user.id(), activityUploadData);
-        ActivityDetailsResponseDTO activityDetailsResponse = activityMapper.activityToActivityDetailsResponse(activity);
+        ActivityDetailsResponseDTO activityDetailsResponse = activityMapper.toActivityDetailsResponse(activity);
         return ResponseEntity.ok(activityDetailsResponse);
     }
 }

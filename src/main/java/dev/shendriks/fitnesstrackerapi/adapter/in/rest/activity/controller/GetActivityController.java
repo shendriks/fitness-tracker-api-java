@@ -68,7 +68,7 @@ public class GetActivityController {
 //        }
 //
         Activity activity = forGettingAnActivity.getActivityByUser(user.id(), new ActivityUlid(id));
-        var activityResponse = activityMapper.activityToActivityDetailsResponse(activity);
+        var activityResponse = activityMapper.toActivityDetailsResponse(activity);
         return ResponseEntity.ok(activityResponse);
     }
 }
