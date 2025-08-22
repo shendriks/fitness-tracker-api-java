@@ -6,8 +6,10 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
+@Builder
 public record ActivityUploadRequestDTO(
     @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)

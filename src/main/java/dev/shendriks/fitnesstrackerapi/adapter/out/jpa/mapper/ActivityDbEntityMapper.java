@@ -3,9 +3,7 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.GPSPositionDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityCreationData;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUploadData;
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,12 +11,10 @@ import java.time.Instant;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ActivityDbEntityMapper {
-    @Mapping(target = "id", expression = "java(new ActivityId(activityDbEntity.getId()))")
-    @Mapping(target = "ulid", expression = "java(new ActivityUlid(activityDbEntity.getUlid()))")
-    Activity activityDbEntityToActivity(ActivityDbEntity activityDbEntity);
+public abstract class ActivityDbEntityMapper {
+    public abstract Activity activityDbEntityToActivity(ActivityDbEntity activityDbEntity);
 
-    List<Activity> activityDbEntitiesToActivities(List<ActivityDbEntity> activityDbEntities);
+    public abstract List<Activity> activityDbEntitiesToActivities(List<ActivityDbEntity> activityDbEntities);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ulid", ignore = true)
@@ -27,9 +23,9 @@ public interface ActivityDbEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "gpsPositions", ignore = true)
     @Mapping(target = "state", ignore = true)
-    ActivityDbEntity activityCreationDataToActivityDbEntity(ActivityCreationData activityCreationData);
+    public abstract ActivityDbEntity activityCreationDataToActivityDbEntity(ActivityCreationData activityCreationData);
 
-    default ActivityDbEntity activityUploadDataToActivityDbEntity(ActivityUploadData request, GPSTrackData metrics) {
+    public ActivityDbEntity activityUploadDataToActivityDbEntity(ActivityUploadData request, GPSTrackData metrics) {
         ActivityDbEntity activity = new ActivityDbEntity();
         activity.setActivityType(request.activityType());
         activity.setTitle(request.title());
@@ -53,5 +49,13 @@ public interface ActivityDbEntityMapper {
                 .toList()
         );
         return activity;
+    }
+    
+    public ActivityId mapActivityId(Long id) {
+        return new ActivityId(id);
+    }
+    
+    public ActivityUlid mapActivityUlid(String ulid) {
+        return new ActivityUlid(ulid);
     }
 }

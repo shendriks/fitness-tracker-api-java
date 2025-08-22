@@ -5,9 +5,11 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
 import java.time.Instant;
 
+@Builder
 public record ActivityCreateRequestDTO(
     @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)
