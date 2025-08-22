@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ForAccessingChallenges {
     List<Challenge> findAllByUser(UserId userId);
 
-    Optional<Challenge> findByUlid(ChallengeUlid challengeUlid);
+    Optional<Challenge> findByUserIdAndUlid(UserId userId, ChallengeUlid challengeUlid);
 
     Optional<String> findNameById(ChallengeId challengeId);
 

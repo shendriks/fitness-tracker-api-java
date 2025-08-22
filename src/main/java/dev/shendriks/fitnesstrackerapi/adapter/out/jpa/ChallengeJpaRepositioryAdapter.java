@@ -29,8 +29,11 @@ public class ChallengeJpaRepositioryAdapter implements ForAccessingChallenges {
     }
 
     @Override
-    public Optional<Challenge> findByUlid(ChallengeUlid challengeUlid) {
-        Optional<ChallengeProjection> entity = challengeDbEntityRepository.findWithUserJoinedByUlid(challengeUlid.getValue());
+    public Optional<Challenge> findByUserIdAndUlid(UserId userId, ChallengeUlid challengeUlid) {
+        Optional<ChallengeProjection> entity = challengeDbEntityRepository.findByUserIdAndUlidWithUserJoined(
+            userId.value(),
+            challengeUlid.getValue()
+        );
         return entity.map(mapper::toChallenge);
     }
 

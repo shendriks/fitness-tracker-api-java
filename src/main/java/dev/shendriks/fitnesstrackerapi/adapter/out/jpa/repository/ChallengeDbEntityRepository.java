@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChallengeDbEntityRepository extends JpaRepository<ChallengeDbEntity, Long> {
+    Optional<ChallengeDbEntity> findByUlid(String ulid);
+
     @Query("""
             SELECT
                 c.id AS id,
@@ -31,9 +33,10 @@ public interface ChallengeDbEntityRepository extends JpaRepository<ChallengeDbEn
             )
             WHERE c.ulid = :ulid
         """)
-    Optional<ChallengeProjection> findWithUserJoinedByUlid(@Param("ulid") String ulid);
-    
-    Optional<ChallengeDbEntity> findByUlid(String ulid);
+    Optional<ChallengeProjection> findByUserIdAndUlidWithUserJoined(
+        @Param("userId") Long userId,
+        @Param("ulid") String ulid
+    );
 
     @Query("""
             SELECT
