@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.5.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'io.freefair.lombok' version '8.14.2'
@@ -56,6 +57,11 @@ dependencies {
     }
 }
 
+jacoco {
+    toolVersion = '0.8.13'
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
 //compileJava {
 //    options.compilerArgs += [
 //            '-Amapstruct.verbose=true'
@@ -78,4 +84,14 @@ tasks.register('integrationTest', Test) {
 
 tasks.named('check') {
     dependsOn tasks.named('integrationTest')
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }
