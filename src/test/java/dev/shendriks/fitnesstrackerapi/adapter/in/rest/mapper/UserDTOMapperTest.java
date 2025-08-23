@@ -16,6 +16,7 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserDTOMapperTest {
     private final UserDTOMapper mapper = Mappers.getMapper(UserDTOMapper.class);
@@ -88,5 +89,20 @@ class UserDTOMapperTest {
         assertEquals(AccountType.PREMIUM, dto.accountType());
         assertEquals(createdAt, dto.createdAt());
         assertEquals(updatedAt, dto.updatedAt());
+    }
+    
+    @Test
+    void toUserSignUpData_withNullInput_returnsNull() {
+        assertNull(mapper.toUserSignUpData(null));
+    }
+
+    @Test
+    void toUserUpdateData_withNullInput_returnsNull() {
+        assertNull(mapper.toUserUpdateData(null));
+    }
+
+    @Test
+    void toUserResponse_withNullInput_returnsNull() {
+        assertNull(mapper.toUserResponse(null));
     }
 }

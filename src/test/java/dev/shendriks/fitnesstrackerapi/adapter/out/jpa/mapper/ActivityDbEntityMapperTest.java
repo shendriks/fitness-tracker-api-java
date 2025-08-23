@@ -255,4 +255,19 @@ class ActivityDbEntityMapperTest {
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertTrue(actualActivityDbEntity.getGpsPositions().isEmpty());
     }
+
+    @Test
+    void toActivity_withNullInput_returnsNull() {
+        assertNull(mapper.toActivity(null));
+    }
+
+    @Test
+    void toActivities_withNullInput_returnsNull() {
+        assertNull(mapper.toActivities(null));
+    }
+
+    @Test
+    void toActivityDbEntity_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityDbEntity(null));
+    }
 }

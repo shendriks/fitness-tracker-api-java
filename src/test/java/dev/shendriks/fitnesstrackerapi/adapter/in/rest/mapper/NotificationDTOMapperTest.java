@@ -70,4 +70,14 @@ class NotificationDTOMapperTest {
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
     }
+    
+    @Test
+    void toNotificationResponseDTO_withNullInput_returnsNull() {
+        assertNull(mapper.toNotificationResponseDTO(null));
+    }
+
+    @Test
+    void toNotificationResponseDTOs_withNullInput_returnsNull() {
+        assertNull(mapper.toNotificationResponseDTOs(null));
+    }
 }

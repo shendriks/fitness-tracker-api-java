@@ -66,4 +66,14 @@ class MilestoneDTOMapperTest {
         assertNotNull(milestoneResponseDTOs);
         assertTrue(milestoneResponseDTOs.isEmpty());
     }
+    
+    @Test
+    void toMilestoneResponseDTO_withNullInput_returnsNull() {
+        assertNull(mapper.toMilestoneResponseDTO(null));
+    }
+
+    @Test
+    void toMilestoneResponseDTOs_withNullInput_returnsNull() {
+        assertNull(mapper.toMilestoneResponseDTOs(null));
+    }
 }

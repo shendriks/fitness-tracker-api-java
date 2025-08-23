@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ActivityDTOMapperTest {
     private final ActivityDTOMapper mapper = Mappers.getMapper(ActivityDTOMapper.class);
@@ -173,5 +174,35 @@ class ActivityDTOMapperTest {
         assertEquals("To work", data.description());
         assertNotNull(data.gpxFile());
         assertEquals("track.gpx", data.gpxFile().getOriginalFilename());
+    }
+    
+    @Test
+    void toActivityResponse_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityResponse(null));
+    }
+
+    @Test
+    void toActivityResponses_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityResponses(null));
+    }
+
+    @Test
+    void toActivityDetailsResponse_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityDetailsResponse(null));
+    }
+
+    @Test
+    void toActivityCreationData_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityCreationData(null));
+    }
+
+    @Test
+    void toActivityUpdateData_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityUpdateData(null));
+    }
+
+    @Test
+    void toActivityUploadData_withNullInput_returnsNull() {
+        assertNull(mapper.toActivityUploadData(null));
     }
 }

@@ -64,4 +64,14 @@ class ChallengeDTOMapperTest {
         assertTrue(dtos.get(0).hasUserJoined());
         assertFalse(dtos.get(1).hasUserJoined());
     }
+    
+    @Test
+    void toChallengeResponse_withNullInput_returnsNull() {
+        assertNull(mapper.toChallengeResponse(null));
+    }
+
+    @Test
+    void toChallengeResponses_withNullInput_returnsNull() {
+        assertNull(mapper.toChallengeResponses(null));
+    }
 }

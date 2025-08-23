@@ -104,4 +104,14 @@ class TrophyDTOMapperTest {
         assertNotNull(trophyResponseDTOs);
         assertTrue(trophyResponseDTOs.isEmpty());
     }
+    
+    @Test
+    void toTrophyResponseDTO_withNullInput_returnsNull() {
+        assertNull(mapper.toTrophyResponseDTO(null));
+    }
+
+    @Test
+    void toTrophyResponseDTOs_withNullInput_returnsNull() {
+        assertNull(mapper.toTrophyResponseDTOs(null));
+    }
 }
