@@ -53,14 +53,14 @@ public class ActivityService implements
     @Override
     public Activity saveActivityForUser(UserId userId, ActivityCreationData activityCreationData) {
         Activity activity = forAccessingActivities.saveForUser(userId, activityCreationData);
-        eventPublisher.publishEvent(new ActivitySavedEvent(this, userId, activity.id()));
+        eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
         return activity;
     }
 
     @Override
     public Activity updateActivityForUser(UserId userId, ActivityUlid activityUlid, ActivityUpdateData activityUpdateData) {
         Activity activity = forAccessingActivities.updateForUser(userId, activityUlid, activityUpdateData);
-        eventPublisher.publishEvent(new ActivityUpdatedEvent(this, userId, activity.id()));
+        eventPublisher.publishEvent(new ActivityUpdatedEvent(userId, activity.id()));
         return activity;
     }
 
@@ -72,7 +72,7 @@ public class ActivityService implements
                 activityUploadData.gpxFile().transferTo(tempFile);
                 GPSTrackData gpsTrackData = gpxService.processGpxFile(tempFile);
                 Activity activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData);
-                eventPublisher.publishEvent(new ActivitySavedEvent(this, userId, activity.id()));
+                eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
                 return activity;
             } finally {
                 Files.deleteIfExists(tempFile);
@@ -86,6 +86,6 @@ public class ActivityService implements
     @Override
     public void deleteActivityForUser(UserId userId, ActivityUlid activityUlid) {
         forAccessingActivities.deleteForUser(userId, activityUlid);
-        eventPublisher.publishEvent(new ActivityDeletedEvent(this, userId, activityUlid));
+        eventPublisher.publishEvent(new ActivityDeletedEvent(userId, activityUlid));
     }
 }

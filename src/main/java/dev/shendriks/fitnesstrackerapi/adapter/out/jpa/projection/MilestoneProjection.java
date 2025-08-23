@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record MilestoneProjection(
-    String id,
+    Long id,
     String ulid,
     String name,
     String description,

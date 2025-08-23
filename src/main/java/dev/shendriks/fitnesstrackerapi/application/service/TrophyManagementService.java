@@ -22,16 +22,16 @@ public class TrophyManagementService {
             return;
         }
         Trophy trophy = forAccessingTrophies.createTrophyForUserAndAchievement(userId, achievementId);
-        eventPublisher.publishEvent(new TrophyUnlockedEvent(this, userId, trophy.id()));
+        eventPublisher.publishEvent(new TrophyUnlockedEvent(userId, trophy.id()));
     }
 
     public void deleteTrophyIfExists(UserId userId, AchievementId achievementId) {
         forAccessingTrophies.deleteIfNotExistsByUserAndAchievement(userId, achievementId);
-        eventPublisher.publishEvent(new TrophyLostEvent(this, userId));
+        eventPublisher.publishEvent(new TrophyLostEvent(userId));
     }
 
     public void deleteTrophyIfExists(UserId userId, AchievementUlid achievementUlid) {
         forAccessingTrophies.deleteIfNotExistsByUserAndAchievement(userId, achievementUlid);
-        eventPublisher.publishEvent(new TrophyLostEvent(this, userId));
+        eventPublisher.publishEvent(new TrophyLostEvent(userId));
     }
 }

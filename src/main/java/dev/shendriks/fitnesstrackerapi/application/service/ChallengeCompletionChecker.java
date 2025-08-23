@@ -62,11 +62,11 @@ public class ChallengeCompletionChecker {
         );
 
         if (result.becameComplete()) {
-            eventPublisher.publishEvent(new ChallengeCompletedEvent(this, userId, challenge.getId()));
+            eventPublisher.publishEvent(new ChallengeCompletedEvent(userId, challenge.getId()));
             trophyManagementService.createTrophyIfNotExists(userId, challenge.getId());
 
         } else if (result.becameIncomplete()) {
-            eventPublisher.publishEvent(new ChallengeBecameIncompleteEvent(this, userId, challenge.getId()));
+            eventPublisher.publishEvent(new ChallengeBecameIncompleteEvent(userId, challenge.getId()));
             trophyManagementService.deleteTrophyIfExists(userId, challenge.getId());
         }
     }

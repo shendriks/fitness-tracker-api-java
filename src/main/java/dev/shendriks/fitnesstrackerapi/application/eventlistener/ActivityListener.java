@@ -23,23 +23,23 @@ public class ActivityListener {
     @Synchronized
     @Async
     public void handleSavedActivity(ActivitySavedEvent event) {
-        milestoneCompletionChecker.checkCompletionForUser(event.getUserId());
-        challengeCompletionChecker.checkCompletionForUser(event.getUserId());
+        milestoneCompletionChecker.checkCompletionForUser(event.userId());
+        challengeCompletionChecker.checkCompletionForUser(event.userId());
     }
 
     @EventListener
     @Synchronized
     @Async
     public void handleUpdatedActivity(ActivityUpdatedEvent event) {
-        milestoneCompletionChecker.checkCompletionForUser(event.getUserId());
-        challengeCompletionChecker.checkCompletionForUser(event.getUserId());
+        milestoneCompletionChecker.checkCompletionForUser(event.userId());
+        challengeCompletionChecker.checkCompletionForUser(event.userId());
     }
 
     @EventListener
     @Synchronized
     @Async
     public void handleDeletedActivity(ActivityDeletedEvent event) {
-        milestoneCompletionChecker.checkCompletionForUser(event.getUserId());
-        challengeCompletionChecker.checkCompletionForUser(event.getUserId());
+        milestoneCompletionChecker.checkCompletionForUser(event.userId());
+        challengeCompletionChecker.checkCompletionForUser(event.userId());
     }
 }

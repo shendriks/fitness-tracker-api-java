@@ -20,7 +20,7 @@ class MilestoneDbEntityMapperTest {
     void toMilestone_shouldMapAllFields_andWrapIdTypes() {
         MilestoneProjection projection = MilestoneProjection
             .builder()
-            .id("42")
+            .id(42L)
             .ulid("TESTULID000000000000000001")
             .name("10 Runs")
             .description("Complete 10 running activities")
@@ -50,7 +50,7 @@ class MilestoneDbEntityMapperTest {
         List<MilestoneProjection> projections = List.of(
             MilestoneProjection
                 .builder()
-                .id("1")
+                .id(1L)
                 .ulid("TESTULID000000000000000002")
                 .name("5 Runs")
                 .description("Complete 5 running activities")
@@ -62,7 +62,7 @@ class MilestoneDbEntityMapperTest {
                 .build(),
             MilestoneProjection
                 .builder()
-                .id("2")
+                .id(2L)
                 .ulid("TESTULID000000000000000003")
                 .name("100km Cycling")
                 .description("Reach 100km total cycling distance")
