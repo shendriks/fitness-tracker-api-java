@@ -1,13 +1,13 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection;
 
-public interface ActivityAggregationDbProjection {
-    long getCount();
+import lombok.Builder;
 
-    long getTotalDistance();
-
-    long getTotalDuration();
-
-    long getMaxDistance();
-
-    long getMaxDuration();
+@Builder
+public record ActivityAggregationDbProjection(
+    long count,
+    long totalDistance,
+    long totalDuration,
+    long maxDistance,
+    long maxDuration
+) {
 }

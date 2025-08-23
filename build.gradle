@@ -64,9 +64,11 @@ jacoco {
 
 //compileJava {
 //    options.compilerArgs += [
-//            '-Amapstruct.verbose=true'
+////            '-Amapstruct.verbose=true',
+//        '-Amapstruct.disableBuilders=true'
 //    ]
 //}
+
 
 tasks.named('test') {
     useJUnitPlatform()
