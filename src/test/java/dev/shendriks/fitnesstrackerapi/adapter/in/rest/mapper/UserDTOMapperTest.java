@@ -6,15 +6,16 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.user.UserUpdateReques
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
-import dev.shendriks.fitnesstrackerapi.domain.value.UserUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserSignupData;
+import dev.shendriks.fitnesstrackerapi.domain.value.UserUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserUpdateData;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class UserDTOMapperTest {
     private final UserDTOMapper mapper = Mappers.getMapper(UserDTOMapper.class);

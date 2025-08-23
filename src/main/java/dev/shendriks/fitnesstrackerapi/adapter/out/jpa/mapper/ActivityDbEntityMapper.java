@@ -4,6 +4,8 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.GPSPositionDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import lombok.Setter;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -13,9 +15,9 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.SETTER)
 public abstract class ActivityDbEntityMapper {
-    @Autowired
+    @Setter(onMethod_ = {@Autowired})
     private Clock clock;
 
     public abstract Activity toActivity(ActivityDbEntity activityDbEntity);

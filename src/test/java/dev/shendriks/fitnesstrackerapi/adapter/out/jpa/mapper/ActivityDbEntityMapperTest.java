@@ -6,11 +6,9 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.mapstruct.factory.Mappers;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -20,10 +18,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 class ActivityDbEntityMapperTest {
-    @Autowired
-    private ActivityDbEntityMapper mapper;
+    private final ActivityDbEntityMapper mapper = Mappers.getMapper(ActivityDbEntityMapper.class);
+
+    @BeforeEach
+    void setUp() {
+        mapper.setClock(Clock.fixed(Instant.parse("2021-09-10T12:00:00Z"), ZoneOffset.UTC));
+    }
 
     @Test
     void toActivity_shouldMapAllFields_andWrapIds_andMapGps() {
@@ -253,13 +254,5 @@ class ActivityDbEntityMapperTest {
         assertEquals(Instant.parse("2021-09-10T12:00:00Z"), actualActivityDbEntity.getStartDate());
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertTrue(actualActivityDbEntity.getGpsPositions().isEmpty());
-    }
-
-    @TestConfiguration
-    static class ClockTestConfig {
-        @Bean
-        public Clock clock() {
-            return Clock.fixed(Instant.parse("2021-09-10T12:00:00Z"), ZoneOffset.UTC);
-        }
     }
 }
