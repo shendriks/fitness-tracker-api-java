@@ -41,7 +41,9 @@ public abstract class TrophyDbEntityMapper {
             case MilestoneDbEntity ignored -> AchievementType.MILESTONE;
             case ChallengeDbEntity ignored -> AchievementType.CHALLENGE;
             case null, default ->
-                throw new IllegalArgumentException("Unkown achievement type: %s".formatted(Objects.requireNonNull(trophy.getAchievement()).getClass().getSimpleName()));
+                throw new IllegalArgumentException("Unkown achievement type: %s"
+                    .formatted(Objects.requireNonNull(trophy.getAchievement()).getClass().getSimpleName())
+                );
         };
     }
 }
