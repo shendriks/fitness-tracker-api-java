@@ -10,6 +10,7 @@ import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Metadata;
 import io.jenetics.jpx.Track;
 import io.jenetics.jpx.WayPoint;
+import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +22,11 @@ import java.util.Optional;
 
 @Service
 @Log
+@AllArgsConstructor
 public class GpxService {
     private final GpxWaypointProcessor waypointProcessor;
     private final GpxMetricsCalculator metricsCalculator;
     private final KilometerMetricsCalculator kilometerMetricsCalculator;
-
-    public GpxService(
-        GpxWaypointProcessor waypointProcessor,
-        GpxMetricsCalculator metricsCalculator,
-        KilometerMetricsCalculator kilometerMetricsCalculator
-    ) {
-        this.waypointProcessor = waypointProcessor;
-        this.metricsCalculator = metricsCalculator;
-        this.kilometerMetricsCalculator = kilometerMetricsCalculator;
-    }
 
     private static Optional<String> getName(GPX gpx) {
         return gpx
