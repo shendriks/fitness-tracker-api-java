@@ -2,23 +2,18 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection;
 
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityMetric;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import lombok.Builder;
 
-public interface MilestoneProjection {
-    String getId();
-
-    String getUlid();
-
-    String getName();
-
-    String getDescription();
-
-    String getImageFilePath();
-
-    ActivityType getActivityType();
-
-    ActivityMetric getActivityMetric();
-
-    Long getCompletionThreshold();
-
-    boolean isCompleted();
+@Builder
+public record MilestoneProjection(
+    String id,
+    String ulid,
+    String name,
+    String description,
+    String imageFilePath,
+    ActivityType activityType,
+    ActivityMetric activityMetric,
+    Long completionThreshold,
+    boolean isCompleted
+) {
 }

@@ -19,10 +19,10 @@ public final class Milestone extends Achievement {
         ActivityType activityType,
         ActivityMetric activityMetric,
         Long completionThreshold,
-        boolean completed
+        boolean isCompleted
     ) {
         super(id, ulid, name, description, imageFilePath, activityType, activityMetric, completionThreshold);
-        this.isCompleted = completed;
+        this.isCompleted = isCompleted;
     }
 
     @Override
