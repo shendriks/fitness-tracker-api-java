@@ -1,8 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.Set;
@@ -10,6 +10,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
 @Table(name = "challenge")
 public class ChallengeDbEntity extends AchievementDbEntity {
     @Column(nullable = false)
