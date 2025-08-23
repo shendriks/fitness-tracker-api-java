@@ -1,15 +1,15 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "gpsposition")
 public class GPSPositionDbEntity {

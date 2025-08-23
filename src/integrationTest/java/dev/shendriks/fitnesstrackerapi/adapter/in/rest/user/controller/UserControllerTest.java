@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-
 public class UserControllerTest {
     private final BasicAuthHelper basicAuthHelper;
     private final MockMvc mvc;

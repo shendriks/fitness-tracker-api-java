@@ -31,22 +31,22 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     @Override
     public List<Activity> findAllByUser(UserId userId) {
         List<ActivityDbEntity> entities = activityDbEntityRepository.findAllByUserIdOrderByUlidDesc(userId.value());
-        return activityMapper.activityDbEntitiesToActivities(entities);
+        return activityMapper.toActivities(entities);
     }
 
     @Override
     public Optional<Activity> findByUserAndId(UserId userId, ActivityUlid activityUlid) {
         var entity = activityDbEntityRepository.findByUserIdAndUlid(userId.value(), activityUlid.value());
-        return entity.map(activityMapper::activityDbEntityToActivity);
+        return entity.map(activityMapper::toActivity);
     }
 
     @Override
     public Activity saveForUser(UserId userId, ActivityCreationData activityCreationData) {
-        ActivityDbEntity entity = activityMapper.activityCreationDataToActivityDbEntity(activityCreationData);
+        ActivityDbEntity entity = activityMapper.toActivityDbEntity(activityCreationData);
         UserDbEntity user = userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new);
         entity.setUser(user);
         entity = activityDbEntityRepository.save(entity);
-        return activityMapper.activityDbEntityToActivity(entity);
+        return activityMapper.toActivity(entity);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
         entity.setTitle(activityUpdateData.title());
         entity.setDescription(activityUpdateData.description());
         entity = activityDbEntityRepository.save(entity);
-        return activityMapper.activityDbEntityToActivity(entity);
+        return activityMapper.toActivity(entity);
     }
 
     @Override
@@ -68,13 +68,13 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
 
     @Override
     public Activity saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData) {
-        ActivityDbEntity activityDbEntry = activityMapper.activityUploadDataToActivityDbEntity(
+        ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(
             activityUploadData,
             gpsTrackData
         );
         activityDbEntry.setUser(userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new));
         activityDbEntityRepository.save(activityDbEntry);
-        return activityMapper.activityDbEntityToActivity(activityDbEntry);
+        return activityMapper.toActivity(activityDbEntry);
     }
 
     @Override

@@ -6,15 +6,21 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public abstract class ActivityDbEntityMapper {
-    public abstract Activity activityDbEntityToActivity(ActivityDbEntity activityDbEntity);
+    @Autowired
+    private Clock clock;
 
-    public abstract List<Activity> activityDbEntitiesToActivities(List<ActivityDbEntity> activityDbEntities);
+    public abstract Activity toActivity(ActivityDbEntity activityDbEntity);
+
+    public abstract List<Activity> toActivities(List<ActivityDbEntity> activityDbEntities);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ulid", ignore = true)
@@ -23,28 +29,28 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "gpsPositions", ignore = true)
     @Mapping(target = "state", ignore = true)
-    public abstract ActivityDbEntity activityCreationDataToActivityDbEntity(ActivityCreationData activityCreationData);
+    public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData);
 
-    public ActivityDbEntity activityUploadDataToActivityDbEntity(ActivityUploadData request, GPSTrackData metrics) {
+    public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData) {
         ActivityDbEntity activity = new ActivityDbEntity();
         activity.setActivityType(request.activityType());
         activity.setTitle(request.title());
         activity.setDescription(request.description());
-        activity.setStartDate(metrics.gpxTime().orElse(Instant.now()));
-        activity.setDuration((int) metrics.duration());
-        activity.setDistance((int) metrics.totalLength());
+        activity.setStartDate(gpsTrackData.gpxTime().orElse(Instant.now(clock)));
+        activity.setDuration((int) gpsTrackData.duration());
+        activity.setDistance((int) gpsTrackData.totalLength());
         activity.setCalories(0);
         activity.setGpsPositions(
-            metrics
+            gpsTrackData
                 .gpsPositions()
                 .stream()
-                .map(gpsPositionData -> {
-                    GPSPositionDbEntity gpsPositionDbEntity = new GPSPositionDbEntity();
-                    gpsPositionDbEntity.setLatitude(gpsPositionData.latitude());
-                    gpsPositionDbEntity.setLongitude(gpsPositionData.longitude());
-                    gpsPositionDbEntity.setTimestamp(gpsPositionData.timestamp());
-                    return gpsPositionDbEntity;
-                })
+                .map(gpsPositionData -> GPSPositionDbEntity
+                    .builder()
+                    .latitude(gpsPositionData.latitude())
+                    .longitude(gpsPositionData.longitude())
+                    .timestamp(gpsPositionData.timestamp())
+                    .altitude(gpsPositionData.altitude().orElse(null))
+                    .build())
                 .peek((position) -> position.setActivity(activity))
                 .toList()
         );
