@@ -59,7 +59,6 @@ dependencies {
 
 jacoco {
     toolVersion = '0.8.13'
-    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
 
 //compileJava {
@@ -68,7 +67,6 @@ jacoco {
 //        '-Amapstruct.disableBuilders=true'
 //    ]
 //}
-
 
 tasks.named('test') {
     useJUnitPlatform()
@@ -82,6 +80,7 @@ tasks.register('integrationTest', Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
     useJUnitPlatform()
     jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+    shouldRunAfter(tasks.named('test'))
 }
 
 tasks.named('check') {
@@ -90,10 +89,11 @@ tasks.named('check') {
 }
 
 jacocoTestReport {
-    dependsOn test
+    dependsOn check
     reports {
         xml.required = false
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
+    getExecutionData().setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
 }
