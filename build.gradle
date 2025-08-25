@@ -59,6 +59,7 @@ dependencies {
 
 jacoco {
     toolVersion = '0.8.13'
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
 
 //compileJava {
@@ -92,7 +93,7 @@ jacocoTestReport {
     dependsOn check
     reports {
         xml.required = false
-        csv.required = false
+        csv.required = true
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
     getExecutionData().setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
