@@ -16,7 +16,7 @@ public class UlidGenerator implements BeforeExecutionGenerator {
         Object o1,
         EventType eventType
     ) {
-        return UlidCreator.getUlid().toString();
+        return UlidCreator.getMonotonicUlid().toString();
     }
 
     @Override
