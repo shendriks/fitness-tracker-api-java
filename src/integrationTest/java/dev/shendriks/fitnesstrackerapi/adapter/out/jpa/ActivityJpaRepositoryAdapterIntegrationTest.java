@@ -115,6 +115,25 @@ class ActivityJpaRepositoryAdapterIntegrationTest {
 
         Activity actualActivity = adapter.saveForUser(userId, create);
 
+        assertInstanceOf(ActivityId.class, actualActivity.id());
+        assertInstanceOf(ActivityUlid.class, actualActivity.ulid());
+        assertEquals(900, actualActivity.duration());
+        assertEquals(1200, actualActivity.distance());
+        assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualActivity.startDate());
+        assertEquals(ActivityType.WALKING, actualActivity.activityType());
+        assertEquals("Short Walk", actualActivity.title());
+        assertEquals("To the park", actualActivity.description());
+
+        ActivityDbEntity actualSavedDbEntity = entityManager.find(ActivityDbEntity.class, actualActivity.id().value());
+        assertInstanceOf(ActivityDbEntity.class, actualSavedDbEntity);
+        assertEquals(actualActivity.id().value(), actualSavedDbEntity.getId());
+        assertEquals(ActivityType.WALKING, actualSavedDbEntity.getActivityType());
+        assertEquals("Short Walk", actualSavedDbEntity.getTitle());
+        assertEquals("To the park", actualSavedDbEntity.getDescription());
+        assertEquals(900, actualSavedDbEntity.getDuration());
+        assertEquals(1200, actualSavedDbEntity.getDistance());
+        assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualSavedDbEntity.getStartDate());
+
         ActivityUpdateData update = ActivityUpdateData
             .builder()
             .activityType(ActivityType.SWIMMING)
@@ -124,10 +143,25 @@ class ActivityJpaRepositoryAdapterIntegrationTest {
 
         Activity actualUpdatedActivity = adapter.updateForUser(userId, actualActivity.ulid(), update);
 
+        assertInstanceOf(ActivityId.class, actualActivity.id());
+        assertInstanceOf(ActivityUlid.class, actualActivity.ulid());
         assertEquals(ActivityType.SWIMMING, actualUpdatedActivity.activityType());
         assertEquals("Swim Session", actualUpdatedActivity.title());
         assertEquals("Pool laps", actualUpdatedActivity.description());
+        assertEquals(900, actualUpdatedActivity.duration());
+        assertEquals(1200, actualUpdatedActivity.distance());
+        assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualUpdatedActivity.startDate());
 
+        ActivityDbEntity actualActivityDbEntity = entityManager.find(ActivityDbEntity.class, actualUpdatedActivity.id().value());
+        assertInstanceOf(ActivityDbEntity.class, actualActivityDbEntity);
+        assertEquals(actualUpdatedActivity.id().value(), actualActivityDbEntity.getId());
+        assertEquals(ActivityType.SWIMMING, actualActivityDbEntity.getActivityType());
+        assertEquals("Swim Session", actualActivityDbEntity.getTitle());
+        assertEquals("Pool laps", actualActivityDbEntity.getDescription());
+        assertEquals(900, actualActivityDbEntity.getDuration());
+        assertEquals(1200, actualActivityDbEntity.getDistance());
+        assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualActivityDbEntity.getStartDate());
+        
         Optional<String> title = adapter.findTitleById(actualUpdatedActivity.id());
         assertTrue(title.isPresent());
         assertEquals("Swim Session", title.get());
@@ -158,18 +192,27 @@ class ActivityJpaRepositoryAdapterIntegrationTest {
             .kilometerSpeeds(List.of())
             .kilometerPaces(List.of())
             .gpsPositions(List.of(
-                new GPSPositionData(Instant.parse("2025-08-23T10:00:05Z"), 52.0, 5.0, Optional.of(10.0)),
-                new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 52.001, 5.001, Optional.empty())
+                new GPSPositionData(Instant.parse("2025-08-23T10:00:05Z"), 0.0, 1.0, Optional.of(10.0)),
+                new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, Optional.empty())
             ))
             .build();
 
         Activity actualSavedActivity = adapter.saveForUser(userId, upload, gps);
 
+        assertNotNull(actualSavedActivity.id());
         assertEquals(789, actualSavedActivity.duration());
         assertEquals(1234, actualSavedActivity.distance());
         assertEquals("Trail Run", actualSavedActivity.title());
         assertEquals("Through the woods", actualSavedActivity.description());
-        assertNotNull(actualSavedActivity.id());
+        assertEquals(2, actualSavedActivity.gpsPositions().size(), "Expected two GPS positions");
+        assertEquals(Instant.parse("2025-08-23T10:00:05Z"), actualSavedActivity.gpsPositions().getFirst().timestamp());
+        assertEquals(0.0, actualSavedActivity.gpsPositions().getFirst().latitude());
+        assertEquals(1.0, actualSavedActivity.gpsPositions().getFirst().longitude());
+        assertEquals(10.0, actualSavedActivity.gpsPositions().getFirst().altitude());
+        assertEquals(Instant.parse("2025-08-23T10:05:05Z"), actualSavedActivity.gpsPositions().get(1).timestamp());
+        assertEquals(0.001, actualSavedActivity.gpsPositions().get(1).latitude());
+        assertEquals(1.001, actualSavedActivity.gpsPositions().get(1).longitude());
+        assertNull(actualSavedActivity.gpsPositions().get(1).altitude());
 
         ActivityDbEntity actualActivityDbEntity = entityManager.find(ActivityDbEntity.class, actualSavedActivity.id().value());
 
@@ -181,5 +224,13 @@ class ActivityJpaRepositoryAdapterIntegrationTest {
         assertEquals(789, actualActivityDbEntity.getDuration());
         assertEquals(1234, actualActivityDbEntity.getDistance());
         assertEquals(2, actualActivityDbEntity.getGpsPositions().size(), "Expected two GPS positions");
+        assertEquals(Instant.parse("2025-08-23T10:00:05Z"), actualActivityDbEntity.getGpsPositions().getFirst().getTimestamp());
+        assertEquals(0.0, actualActivityDbEntity.getGpsPositions().getFirst().getLatitude());
+        assertEquals(1.0, actualActivityDbEntity.getGpsPositions().getFirst().getLongitude());
+        assertEquals(10.0, actualActivityDbEntity.getGpsPositions().getFirst().getAltitude());
+        assertEquals(Instant.parse("2025-08-23T10:05:05Z"), actualActivityDbEntity.getGpsPositions().get(1).getTimestamp());
+        assertEquals(0.001, actualActivityDbEntity.getGpsPositions().get(1).getLatitude());
+        assertEquals(1.001, actualActivityDbEntity.getGpsPositions().get(1).getLongitude());
+        assertNull(actualActivityDbEntity.getGpsPositions().get(1).getAltitude());
     }
 }
