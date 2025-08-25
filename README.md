@@ -2,8 +2,10 @@
 
 [![Java CI with Gradle](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/gradle.yml)
 [![Dependabot Updates](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/dependabot/dependabot-updates)
-![Coverage](.github/badges/jacoco.svg)
-![Branches](.github/badges/branches.svg)
+![Coverage]([.github/badges/jacoco.svg](https://github.com/shendriks/fitness-tracker-api-java/blob/badge/.github/badges/jacoco.svg)
+![Branches]([.github/badges](https://github.com/shendriks/fitness-tracker-api-java/blob/badge/.github/badges/branches.svg)
+
+
 
 A simple API for tracking fitness activities
 
