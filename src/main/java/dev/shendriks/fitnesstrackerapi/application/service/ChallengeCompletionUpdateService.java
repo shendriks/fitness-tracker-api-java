@@ -21,14 +21,14 @@ import java.util.List;
 @Log
 @Service
 @AllArgsConstructor
-public class ChallengeCompletionChecker {
+public class ChallengeCompletionUpdateService {
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
     private final ForAggregatingActivities forAggregatingActivities;
     private final AchievementCompletionCalculator achievementCompletionCalculator;
     private final TrophyManagementService trophyManagementService;
 
-    public void checkCompletionForUser(UserId userId) {
+    public void updateAllChallengeCompletionsForUser(UserId userId) {
         List<ChallengeParticipation> challengeParticipations = forAccessingChallengeParticipations.findCurrentByUser(userId);
 
         for (ChallengeParticipation challengeParticipation : challengeParticipations) {

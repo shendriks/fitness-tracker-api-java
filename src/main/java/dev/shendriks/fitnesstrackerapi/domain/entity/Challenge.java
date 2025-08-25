@@ -5,10 +5,12 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeId;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
 @Getter
+@SuperBuilder
 public final class Challenge extends Achievement {
     private final Instant startDate;
     private final Instant endDate;

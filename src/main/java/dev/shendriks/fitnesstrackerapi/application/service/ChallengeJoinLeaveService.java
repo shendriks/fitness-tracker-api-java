@@ -23,7 +23,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingChallenges forAccessingChallenges;
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
-    private final ChallengeCompletionChecker challengeCompletionChecker;
+    private final ChallengeCompletionUpdateService challengeCompletionUpdateService;
     private final TrophyManagementService trophyManagementService;
 
     @Override
@@ -37,7 +37,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
 
         ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.create(userId, challenge);
-        challengeCompletionChecker.updateChallengeCompletion(challengeParticipation);
+        challengeCompletionUpdateService.updateChallengeCompletion(challengeParticipation);
 
         eventPublisher.publishEvent(new ChallengeJoinedEvent(userId, challengeUlid));
     }

@@ -5,8 +5,10 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.MilestoneId;
 import dev.shendriks.fitnesstrackerapi.domain.value.MilestoneUlid;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
+@SuperBuilder
 public final class Milestone extends Achievement {
     private final boolean isCompleted;
 
