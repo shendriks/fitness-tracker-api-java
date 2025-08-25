@@ -20,16 +20,16 @@ public class ActivityAggregationJpaRepositoryAdapter implements ForAggregatingAc
     private final ActivityAggregationMapper mapper;
 
     @Override
-    public ActivityAggregationMap aggregateForUserByTypeInTimeRange(UserId userId, Instant from, Instant to) {
+    public ActivityAggregationMap aggregateForUserInTimeRange(UserId userId, Instant from, Instant to) {
         ActivityAggregationDbProjection totalProjection = repository.aggregateForUserInTimeRange(userId.value(), from, to);
         List<ActivityTypeAggregationDbProjection> byTypeProjections = repository.aggregateForUserByTypeInTimeRange(userId.value(), from, to);
         return mapper.toActivityAggregationMap(totalProjection, byTypeProjections);
     }
 
     @Override
-    public ActivityAggregationMap aggregateForUserByType(UserId userId) {
-        ActivityAggregationDbProjection totalProjection = repository.aggregateForUserInTimeRange(userId.value(), null, null);
-        List<ActivityTypeAggregationDbProjection> byTypeProjections = repository.aggregateForUserByTypeInTimeRange(userId.value(), null, null);
+    public ActivityAggregationMap aggregateForUser(UserId userId) {
+        ActivityAggregationDbProjection totalProjection = repository.aggregateForUser(userId.value());
+        List<ActivityTypeAggregationDbProjection> byTypeProjections = repository.aggregateForUserByType(userId.value());
         return mapper.toActivityAggregationMap(totalProjection, byTypeProjections);
     }
 }

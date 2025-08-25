@@ -76,7 +76,7 @@ class ChallengeCompletionUpdateServiceTest {
         );
 
         // Aggregation data is irrelevant because the calculator is mocked
-        when(forAggregatingActivities.aggregateForUserByTypeInTimeRange(any(), any(), any()))
+        when(forAggregatingActivities.aggregateForUserInTimeRange(any(), any(), any()))
             .thenReturn(ActivityAggregationMap.create(
                 ActivityAggregation.zero(),
                 List.of()
@@ -180,7 +180,7 @@ class ChallengeCompletionUpdateServiceTest {
             .updatePercentageCompleted(any(ChallengeParticipationId.class), eq(23));
 
         verify(forAggregatingActivities, times(2))
-            .aggregateForUserByTypeInTimeRange(eq(userId), any(), any());
+            .aggregateForUserInTimeRange(eq(userId), any(), any());
 
         verify(achievementCompletionCalculator, times(2)).calculateAchievementCompletion(any());
     }

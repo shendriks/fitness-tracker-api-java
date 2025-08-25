@@ -63,7 +63,7 @@ class MilestoneCompletionUpdateServiceTest {
         );
 
         // Aggregation data is irrelevant because the calculator is mocked
-        when(forAggregatingActivities.aggregateForUserByType(any()))
+        when(forAggregatingActivities.aggregateForUser(any()))
             .thenReturn(ActivityAggregationMap.create(
                 ActivityAggregation.zero(),
                 List.of()
@@ -157,7 +157,7 @@ class MilestoneCompletionUpdateServiceTest {
         service.updateAllMilestoneCompletionsForUser(userId);
 
         verify(forAccessingMilestones).findAllWithCompletedByUser(userId);
-        verify(forAggregatingActivities, times(1)).aggregateForUserByType(userId);
+        verify(forAggregatingActivities, times(1)).aggregateForUser(userId);
         verify(achievementCompletionCalculator, times(2)).calculateAchievementCompletion(any());
         verifyNoInteractions(eventPublisher);
         verifyNoInteractions(trophyManagementService);

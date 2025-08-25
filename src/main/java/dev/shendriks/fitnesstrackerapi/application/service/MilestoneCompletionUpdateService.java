@@ -29,7 +29,7 @@ public class MilestoneCompletionUpdateService {
 
     public void updateAllMilestoneCompletionsForUser(UserId userId) {
         List<Milestone> milestones = forAccessingMilestones.findAllWithCompletedByUser(userId);
-        ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserByType(userId);
+        ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUser(userId);
 
         for (Milestone milestone : milestones) {
             AchievementCompletionRequest request = AchievementCompletionRequest

@@ -6,7 +6,7 @@ import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import java.time.Instant;
 
 public interface ForAggregatingActivities {
-    ActivityAggregationMap aggregateForUserByTypeInTimeRange(UserId userId, Instant from, Instant to);
+    ActivityAggregationMap aggregateForUserInTimeRange(UserId userId, Instant from, Instant to);
 
-    ActivityAggregationMap aggregateForUserByType(UserId userId);
+    ActivityAggregationMap aggregateForUser(UserId userId);
 }

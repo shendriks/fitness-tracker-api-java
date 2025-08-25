@@ -40,7 +40,7 @@ public class ChallengeCompletionUpdateService {
         Challenge challenge = challengeParticipation.challenge();
         UserId userId = challengeParticipation.userId();
 
-        ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserByTypeInTimeRange(
+        ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUserInTimeRange(
             userId,
             challenge.getStartDate(),
             challenge.getEndDate()
