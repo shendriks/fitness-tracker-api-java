@@ -2,11 +2,9 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa;
 
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ChallengeDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ChallengeParticipationDbEntity;
-import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.application.exception.ChallengeNotFoundException;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
-import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityMetric;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
@@ -25,29 +23,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional
 @AutoConfigureTestEntityManager
-class ChallengeParticipationJpaRepositoryAdapterIntegrationTest {
+class ChallengeParticipationJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterIntegrationTest {
     private final ChallengeParticipationJpaRepositoryAdapter adapter;
-    private final TestEntityManager entityManager;
 
     public ChallengeParticipationJpaRepositoryAdapterIntegrationTest(
         @Autowired ChallengeParticipationJpaRepositoryAdapter adapter,
         @Autowired TestEntityManager entityManager
     ) {
+        super(entityManager);
         this.adapter = adapter;
-        this.entityManager = entityManager;
-    }
-
-    private UserId createAndPersistUser() {
-        UserDbEntity user = UserDbEntity
-            .builder()
-            .name("Alice")
-            .email("alice@example.com")
-            .password("password")
-            .authority("ROLE_USER")
-            .accountType(AccountType.BASIC)
-            .build();
-        Long userId = entityManager.persistAndGetId(user, Long.class);
-        return new UserId(userId);
     }
 
     private ChallengeDbEntity createAndPersistChallenge(String ulid, Instant start, Instant end) {

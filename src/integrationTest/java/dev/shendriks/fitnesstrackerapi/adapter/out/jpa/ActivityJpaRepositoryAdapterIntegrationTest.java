@@ -1,9 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa;
 
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
-import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
-import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import org.junit.jupiter.api.Test;
@@ -22,29 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @Transactional
 @AutoConfigureTestEntityManager
-class ActivityJpaRepositoryAdapterIntegrationTest {
+class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterIntegrationTest {
     private final ActivityJpaRepositoryAdapter adapter;
-    private final TestEntityManager entityManager;
 
     public ActivityJpaRepositoryAdapterIntegrationTest(
         @Autowired ActivityJpaRepositoryAdapter adapter,
         @Autowired TestEntityManager entityManager
     ) {
+        super(entityManager);
         this.adapter = adapter;
-        this.entityManager = entityManager;
-    }
-
-    private UserId createAndPersistUser() {
-        UserDbEntity user = UserDbEntity
-            .builder()
-            .name("Alice")
-            .email("alice@example.com")
-            .password("password")
-            .authority("ROLE_USER")
-            .accountType(AccountType.BASIC)
-            .build();
-        Long userId = entityManager.persistAndGetId(user, Long.class);
-        return new UserId(userId);
     }
 
     @Test
@@ -161,7 +145,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest {
         assertEquals(900, actualActivityDbEntity.getDuration());
         assertEquals(1200, actualActivityDbEntity.getDistance());
         assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualActivityDbEntity.getStartDate());
-        
+
         Optional<String> title = adapter.findTitleById(actualUpdatedActivity.id());
         assertTrue(title.isPresent());
         assertEquals("Swim Session", title.get());
