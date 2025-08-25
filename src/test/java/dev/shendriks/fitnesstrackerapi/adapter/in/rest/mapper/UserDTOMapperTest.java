@@ -14,9 +14,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserDTOMapperTest {
     private final UserDTOMapper mapper = Mappers.getMapper(UserDTOMapper.class);
@@ -90,7 +88,7 @@ class UserDTOMapperTest {
         assertEquals(createdAt, dto.createdAt());
         assertEquals(updatedAt, dto.updatedAt());
     }
-    
+
     @Test
     void toUserSignUpData_withNullInput_returnsNull() {
         assertNull(mapper.toUserSignUpData(null));

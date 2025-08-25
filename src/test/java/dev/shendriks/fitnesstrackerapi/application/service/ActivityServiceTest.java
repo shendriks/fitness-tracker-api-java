@@ -199,7 +199,7 @@ class ActivityServiceTest {
             .description("desc")
             .gpxFile(multipartFile)
             .build();
-        
+
         GPSTrackData gpsTrackData = GPSTrackData
             .builder()
             .name("track")
@@ -263,7 +263,7 @@ class ActivityServiceTest {
             .build();
 
         RuntimeException exception = assertThrows(
-            RuntimeException.class, 
+            RuntimeException.class,
             () -> service.uploadActivityForUser(userId, uploadData)
         );
         assertInstanceOf(IOException.class, exception.getCause());

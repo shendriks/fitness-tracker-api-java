@@ -11,9 +11,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.time.Instant;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityDTOMapperTest {
     private final ActivityDTOMapper mapper = Mappers.getMapper(ActivityDTOMapper.class);
@@ -175,7 +173,7 @@ class ActivityDTOMapperTest {
         assertNotNull(data.gpxFile());
         assertEquals("track.gpx", data.gpxFile().getOriginalFilename());
     }
-    
+
     @Test
     void toActivityResponse_withNullInput_returnsNull() {
         assertNull(mapper.toActivityResponse(null));

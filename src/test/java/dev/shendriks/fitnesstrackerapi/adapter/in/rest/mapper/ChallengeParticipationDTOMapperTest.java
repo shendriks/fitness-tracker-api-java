@@ -106,7 +106,7 @@ class ChallengeParticipationDTOMapperTest {
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
     }
-    
+
     @Test
     void toChallengeParticipationResponseDTO_withNullInput_returnsNull() {
         assertNull(mapper.toChallengeParticipationResponseDTO(null));

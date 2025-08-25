@@ -11,9 +11,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityAggregationMapperTest {
     private final ActivityAggregationMapper mapper = Mappers.getMapper(ActivityAggregationMapper.class);
@@ -151,7 +149,7 @@ class ActivityAggregationMapperTest {
         assertEquals(ActivityAggregation.zero(), actualActivityAggregationMap.getByType(ActivityType.SWIMMING));
         assertEquals(ActivityAggregation.zero(), actualActivityAggregationMap.getByType(ActivityType.MOUNTAIN_BIKING));
     }
-    
+
     @Test
     void toActivityAggregation_withNullInput_returnsNull() {
         assertNull(mapper.toActivityAggregation(null));
