@@ -93,12 +93,12 @@ class ChallengeJoinLeaveServiceTest {
             .updatedAt(Instant.now())
             .percentageCompleted(0)
             .build();
-        when(forAccessingChallengeParticipations.create(userId, challenge)).thenReturn(participation);
+        when(forAccessingChallengeParticipations.joinChallenge(userId, challenge.getUlid())).thenReturn(participation);
 
         service.joinChallenge(userId, challengeUlid);
 
         verify(forAccessingChallenges).findByUserIdAndUlid(userId, challengeUlid);
-        verify(forAccessingChallengeParticipations).create(userId, challenge);
+        verify(forAccessingChallengeParticipations).joinChallenge(userId, challenge.getUlid());
         verify(challengeCompletionUpdateService).updateChallengeCompletion(participation);
 
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
@@ -118,7 +118,7 @@ class ChallengeJoinLeaveServiceTest {
         assertThrows(ChallengeNotFoundException.class, () -> service.joinChallenge(userId, challengeUlid));
 
         verify(forAccessingChallenges).findByUserIdAndUlid(userId, challengeUlid);
-        verify(forAccessingChallengeParticipations, never()).create(any(), any());
+        verify(forAccessingChallengeParticipations, never()).joinChallenge(any(), any());
         verifyNoInteractions(challengeCompletionUpdateService);
         verifyNoInteractions(eventPublisher);
     }

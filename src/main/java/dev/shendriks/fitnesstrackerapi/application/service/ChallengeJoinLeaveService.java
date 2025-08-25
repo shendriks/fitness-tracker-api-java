@@ -36,7 +36,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
             .findByUserIdAndUlid(userId, challengeUlid)
             .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
 
-        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.create(userId, challenge);
+        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.joinChallenge(userId, challenge.getUlid());
         challengeCompletionUpdateService.updateChallengeCompletion(challengeParticipation);
 
         eventPublisher.publishEvent(new ChallengeJoinedEvent(userId, challengeUlid));
