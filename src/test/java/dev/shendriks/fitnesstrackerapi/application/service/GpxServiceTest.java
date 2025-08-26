@@ -6,6 +6,7 @@ import dev.shendriks.fitnesstrackerapi.application.service.gpx.KilometerMetricsC
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
 import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
+import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
 import io.jenetics.jpx.WayPoint;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +84,13 @@ class GpxServiceTest {
         when(metricsCalculator.calculateSpeed(12345.6, 3000L)).thenReturn(4.1152);
         when(metricsCalculator.calculatePace(4.1152)).thenReturn(14.6);
         when(metricsCalculator.calculateElevationGain(wayPoints)).thenReturn(200.0);
-        when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(new long[]{2500L, 500L});
+        when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(
+            MotionAndPausingTime
+                .builder()
+                .motionTime(2500L)
+                .pausingTime(500L)
+                .build()
+        );
         when(kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints)).thenReturn(
             new KilometerMetrics(List.of(10.0, 9.5), List.of(6.0, 6.3))
         );
@@ -140,7 +147,13 @@ class GpxServiceTest {
         when(metricsCalculator.calculateSpeed(1000.0, 600L)).thenReturn(1.6667);
         when(metricsCalculator.calculatePace(1.6667)).thenReturn(36.0);
         when(metricsCalculator.calculateElevationGain(wayPoints)).thenReturn(0.0);
-        when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(new long[]{600L, 0L});
+        when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(
+            MotionAndPausingTime
+                .builder()
+                .motionTime(600L)
+                .pausingTime(0L)
+                .build()
+        );
         when(kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints)).thenReturn(
             new KilometerMetrics(List.of(1.6), List.of(37.0))
         );

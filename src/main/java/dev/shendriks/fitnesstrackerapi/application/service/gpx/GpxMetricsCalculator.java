@@ -1,7 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
-import io.jenetics.jpx.Length;
+import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Component
@@ -55,19 +54,21 @@ public class GpxMetricsCalculator {
             return 0;
         }
 
-        return IntStream.range(1, points.size()).mapToDouble(i -> {
-            Optional<Double> elev1 = points.get(i - 1).getElevation().map(Length::doubleValue);
-            Optional<Double> elev2 = points.get(i).getElevation().map(Length::doubleValue);
+        List<Double> nonEmptyElevations = points
+            .stream()
+            .filter(p -> p.getElevation().isPresent())
+            .map(p -> p.getElevation().get().doubleValue())
+            .toList();
 
-            if (elev1.isEmpty() || elev2.isEmpty()) {
-                return 0;
-            }
-            double elevationDiff = elev2.get() - elev1.get();
+        return IntStream.range(1, nonEmptyElevations.size()).mapToDouble(i -> {
+            double elevation1 = nonEmptyElevations.get(i - 1);
+            double elevation2 = nonEmptyElevations.get(i);
+            double elevationDiff = elevation2 - elevation1;
             return elevationDiff > 0 ? elevationDiff : 0;
         }).sum();
     }
 
-    public long[] calculateMotionAndPausingTime(List<WayPoint> points) {
+    public MotionAndPausingTime calculateMotionAndPausingTime(List<WayPoint> points) {
         long totalMotionTime = 0;
         long totalPausingTime = 0;
 
@@ -93,6 +94,7 @@ public class GpxMetricsCalculator {
             }
         }
 
-        return new long[]{totalMotionTime, totalPausingTime};
+        return new MotionAndPausingTime(totalMotionTime, totalPausingTime);
     }
 }
+
