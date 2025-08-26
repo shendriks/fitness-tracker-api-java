@@ -1,8 +1,5 @@
-package dev.shendriks.fitnesstrackerapi.adapter.in.rest.user.controller;
+package dev.shendriks.fitnesstrackerapi.adapter.in.rest.user.controller.user;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.shendriks.fitnesstrackerapi.BasicAuthHelper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -13,31 +10,26 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class UserControllerTest {
-    private final BasicAuthHelper basicAuthHelper;
+public class SignUpUserControllerTest {
     private final MockMvc mvc;
     private final UserRepository userRepository;
 
-    public UserControllerTest(
-        @Autowired BasicAuthHelper basicAuthHelper,
+    public SignUpUserControllerTest(
         @Autowired MockMvc mvc,
         @Autowired UserRepository userRepository
     ) {
-        this.basicAuthHelper = basicAuthHelper;
         this.mvc = mvc;
         this.userRepository = userRepository;
     }
@@ -73,7 +65,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void registerUserReturnsErrorIfEmailIsAlreadyRegistered() throws Exception {
+    public void registerUser_withEmailAlreadyRegistered_returnsError() throws Exception {
         mvc
             .perform(post("/api/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -90,47 +82,8 @@ public class UserControllerTest {
             .andExpect(content().json("""
                 {
                     "message": "Email already registered",
-                    "errors": [
-                        "Email already registered"
-                    ]
+                    "errors": ["Email already registered"]
                 }
                 """));
-    }
-
-    @Test
-    public void getUserReturnsUser() throws Exception {
-        String userId = "USER0000000000000000000000";
-        String email = "foo@bar.baz";
-        String password = "Sup3rS3cr3tPa$$w0rd!";
-
-        String accessToken = getAccessToken(email, password);
-
-        mvc
-            .perform(get("/api/users/me").header("Authorization", "Bearer " + accessToken))
-            .andExpect(status().isOk())
-            .andExpect(content().json("""
-                {
-                    "id": "%s",
-                    "email": "%s",
-                    "accountType": "basic"
-                }
-                """.formatted(userId, email)
-            ));
-    }
-
-    private String getAccessToken(String email, String password) throws Exception {
-        String basicAuthHeader = basicAuthHelper.createBasicAuthHeader(email, password);
-
-        String accessTokenJson = mvc
-            .perform(get("/api/access-token").header("Authorization", "Basic " + basicAuthHeader))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> tokenMap = mapper.readValue(accessTokenJson, new TypeReference<>() {
-        });
-        return (String) tokenMap.get("token");
     }
 }
