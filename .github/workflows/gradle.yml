@@ -48,6 +48,8 @@ jobs:
         with:
           generate-branches-badge: true
           jacoco-csv-file: build/customJacocoReportDir/test/jacocoTestReport.csv
+          coverage-label: 'Coverage'
+          branches-label: 'Branches'
 
       #- name: Log coverage percentage
       #  run: |
