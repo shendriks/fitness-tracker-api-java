@@ -32,7 +32,7 @@ public class AccessTokenHelper {
             .withExpiresAt(Instant.now().plus(Duration.ofSeconds(jwtExpiration)))
             .sign(Algorithm.HMAC512(jwtSecret));
     }
-    
+
     public void validateAccessToken(String token) {
         JWTVerifier verifier = JWT
             .require(Algorithm.HMAC512(jwtSecret))

@@ -100,7 +100,7 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         // Aggregate without time range
         ActivityAggregationMap actualAllTimeAggregationMap = adapter.aggregateForUser(userId);
         ActivityAggregation totalAll = actualAllTimeAggregationMap.getTotal();
-        
+
         // Now all 3 activities are included
         assertEquals(3L, totalAll.count());
         assertEquals(3500L, totalAll.totalDistance());
@@ -122,7 +122,7 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         assertEquals(600L, cyclingAll.totalDuration());
         assertEquals(2000L, cyclingAll.maxDistance());
         assertEquals(600L, cyclingAll.maxDuration());
-        
+
         // A type with no activities should be zeroed
         ActivityAggregation swimmingAll = actualAllTimeAggregationMap.getByType(ActivityType.SWIMMING);
         assertEquals(0L, swimmingAll.count());

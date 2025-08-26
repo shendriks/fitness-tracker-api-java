@@ -30,7 +30,7 @@ import java.util.List;
 import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRequirementName.BEARER_TOKEN;
 
 @RestController
-@Tag(name = OpenApiTagName.NOTIFICATIONS, description = "Notifications")
+@Tag(name = OpenApiTagName.NOTIFICATIONS)
 @RequestMapping("/api/notifications")
 @SecurityRequirement(name = BEARER_TOKEN)
 @AllArgsConstructor

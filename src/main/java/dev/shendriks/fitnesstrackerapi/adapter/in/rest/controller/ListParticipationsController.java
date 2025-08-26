@@ -26,7 +26,7 @@ import java.util.List;
 import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRequirementName.BEARER_TOKEN;
 
 @RestController
-@Tag(name = OpenApiTagName.CHALLENGES, description = "Challenges the user is participating in")
+@Tag(name = OpenApiTagName.CHALLENGE_PARTICIPATIONS)
 @SecurityRequirement(name = BEARER_TOKEN)
 @AllArgsConstructor
 public class ListParticipationsController {

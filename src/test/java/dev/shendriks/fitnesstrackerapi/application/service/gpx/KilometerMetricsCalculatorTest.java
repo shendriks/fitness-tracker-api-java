@@ -142,12 +142,12 @@ class KilometerMetricsCalculatorTest {
         assertEquals(0.0, actualMetrics.speeds().getFirst(), "Expected zero speed");
         assertEquals(0.0, actualMetrics.paces().getFirst(), "Expected zero pace");
     }
-    
+
     @Test
     void calculateKilometerMetrics_wayPointsNotSortedByTime_throwsException() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.minusSeconds(1);
-        
+
         WayPoint wayPoint0 = WayPoint.builder().lat(0.0).lon(0.0).time(t0).build();
         WayPoint wayPoint1 = WayPoint.builder().lat(0.0).lon(0.001).time(t1).build();
         List<WayPoint> wayPoints = List.of(wayPoint0, wayPoint1);

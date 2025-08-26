@@ -25,7 +25,7 @@ import java.util.List;
 import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRequirementName.BEARER_TOKEN;
 
 @RestController
-@Tag(name = OpenApiTagName.TROPHIES, description = "A user's trophies")
+@Tag(name = OpenApiTagName.TROPHIES)
 @SecurityRequirement(name = BEARER_TOKEN)
 @AllArgsConstructor
 public class GetTrophiesController {

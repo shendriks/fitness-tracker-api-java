@@ -25,7 +25,7 @@ import java.time.Instant;
 import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRequirementName.BASIC_AUTH;
 
 @Controller
-@Tag(name = OpenApiTagName.ACCESS_TOKENS, description = "An access token is needed to access secured endpoints")
+@Tag(name = OpenApiTagName.ACCESS_TOKENS)
 @SecurityRequirement(name = BASIC_AUTH)
 public class AccessTokenController {
     private final String jwtSecret;

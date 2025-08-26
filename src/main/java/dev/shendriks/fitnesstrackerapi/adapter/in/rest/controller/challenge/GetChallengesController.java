@@ -27,7 +27,7 @@ import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRe
 
 @AllArgsConstructor
 @RestController
-@Tag(name = OpenApiTagName.CHALLENGES, description = "Users can master challenges and earn trophies")
+@Tag(name = OpenApiTagName.CHALLENGES)
 @SecurityRequirement(name = BEARER_TOKEN)
 public class GetChallengesController {
     private final ListChallengesUseCase getAllChallengesUseCase;

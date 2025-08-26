@@ -128,7 +128,7 @@ class GpxMetricsCalculatorTest {
 
         assertEquals(0.0, actualElevationGain, "Expected elevation gain of 0m");
     }
-    
+
     @Test
     void calculateElevationGain_whenOnlyOnePoint_returnsZero() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");

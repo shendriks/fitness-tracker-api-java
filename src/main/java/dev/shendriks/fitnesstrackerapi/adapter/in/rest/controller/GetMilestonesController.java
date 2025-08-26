@@ -26,7 +26,7 @@ import java.util.List;
 import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRequirementName.BEARER_TOKEN;
 
 @RestController
-@Tag(name = OpenApiTagName.MILESTONES, description = "Users can reach milestones by uploading activities")
+@Tag(name = OpenApiTagName.MILESTONES)
 @SecurityRequirement(name = BEARER_TOKEN)
 @AllArgsConstructor
 public class GetMilestonesController {

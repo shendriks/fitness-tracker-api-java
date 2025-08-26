@@ -34,7 +34,7 @@ public class PatchUserControllerTest {
         @Autowired UserRepository userRepository,
         @Autowired AccessTokenHelper accessTokenHelper,
         @Autowired PasswordEncoder passwordEncoder
-        ) {
+    ) {
         this.mvc = mvc;
         this.userRepository = userRepository;
         this.accessTokenHelper = accessTokenHelper;
