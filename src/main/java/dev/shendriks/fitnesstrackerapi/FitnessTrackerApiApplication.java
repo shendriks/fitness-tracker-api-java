@@ -19,11 +19,10 @@ import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRe
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
-//@EnableSpringDataWebSupport
 @OpenAPIDefinition(info = @Info(
-    title = "Fitness API",
+    title = "Fitness Tracker API",
     version = "0.0.1",
-    description = "A simple API for tracking fitness activities"),
+    description = "An API for tracking fitness activities"),
     tags = {
         @Tag(name = OpenApiTagName.USERS, description = "A user can sign up, read and write activities, etc."),
         @Tag(name = OpenApiTagName.ACCESS_TOKENS, description = "An access token is needed to access secured endpoints"),
