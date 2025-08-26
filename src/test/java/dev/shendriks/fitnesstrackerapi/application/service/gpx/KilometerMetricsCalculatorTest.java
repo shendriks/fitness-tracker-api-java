@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class KilometerMetricsCalculatorTest {
-    public static final double EPSILON = 0.000_000_001;
+    private static final double EPSILON = 0.000_000_001;
     @Mock
     DistanceCalculator distanceCalculator;
     private KilometerMetricsCalculator calculator;
