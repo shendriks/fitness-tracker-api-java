@@ -46,10 +46,9 @@ jobs:
       - name: Generate Jacoco Badge
         uses: cicirello/jacoco-badge-generator@v2.12.1
         with:
-          generate-branches-badge: true
+          generate-branches-badge: false
+          generate-coverage-endpoint: true
           jacoco-csv-file: build/customJacocoReportDir/test/jacocoTestReport.csv
-          coverage-label: 'Coverage'
-          branches-label: 'Branches'
 
       #- name: Log coverage percentage
       #  run: |
