@@ -138,19 +138,19 @@ class GpxMetricsCalculatorTest {
 
         List<WayPoint> points = List.of(wayPoint1, wayPoint2, wayPoint3, wayPoint4, wayPoint5);
 
-        // Segment wayPoint1 → wayPoint2: 5m over 10s ⇒ 0.5 m/s (threshold) → motion
-        // Segment wayPoint2 → wayPoint3: 2m over 10s ⇒ 0.2 m/s → pause
-        // Segment wayPoint3 → wayPoint4: skipped (missing time)
-        // Segment wayPoint4 → wayPoint5: skipped (missing time)
+        // Segment wayPoint1 -> wayPoint2: 5m over 10s => 0.5 m/s (threshold) -> motion
+        // Segment wayPoint2 -> wayPoint3: 2m over 10s => 0.2 m/s (under threshold) -> pause
+        // Segment wayPoint3 -> wayPoint5: 20m over 20s => 1.0m/s (over threshold) -> motion
         when(distanceCalculator.calculateDistance(wayPoint1, wayPoint2)).thenReturn(5.0);
         when(distanceCalculator.calculateDistance(wayPoint2, wayPoint3)).thenReturn(2.0);
+        when(distanceCalculator.calculateDistance(wayPoint3, wayPoint5)).thenReturn(20.0);
 
         MotionAndPausingTime actualMotionAndPausingTime = calculator.calculateMotionAndPausingTime(points);
 
         assertEquals(
-            MotionAndPausingTime.builder().motionTime(10L).pausingTime(10L).build(),
+            MotionAndPausingTime.builder().motionTime(30L).pausingTime(10L).build(),
             actualMotionAndPausingTime,
-            "Expected motion and pausing time of 10s each"
+            "Expected motion time of 30s and pausing time of 10s"
         );
     }
 }

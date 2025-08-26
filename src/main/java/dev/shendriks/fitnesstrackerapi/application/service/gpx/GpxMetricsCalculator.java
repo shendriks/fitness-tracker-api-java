@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 @Component
 @AllArgsConstructor
 public class GpxMetricsCalculator {
-    private static final double SPEED_THRESHOLD = 0.5;
+    private static final double SPEED_THRESHOLD_METERS_PER_SECOND = 0.5;
     private final DistanceCalculator distanceCalculator;
 
     public double calculateTotalLength(List<WayPoint> points) {
@@ -72,29 +72,30 @@ public class GpxMetricsCalculator {
         long totalMotionTime = 0;
         long totalPausingTime = 0;
 
-        for (int i = 0; i < points.size() - 1; i++) {
-            WayPoint p1 = points.get(i);
-            WayPoint p2 = points.get(i + 1);
+        List<WayPoint> pointsWithTime = points.stream().filter(p -> p.getTime().isPresent()).toList();
 
-            if (p1.getTime().isEmpty() || p2.getTime().isEmpty()) {
-                continue;
-            }
+        for (int i = 0; i < pointsWithTime.size() - 1; i++) {
+            WayPoint wayPoint1 = pointsWithTime.get(i);
+            WayPoint wayPoint2 = pointsWithTime.get(i + 1);
 
-            Instant t1 = p1.getTime().get();
-            Instant t2 = p2.getTime().get();
+            Instant time1 = wayPoint1.getTime().orElseThrow();
+            Instant time2 = wayPoint2.getTime().orElseThrow();
 
-            long timeBetweenPoints = Duration.between(t1, t2).getSeconds();
-            double distance = distanceCalculator.calculateDistance(p1, p2);
+            long timeBetweenPoints = Duration.between(time1, time2).getSeconds();
+            double distance = distanceCalculator.calculateDistance(wayPoint1, wayPoint2);
             double speed = timeBetweenPoints > 0 ? distance / timeBetweenPoints : 0;
 
-            if (speed >= SPEED_THRESHOLD) {
+            if (speed >= SPEED_THRESHOLD_METERS_PER_SECOND) {
                 totalMotionTime += timeBetweenPoints;
             } else {
                 totalPausingTime += timeBetweenPoints;
             }
         }
 
-        return new MotionAndPausingTime(totalMotionTime, totalPausingTime);
+        return MotionAndPausingTime
+            .builder()
+            .motionTime(totalMotionTime)
+            .pausingTime(totalPausingTime)
+            .build();
     }
 }
-
