@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 import dev.shendriks.fitnesstrackerapi.application.exception.WayPointsNotSortedException;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import io.jenetics.jpx.WayPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class KilometerMetricsCalculatorTest {
-    private static final double EPSILON = 0.000_000_001;
     @Mock
     DistanceCalculator distanceCalculator;
     private KilometerMetricsCalculator calculator;
@@ -70,14 +70,14 @@ class KilometerMetricsCalculatorTest {
         // Segment 1: distance 1100m over 40s
         double expectedSpeed1 = 1100.0 / 40.0;
         double expectedPace1 = 1000.0 / expectedSpeed1;
-        assertEquals(expectedSpeed1, actualMetrics.speeds().getFirst(), EPSILON);
-        assertEquals(expectedPace1, actualMetrics.paces().getFirst(), EPSILON);
+        assertEquals(expectedSpeed1, actualMetrics.speeds().getFirst(), Constant.EPSILON);
+        assertEquals(expectedPace1, actualMetrics.paces().getFirst(), Constant.EPSILON);
 
         // Segment 2 (partial): distance 150m over 30s
         double expectedSpeed2 = 150.0 / 30.0;
         double expectedPace2 = 1000.0 / expectedSpeed2;
-        assertEquals(expectedSpeed2, actualMetrics.speeds().get(1), EPSILON);
-        assertEquals(expectedPace2, actualMetrics.paces().get(1), EPSILON);
+        assertEquals(expectedSpeed2, actualMetrics.speeds().get(1), Constant.EPSILON);
+        assertEquals(expectedPace2, actualMetrics.paces().get(1), Constant.EPSILON);
     }
 
     @Test
@@ -98,8 +98,8 @@ class KilometerMetricsCalculatorTest {
 
         double expectedSpeed = 1000.0 / 60.0;
         double expectedPace = 1000.0 / expectedSpeed;
-        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst(), EPSILON);
-        assertEquals(expectedPace, actualMetrics.paces().getFirst(), EPSILON);
+        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst(), Constant.EPSILON);
+        assertEquals(expectedPace, actualMetrics.paces().getFirst(), Constant.EPSILON);
     }
 
     @Test
@@ -122,8 +122,8 @@ class KilometerMetricsCalculatorTest {
 
         double expectedSpeed = 1000.0 / 50.0;
         double expectedPace = 1000.0 / expectedSpeed;
-        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst(), EPSILON);
-        assertEquals(expectedPace, actualMetrics.paces().getFirst(), EPSILON);
+        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst(), Constant.EPSILON);
+        assertEquals(expectedPace, actualMetrics.paces().getFirst(), Constant.EPSILON);
     }
 
     @Test

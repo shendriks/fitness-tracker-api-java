@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi;
+package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class HttpRequestTest {
+class PingControllerTest {
     @LocalServerPort
     private int port;
 
@@ -18,7 +18,7 @@ class HttpRequestTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    void pingShouldReturnPongMessage() {
+    void ping_shouldReturnPongMessage() {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/api/ping", String.class))
             .contains("{\"message\":\"Pong!\"}");
     }

@@ -10,4 +10,7 @@ public class OpenApiTagName {
     public static final String TROPHIES = "06. Trophy";
     public static final String NOTIFICATIONS = "07. Notifications";
     public static final String PING = "08. Ping";
+    
+    private OpenApiTagName() {
+    }
 }

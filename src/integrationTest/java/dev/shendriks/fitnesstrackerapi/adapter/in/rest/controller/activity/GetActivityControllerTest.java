@@ -10,6 +10,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 class GetActivityControllerTest {
-    private static final double EPSILON = 0.000_000_001;
     private final MockMvc mvc;
     private final AccessTokenHelper accessTokenHelper;
     private final UserRepository userRepository;
@@ -101,11 +101,11 @@ class GetActivityControllerTest {
         assertNotNull(gps);
         assertEquals(2, gps.size(), "Expected two GPS positions");
         assertEquals("2025-08-21T06:00:10Z", gps.getFirst().get("timestamp"));
-        assertEquals(0.023, (Double) gps.getFirst().get("latitude"), EPSILON);
-        assertEquals(0.42, (Double) gps.getFirst().get("longitude"), EPSILON);
+        assertEquals(0.023, (Double) gps.getFirst().get("latitude"), Constant.EPSILON);
+        assertEquals(0.42, (Double) gps.getFirst().get("longitude"), Constant.EPSILON);
         assertEquals("2025-08-21T06:05:10Z", gps.get(1).get("timestamp"));
-        assertEquals(0.0231337, (Double) gps.get(1).get("latitude"), EPSILON);
-        assertEquals(0.42023, (Double) gps.get(1).get("longitude"), EPSILON);
+        assertEquals(0.0231337, (Double) gps.get(1).get("latitude"), Constant.EPSILON);
+        assertEquals(0.42023, (Double) gps.get(1).get("longitude"), Constant.EPSILON);
     }
 
     @Test
