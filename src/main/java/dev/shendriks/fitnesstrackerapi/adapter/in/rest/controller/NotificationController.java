@@ -54,7 +54,7 @@ public class NotificationController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content(schema = @Schema(implementation = ApiErrorResponseDTO.class))),
     })
     @GetMapping
-    public ResponseEntity<Iterable<NotificationResponseDTO>> getMilestones(
+    public ResponseEntity<List<NotificationResponseDTO>> getNotifications(
         @AuthenticationPrincipal(errorOnInvalidType = true) User user,
         @RequestParam(required = false) String sinceId
     ) {
