@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.adapter.in.rest.user.controller;
+package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

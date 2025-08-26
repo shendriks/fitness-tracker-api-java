@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.adapter.in.rest.user.controller.user;
+package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.user;
 
 import dev.shendriks.fitnesstrackerapi.AccessTokenHelper;
 import org.junit.jupiter.api.Test;
