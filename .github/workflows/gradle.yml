@@ -45,15 +45,16 @@ jobs:
 
       - name: Generate Jacoco Json
         uses: cicirello/jacoco-badge-generator@v2.12.1
+        id: jacoco
         with:
-          generate-branches-badge: false
-          generate-coverage-endpoint: true
+          #generate-branches-badge: false
+          #generate-coverage-endpoint: true
           #generate-branches-endpoint: true
           jacoco-csv-file: build/customJacocoReportDir/test/jacocoTestReport.csv
 
       - name: Generate coverage output
         run: |
-          echo "COVERAGE=$(${{github.workspace}}/.github/badges/jacoco.json)" >> $GITHUB_ENV
+          echo "COVERAGE=${{ steps.jacoco.outputs.coverage }}" >> $GITHUB_ENV
 
       - name: Update dynamic badge gist
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -61,7 +62,7 @@ jobs:
           auth: ${{secrets.GIST_SECRET}}
           gistID: 03eeb6afeb7203a9623921eeb46576b4
           filename: coverage.json
-          label: coverage
+          label: Coverage
           message: ${{env.COVERAGE}}%
           valColorRange: ${{env.COVERAGE}}
           minColorRange: 0
