@@ -54,7 +54,7 @@ jobs:
 
       - name: Generate coverage output
         run: |
-          echo "COVERAGE=${{ steps.jacoco.outputs.coverage }}" >> $GITHUB_ENV
+          foo=${{ steps.jacoco.outputs.coverage }} && printf "COVERAGE=%.1f\n" "${foo}e2" >> $GITHUB_ENV
 
       - name: Update dynamic badge gist
         uses: schneegans/dynamic-badges-action@v1.7.0
