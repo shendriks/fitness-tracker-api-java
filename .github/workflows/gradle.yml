@@ -48,12 +48,12 @@ jobs:
         with:
           generate-branches-badge: false
           generate-coverage-endpoint: true
-          generate-branches-endpoint: true
+          #generate-branches-endpoint: true
           jacoco-csv-file: build/customJacocoReportDir/test/jacocoTestReport.csv
 
       - name: Generate coverage output
         run: |
-          echo "COVERAGE=$(${{github.workspace}}/.github/badges/coverage.json)" >> $GITHUB_ENV
+          echo "COVERAGE=$(${{github.workspace}}/.github/badges/jacoco.json)" >> $GITHUB_ENV
 
       - name: Update dynamic badge gist
         uses: schneegans/dynamic-badges-action@v1.7.0
