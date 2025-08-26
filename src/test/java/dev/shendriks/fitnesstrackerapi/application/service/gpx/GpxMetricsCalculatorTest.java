@@ -123,6 +123,23 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
+    void calculateElevationGain_whenNull_returnsZero() {
+        double actualElevationGain = calculator.calculateElevationGain(null);
+
+        assertEquals(0.0, actualElevationGain, "Expected elevation gain of 0m");
+    }
+    
+    @Test
+    void calculateElevationGain_whenOnlyOnePoint_returnsZero() {
+        Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
+        List<WayPoint> points = List.of(WayPoint.builder().lat(0).lon(0).time(t0).ele(100.0).build());
+
+        double actualElevationGain = calculator.calculateElevationGain(points);
+
+        assertEquals(0.0, actualElevationGain, "Expected elevation gain of 0m");
+    }
+
+    @Test
     void calculateMotionAndPausingTime_classifiesBySpeedThreshold_andSkipsMissingTimes() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(10);
@@ -135,15 +152,18 @@ class GpxMetricsCalculatorTest {
         WayPoint wayPoint3 = WayPoint.builder().lat(0.2).lon(0.4).time(t2).build();
         WayPoint wayPoint4 = WayPoint.builder().lat(0.3).lon(0.6).build(); // missing time
         WayPoint wayPoint5 = WayPoint.builder().lat(0.4).lon(0.8).time(t4).build();
+        WayPoint wayPoint6 = WayPoint.builder().lat(0.5).lon(1.0).time(t4).build(); // same time as wayPoint5
 
-        List<WayPoint> points = List.of(wayPoint1, wayPoint2, wayPoint3, wayPoint4, wayPoint5);
+        List<WayPoint> points = List.of(wayPoint1, wayPoint2, wayPoint3, wayPoint4, wayPoint5, wayPoint6);
 
         // Segment wayPoint1 -> wayPoint2: 5m over 10s => 0.5 m/s (threshold) -> motion
         // Segment wayPoint2 -> wayPoint3: 2m over 10s => 0.2 m/s (under threshold) -> pause
         // Segment wayPoint3 -> wayPoint5: 20m over 20s => 1.0m/s (over threshold) -> motion
+        // Segment wayPoint5 -> wayPoint6: 10m over 0s => skipped
         when(distanceCalculator.calculateDistance(wayPoint1, wayPoint2)).thenReturn(5.0);
         when(distanceCalculator.calculateDistance(wayPoint2, wayPoint3)).thenReturn(2.0);
         when(distanceCalculator.calculateDistance(wayPoint3, wayPoint5)).thenReturn(20.0);
+        when(distanceCalculator.calculateDistance(wayPoint5, wayPoint6)).thenReturn(10.0);
 
         MotionAndPausingTime actualMotionAndPausingTime = calculator.calculateMotionAndPausingTime(points);
 
