@@ -56,7 +56,6 @@ jobs:
           default_author: github_actions
           message: 'Commit coverage badges'
           add: '*.svg'
-          new_branch: badge
 
       - name: Upload JaCoCo coverage report
         uses: actions/upload-artifact@v4
