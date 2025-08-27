@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.activity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.shendriks.fitnesstrackerapi.AccessTokenHelper;
+import dev.shendriks.fitnesstrackerapi.MockMultipartFileBuilder;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEntityRepository;

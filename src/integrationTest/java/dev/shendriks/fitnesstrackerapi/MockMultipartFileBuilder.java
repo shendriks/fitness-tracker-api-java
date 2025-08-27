@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.activity;
+package dev.shendriks.fitnesstrackerapi;
 
 import org.springframework.mock.web.MockMultipartFile;
 
