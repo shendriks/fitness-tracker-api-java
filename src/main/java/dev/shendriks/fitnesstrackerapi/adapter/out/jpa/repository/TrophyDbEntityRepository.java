@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TrophyDbEntityRepository extends JpaRepository<TrophyDbEntity, Long> {
-    List<TrophyDbEntity> findAllByUserIdOrderByCreatedAtDesc(Long userId);
+    List<TrophyDbEntity> findAllByUserIdOrderByUlidDesc(Long userId);
 
     List<TrophyDbEntity> user(UserDbEntity user);
 

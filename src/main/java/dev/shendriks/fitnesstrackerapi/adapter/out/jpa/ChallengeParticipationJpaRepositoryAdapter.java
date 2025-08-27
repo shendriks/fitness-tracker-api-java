@@ -17,6 +17,7 @@ import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
@@ -27,10 +28,11 @@ public class ChallengeParticipationJpaRepositoryAdapter implements ForAccessingC
     private final ChallengeDbEntityRepository challengeRepository;
     private final UserRepository userRepository;
     private final ChallengeParticipationDbEntityMapper mapper;
+    private final Clock clock;
 
     @Override
     public List<ChallengeParticipation> findCurrentByUser(UserId userId) {
-        List<ChallengeParticipationDbEntity> entities = repository.findCurrent(userId.value(), Instant.now());
+        List<ChallengeParticipationDbEntity> entities = repository.findCurrent(userId.value(), Instant.now(clock));
         return mapper.toChallengeParticipations(entities);
     }
 
