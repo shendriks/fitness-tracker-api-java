@@ -12,7 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
 public abstract class UserDbEntityMapper {
-    @Autowired // MapStruct doesn't support constructor injection
+    @SuppressWarnings({"SpringJavaAutowiredFieldsWarningInspection", "java:S1258"})
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(userSignupData.password()))")

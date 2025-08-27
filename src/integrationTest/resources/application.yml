@@ -1,7 +1,8 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
-#    url: jdbc:h2:mem:test
-    url: jdbc:h2:file:../fitness_db_test
+    url: jdbc:h2:mem:test
     driverClassName: org.h2.Driver
     username: sa
     password: sa
@@ -13,7 +14,8 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
+
 jwt:
   secret: test-token-secret
-  expiration: 86400
+  expiration: 30
   issuer: test-fitnesstrackerapi

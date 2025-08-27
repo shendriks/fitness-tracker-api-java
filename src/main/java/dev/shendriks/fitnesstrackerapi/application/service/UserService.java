@@ -33,7 +33,7 @@ public class UserService implements SignUpUseCase, UpdateUserUseCase {
         }
 
         User user = forAccessingUsers.createUser(userSignupData);
-        eventPublisher.publishEvent(new UserSignedUpEvent(this, user.id()));
+        eventPublisher.publishEvent(new UserSignedUpEvent(user.id()));
         return user;
     }
 
@@ -52,7 +52,7 @@ public class UserService implements SignUpUseCase, UpdateUserUseCase {
         }
 
         user = forAccessingUsers.updateUser(userId, userUpdateData);
-        eventPublisher.publishEvent(new UserUpdatedEvent(this, userId));
+        eventPublisher.publishEvent(new UserUpdatedEvent(userId));
 
         return user;
     }

@@ -10,7 +10,6 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository
 import dev.shendriks.fitnesstrackerapi.application.exception.ChallengeNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.exception.UserNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingChallengeParticipations;
-import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeParticipationId;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
@@ -18,6 +17,7 @@ import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
@@ -28,10 +28,11 @@ public class ChallengeParticipationJpaRepositoryAdapter implements ForAccessingC
     private final ChallengeDbEntityRepository challengeRepository;
     private final UserRepository userRepository;
     private final ChallengeParticipationDbEntityMapper mapper;
+    private final Clock clock;
 
     @Override
     public List<ChallengeParticipation> findCurrentByUser(UserId userId) {
-        List<ChallengeParticipationDbEntity> entities = repository.findCurrent(userId.value(), Instant.now());
+        List<ChallengeParticipationDbEntity> entities = repository.findCurrent(userId.value(), Instant.now(clock));
         return mapper.toChallengeParticipations(entities);
     }
 
@@ -57,12 +58,11 @@ public class ChallengeParticipationJpaRepositoryAdapter implements ForAccessingC
     }
 
     @Override
-    public ChallengeParticipation create(UserId userId, Challenge challenge) {
+    public ChallengeParticipation joinChallenge(UserId userId, ChallengeUlid challengeUlid) {
         UserDbEntity user = userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new);
-        String challengeUlid = challenge.getUlid().getValue();
         ChallengeDbEntity challengeDbEntity = challengeRepository
-            .findByUlid(challengeUlid)
-            .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid));
+            .findByUlid(challengeUlid.getValue())
+            .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
         ChallengeParticipationDbEntity participationDbEntity = new ChallengeParticipationDbEntity();
         participationDbEntity.setChallenge(challengeDbEntity);
         participationDbEntity.setUser(user);

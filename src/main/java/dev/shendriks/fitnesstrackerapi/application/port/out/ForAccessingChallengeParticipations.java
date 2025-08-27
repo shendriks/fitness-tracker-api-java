@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.application.port.out;
 
-import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeParticipationId;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
@@ -17,5 +16,5 @@ public interface ForAccessingChallengeParticipations {
 
     void leaveChallenge(UserId userId, ChallengeUlid challengeId);
 
-    ChallengeParticipation create(UserId userId, Challenge challenge);
+    ChallengeParticipation joinChallenge(UserId userId, ChallengeUlid challengeUlid);
 }

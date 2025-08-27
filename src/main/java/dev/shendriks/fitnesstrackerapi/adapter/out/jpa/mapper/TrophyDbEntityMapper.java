@@ -22,7 +22,6 @@ public abstract class TrophyDbEntityMapper {
     @Mapping(target = "unlockedAt", source = "createdAt")
     @Mapping(target = "achievementType", expression = "java(mapAchievementType(entity))")
     @Mapping(target = "userId", expression = "java(mapUserId(entity.getUser()))")
-//    @Mapping(target = "userId", ignore = true)
     public abstract Trophy toTrophy(TrophyDbEntity entity);
 
     TrophyId mapTrophyId(Long id) {
@@ -41,8 +40,9 @@ public abstract class TrophyDbEntityMapper {
         return switch (trophy.getAchievement()) {
             case MilestoneDbEntity ignored -> AchievementType.MILESTONE;
             case ChallengeDbEntity ignored -> AchievementType.CHALLENGE;
-            case null, default ->
-                throw new IllegalArgumentException("Unkown achievement type: %s".formatted(Objects.requireNonNull(trophy.getAchievement()).getClass().getSimpleName()));
+            case null, default -> throw new IllegalArgumentException("Unkown achievement type: %s"
+                .formatted(Objects.requireNonNull(trophy.getAchievement()).getClass().getSimpleName())
+            );
         };
     }
 }

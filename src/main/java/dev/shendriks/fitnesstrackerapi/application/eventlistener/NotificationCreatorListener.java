@@ -28,11 +28,11 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(ChallengeJoinedEvent event) {
-        String challengeName = forAccessingChallenges.findNameByUlid(event.getChallengeUlid()).orElseThrow();
+        String challengeName = forAccessingChallenges.findNameByUlid(event.challengeUlid()).orElseThrow();
 
         NotificationCreationData notification = NotificationCreationData
             .builder()
-            .userId(event.getUserId())
+            .userId(event.userId())
             .title("Challenge joined")
             .description("You have joined the challenge \"" + challengeName + "\"")
             .build();
@@ -44,9 +44,9 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(ChallengeLeftEvent event) {
-        String challengeName = forAccessingChallenges.findNameByUlid(event.getChallengeUlid()).orElseThrow();
+        String challengeName = forAccessingChallenges.findNameByUlid(event.challengeUlid()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Challenge left",
             "You have left the challenge \"" + challengeName + "\"");
         forAccessingNotifications.save(notification);
@@ -57,9 +57,9 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(ChallengeCompletedEvent event) {
-        String challengeName = forAccessingChallenges.findNameById(event.getChallengeId()).orElseThrow();
+        String challengeName = forAccessingChallenges.findNameById(event.challengeId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Wow, congratulations!",
             "You have completed the challenge " + challengeName
         );
@@ -71,9 +71,9 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(MilestoneCompletedEvent event) {
-        String milestoneName = forAccessingMilestones.findNameById(event.getMilestoneId()).orElseThrow();
+        String milestoneName = forAccessingMilestones.findNameById(event.milestoneId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Another milestone reached!",
             "You have completed the milestone " + milestoneName
         );
@@ -85,9 +85,9 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(ActivitySavedEvent event) {
-        String activityTitle = forAccessingActivities.findTitleById(event.getActivityId()).orElseThrow();
+        String activityTitle = forAccessingActivities.findTitleById(event.activityId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Well done!",
             "You have saved a new activity: " + activityTitle
         );
@@ -99,9 +99,9 @@ public class NotificationCreatorListener {
     @Async
     @Order(0)
     public void handle(ActivityUpdatedEvent event) {
-        String activityTitle = forAccessingActivities.findTitleById(event.getActivityId()).orElseThrow();
+        String activityTitle = forAccessingActivities.findTitleById(event.activityId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Activity updated!",
             "You have updated an activity: " + activityTitle
         );
@@ -114,7 +114,7 @@ public class NotificationCreatorListener {
     @Order(0)
     public void handle(ActivityDeletedEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Bummer!",
             "You have deleted an activity"
         );
@@ -127,7 +127,7 @@ public class NotificationCreatorListener {
     @Order(0)
     public void handle(TrophyUnlockedEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "Superb!",
             "You have unlocked a trophy"
         );
@@ -140,7 +140,7 @@ public class NotificationCreatorListener {
     @Order(0)
     public void handle(TrophyLostEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
-            event.getUserId(),
+            event.userId(),
             "D'oh!",
             "You have lost a trophy"
         );

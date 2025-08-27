@@ -2,8 +2,7 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +11,9 @@ import java.time.Instant;
 @Setter
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "trophy", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "achievement_id"}))
 public class TrophyDbEntity {
     @ManyToOne

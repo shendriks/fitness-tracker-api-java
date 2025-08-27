@@ -28,7 +28,7 @@ public class TrophyJpaRepositioryAdapter implements ForAccessingTrophies {
 
     @Override
     public List<Trophy> findAllByUser(UserId userId) {
-        List<TrophyDbEntity> trophyEntities = repository.findAllByUserIdOrderByCreatedAtDesc(userId.value());
+        List<TrophyDbEntity> trophyEntities = repository.findAllByUserIdOrderByUlidDesc(userId.value());
         return mapper.toTrophies(trophyEntities);
     }
 

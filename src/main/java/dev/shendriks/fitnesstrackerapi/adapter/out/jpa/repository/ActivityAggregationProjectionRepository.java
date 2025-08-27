@@ -48,4 +48,12 @@ public interface ActivityAggregationProjectionRepository extends JpaRepository<A
         @Param("from") Instant from,
         @Param("to") Instant to
     );
+
+    default List<ActivityTypeAggregationDbProjection> aggregateForUserByType(@Param("userId") Long userId) {
+        return aggregateForUserByTypeInTimeRange(userId, null, null);
+    }
+
+    default ActivityAggregationDbProjection aggregateForUser(@Param("userId") Long userId) {
+        return aggregateForUserInTimeRange(userId, null, null);
+    }
 }

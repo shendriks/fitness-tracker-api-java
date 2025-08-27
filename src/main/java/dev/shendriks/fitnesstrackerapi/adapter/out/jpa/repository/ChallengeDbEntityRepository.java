@@ -31,6 +31,31 @@ public interface ChallengeDbEntityRepository extends JpaRepository<ChallengeDbEn
                 cp.challenge = c
                 AND cp.user.id = :userId
             )
+            WHERE c.ulid = :ulid
+        """)
+    Optional<ChallengeProjection> findByUserIdAndUlidWithUserJoined(
+        @Param("userId") Long userId,
+        @Param("ulid") String ulid
+    );
+
+    @Query("""
+            SELECT
+                c.id AS id,
+                c.ulid AS ulid,
+                c.name AS name,
+                c.description AS description,
+                c.imageFilePath AS imageFilePath,
+                c.activityType AS activityType,
+                c.activityMetric AS activityMetric,
+                c.completionThreshold AS completionThreshold,
+                c.startDate AS startDate,
+                c.endDate AS endDate,
+                CASE WHEN cp.id IS NULL THEN false ELSE true END AS hasUserJoined
+            FROM ChallengeDbEntity c
+            LEFT JOIN ChallengeParticipationDbEntity cp ON (
+                cp.challenge = c
+                AND cp.user.id = :userId
+            )
             WHERE (
                 c.startDate <= :now
                 AND c.endDate > :now
@@ -47,4 +72,7 @@ public interface ChallengeDbEntityRepository extends JpaRepository<ChallengeDbEn
 
     @Query("SELECT c.name FROM ChallengeDbEntity c WHERE c.ulid = :ulid")
     Optional<String> findNameByUlid(@Param("ulid") String ulid);
+
+    @Query("SELECT COUNT(c) > 0 FROM ChallengeDbEntity c WHERE c.ulid = :ulid")
+    boolean existsByUlid(@Param("ulid") String ulid);
 }

@@ -2,29 +2,22 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection;
 
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityMetric;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import lombok.Builder;
 
 import java.time.Instant;
 
-public interface ChallengeProjection {
-    Long getId();
-
-    String getUlid();
-
-    String getName();
-
-    String getDescription();
-
-    String getImageFilePath();
-
-    ActivityType getActivityType();
-
-    ActivityMetric getActivityMetric();
-
-    Long getCompletionThreshold();
-
-    Instant getStartDate();
-
-    Instant getEndDate();
-
-    boolean isHasUserJoined();
+@Builder
+public record ChallengeProjection(
+    Long id,
+    String ulid,
+    String name,
+    String description,
+    String imageFilePath,
+    ActivityType activityType,
+    ActivityMetric activityMetric,
+    Long completionThreshold,
+    Instant startDate,
+    Instant endDate,
+    boolean hasUserJoined
+) {
 }

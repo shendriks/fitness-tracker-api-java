@@ -6,10 +6,12 @@ import dev.shendriks.fitnesstrackerapi.application.service.gpx.KilometerMetricsC
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
 import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
+import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Metadata;
 import io.jenetics.jpx.Track;
 import io.jenetics.jpx.WayPoint;
+import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +23,11 @@ import java.util.Optional;
 
 @Service
 @Log
+@AllArgsConstructor
 public class GpxService {
     private final GpxWaypointProcessor waypointProcessor;
     private final GpxMetricsCalculator metricsCalculator;
     private final KilometerMetricsCalculator kilometerMetricsCalculator;
-
-    public GpxService(
-        GpxWaypointProcessor waypointProcessor,
-        GpxMetricsCalculator metricsCalculator,
-        KilometerMetricsCalculator kilometerMetricsCalculator
-    ) {
-        this.waypointProcessor = waypointProcessor;
-        this.metricsCalculator = metricsCalculator;
-        this.kilometerMetricsCalculator = kilometerMetricsCalculator;
-    }
 
     private static Optional<String> getName(GPX gpx) {
         return gpx
@@ -61,9 +54,7 @@ public class GpxService {
         double speed = metricsCalculator.calculateSpeed(totalLength, duration);
         double pace = metricsCalculator.calculatePace(speed);
         double elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
-        long[] motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
-        long motionTime = motionAndPausingTime[0];
-        long pausingTime = motionAndPausingTime[1];
+        MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
 
         KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
         List<Double> kilometerSpeeds = kilometerMetrics.speeds();
@@ -87,8 +78,8 @@ public class GpxService {
             speed,
             pace,
             elevationGain,
-            motionTime,
-            pausingTime,
+            motionAndPausingTime.motionTime(),
+            motionAndPausingTime.pausingTime(),
             kilometerSpeeds,
             kilometerPaces,
             gpsPositions

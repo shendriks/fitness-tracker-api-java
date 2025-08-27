@@ -16,7 +16,9 @@ public class UlidGenerator implements BeforeExecutionGenerator {
         Object o1,
         EventType eventType
     ) {
-        return UlidCreator.getUlid().toString();
+        // Create a monotonic ULID: The random component is incremented for each new ULID generated in the same 
+        // millisecond to prevent the sort order.
+        return UlidCreator.getMonotonicUlid().toString();
     }
 
     @Override

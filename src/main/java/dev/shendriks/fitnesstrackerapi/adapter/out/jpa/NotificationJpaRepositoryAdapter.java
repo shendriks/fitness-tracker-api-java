@@ -30,7 +30,7 @@ public class NotificationJpaRepositoryAdapter implements ForAccessingNotificatio
 
     @Override
     public List<Notification> findByUserSinceUlid(UserId user, NotificationUlid ulid) {
-        var entities = repository.findByUserIdAndUlidGreaterThanOrderByIdDesc(user.value(), ulid.value());
+        List<NotificationDbEntity> entities = repository.findByUserIdAndUlidGreaterThanOrderByIdDesc(user.value(), ulid.value());
         return mapper.toNotifications(entities);
     }
 

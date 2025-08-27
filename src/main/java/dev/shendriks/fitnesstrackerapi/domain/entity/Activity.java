@@ -4,10 +4,12 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityId;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
+import lombok.Builder;
 
 import java.time.Instant;
 import java.util.List;
 
+@Builder
 public record Activity(
     ActivityId id,
     ActivityUlid ulid,

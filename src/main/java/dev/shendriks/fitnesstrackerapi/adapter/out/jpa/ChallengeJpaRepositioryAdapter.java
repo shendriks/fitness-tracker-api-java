@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa;
 
-import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ChallengeDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper.ChallengeDbEntityMapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection.ChallengeProjection;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ChallengeDbEntityRepository;
@@ -12,6 +11,7 @@ import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +21,26 @@ import java.util.Optional;
 public class ChallengeJpaRepositioryAdapter implements ForAccessingChallenges {
     private final ChallengeDbEntityRepository challengeDbEntityRepository;
     private final ChallengeDbEntityMapper mapper;
+    private final Clock clock;
 
     @Override
     public List<Challenge> findAllByUser(UserId userId) {
         List<ChallengeProjection> projections = challengeDbEntityRepository
-            .findAllCurrentWithUserJoined(userId.value(), Instant.now());
+            .findAllCurrentWithUserJoined(userId.value(), Instant.now(clock));
         return mapper.toChallenges(projections);
     }
 
     @Override
-    public Optional<Challenge> findByUlid(ChallengeUlid challengeUlid) {
-        Optional<ChallengeDbEntity> entity = challengeDbEntityRepository.findByUlid(challengeUlid.getValue());
+    public boolean existsByUlid(ChallengeUlid challengeUlid) {
+        return challengeDbEntityRepository.existsByUlid(challengeUlid.getValue());
+    }
+
+    @Override
+    public Optional<Challenge> findByUserIdAndUlid(UserId userId, ChallengeUlid challengeUlid) {
+        Optional<ChallengeProjection> entity = challengeDbEntityRepository.findByUserIdAndUlidWithUserJoined(
+            userId.value(),
+            challengeUlid.getValue()
+        );
         return entity.map(mapper::toChallenge);
     }
 
