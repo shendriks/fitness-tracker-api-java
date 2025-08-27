@@ -32,7 +32,7 @@ class NotificationJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdap
     }
 
     @Test
-    void save_and_findAll_endToEnd() {
+    void saveThenFindAll_worksAsExpected() {
         UserId userId = createAndPersistUser();
 
         NotificationCreationData notification1 = NotificationCreationData

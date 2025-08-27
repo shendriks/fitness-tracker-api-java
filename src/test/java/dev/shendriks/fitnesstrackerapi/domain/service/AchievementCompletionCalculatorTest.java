@@ -77,8 +77,7 @@ class AchievementCompletionCalculatorTest {
     }
 
     @Test
-    @DisplayName("Uses total aggregation when activityType is not set")
-    void testUsesTotalAggregationWhenTypeIsNull() {
+    void calculateAchievementCompletion_withTypeIsNull_usesTotalAggregation() {
         ActivityAggregationMap map = buildAggregationMap();
         AchievementCompletionRequest request = AchievementCompletionRequest
             .builder()
@@ -95,8 +94,7 @@ class AchievementCompletionCalculatorTest {
     }
 
     @Test
-    @DisplayName("Uses by-type aggregation when activityType is specified")
-    void testUsesByTypeAggregationWhenTypeSpecified() {
+    void calculateAchievementCompletion_withTypeSpecified_usesByTypeAggregation() {
         ActivityAggregationMap map = buildAggregationMap();
         AchievementCompletionRequest request = AchievementCompletionRequest
             .builder()
@@ -115,8 +113,7 @@ class AchievementCompletionCalculatorTest {
 
     @ParameterizedTest
     @MethodSource("provideMetricsForMetricMappingTest")
-    @DisplayName("Maps ActivityMetric to correct aggregation fields")
-    void testMapsMetricsCorrectly(ActivityMetric metric, Long completionThreshold, int expectedPercentageCompleted) {
+    void calculateAchievementCompletion_mapsMetricsCorrectly(ActivityMetric metric, Long completionThreshold, int expectedPercentageCompleted) {
         ActivityAggregationMap map = buildAggregationMap();
         AchievementCompletionRequest request = AchievementCompletionRequest
             .builder()
@@ -136,7 +133,7 @@ class AchievementCompletionCalculatorTest {
 
     @Test
     @DisplayName("Percentage is capped at 100")
-    void testPercentageCappedAt100() {
+    void calculateAchievementCompletion_capsPercentageAt100() {
         ActivityAggregationMap map = buildAggregationMap();
         AchievementCompletionRequest request = AchievementCompletionRequest.builder()
             .activityAggregationMap(map)
@@ -151,7 +148,7 @@ class AchievementCompletionCalculatorTest {
 
     @Test
     @DisplayName("Uses integer division semantics")
-    void testUsesIntegerDivision() {
+    void calculateAchievementCompletion_usesIntegerDivision() {
         ActivityAggregationMap map = buildAggregationMap();
         AchievementCompletionRequest request = AchievementCompletionRequest
             .builder()
@@ -169,7 +166,7 @@ class AchievementCompletionCalculatorTest {
     @ParameterizedTest
     @MethodSource("provideMetricsForTransitionTest")
     @DisplayName("Became complete/incomplete flags reflect transitions correctly")
-    void testTransitionFlagsAreSetCorrectly(
+    void calculateAchievementCompletion_setsTransitionFlagsCorrectly(
         ActivityType activityType,
         ActivityMetric metric,
         int currentPercentageCompleted,

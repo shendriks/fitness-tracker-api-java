@@ -33,7 +33,7 @@ class UserDbEntityMapperTest {
     }
 
     @Test
-    void toUserDbEntity_shouldEncodePassword_andSetAuthority_andCopyFields() {
+    void toUserDbEntity_encodesPasswordAndSetsAuthorityAndCopiesFields() {
         UserSignupData signup = UserSignupData
             .builder()
             .name("Alice")
@@ -59,7 +59,7 @@ class UserDbEntityMapperTest {
     }
 
     @Test
-    void toUser_shouldMapAllFields_andWrapIds() {
+    void toUser_mapsAllFieldsAndWrapIds() {
         Instant createdAt = Instant.parse("2025-08-20T10:00:00Z");
         Instant updatedAt = Instant.parse("2025-08-21T11:00:00Z");
 

@@ -38,7 +38,7 @@ class UserJpaRepositoryAdapterIntegrationTest {
     }
 
     @Test
-    void createUser_and_find_exists_endToEnd() {
+    void createUserThenFindThenExists_worksAsExpected() {
         String email = "it.user.create@example.com";
 
         assertFalse(adapter.existsByEmail(email), "Expected user to not exist before create");
@@ -91,7 +91,7 @@ class UserJpaRepositoryAdapterIntegrationTest {
     }
 
     @Test
-    void updateUser_updates_fields_and_reencodes_password() {
+    void updateUser_updatesFieldsAndReencodesPassword() {
         String email = "it.user.update@example.com";
         UserSignupData signup = UserSignupData
             .builder()

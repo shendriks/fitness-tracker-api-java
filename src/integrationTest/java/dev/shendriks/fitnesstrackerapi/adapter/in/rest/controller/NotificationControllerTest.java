@@ -44,7 +44,7 @@ class NotificationControllerTest {
     }
 
     @Test
-    void getNotifications_withoutSinceId_returnsAllForUser_inDescendingOrder() throws Exception {
+    void getNotifications_withoutSinceId_returnsAllForUserInDescendingOrder() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         notificationRepository.save(
@@ -85,7 +85,7 @@ class NotificationControllerTest {
     }
 
     @Test
-    void getNotifications_withSinceId_returnsOnlyNewer_inDescendingOrder() throws Exception {
+    void getNotifications_withSinceId_returnsOnlyNewerInDescendingOrder() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 
@@ -108,7 +108,6 @@ class NotificationControllerTest {
             .getResponse()
             .getContentAsString();
 
-        // Assert: expect n3 then n2
         ObjectMapper mapper = new ObjectMapper();
         List<Map<String, Object>> list = mapper.readValue(json, new TypeReference<>() {
         });

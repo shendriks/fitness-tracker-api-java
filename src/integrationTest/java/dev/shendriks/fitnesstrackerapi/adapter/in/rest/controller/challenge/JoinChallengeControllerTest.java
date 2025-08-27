@@ -69,7 +69,7 @@ class JoinChallengeControllerTest {
     }
 
     @Test
-    void joinChallenge_currentChallenge_persistsParticipation_returns204_andIdempotent() throws Exception {
+    void joinChallenge_withCurrentChallenge_persistsParticipationAndReturns204AndIsIdempotent() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         Instant start = NOW.minusSeconds(10);
@@ -99,7 +99,7 @@ class JoinChallengeControllerTest {
     }
 
     @Test
-    void joinChallenge_nonExistingChallenge_returns404() throws Exception {
+    void joinChallenge_withNonExistingChallenge_returns404() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String token = accessTokenHelper.getAccessToken(userUlid);
         mvc.perform(post("/api/challenges/TESTULID000000000000000001/join")

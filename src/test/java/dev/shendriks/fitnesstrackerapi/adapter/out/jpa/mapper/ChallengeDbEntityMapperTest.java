@@ -18,7 +18,7 @@ class ChallengeDbEntityMapperTest {
     private final ChallengeDbEntityMapper mapper = Mappers.getMapper(ChallengeDbEntityMapper.class);
 
     @Test
-    void toChallenge_shouldMapAllFields_andWrapIdTypes() {
+    void toChallenge_mapsAllFieldsAndWrapsIdTypes() {
         ChallengeProjection projection = ChallengeProjection
             .builder()
             .id(42L)
@@ -51,7 +51,7 @@ class ChallengeDbEntityMapperTest {
     }
 
     @Test
-    void toChallenges_shouldMapList() {
+    void toChallenges_mapsList() {
         List<ChallengeProjection> projections = List.of(
             ChallengeProjection
                 .builder()

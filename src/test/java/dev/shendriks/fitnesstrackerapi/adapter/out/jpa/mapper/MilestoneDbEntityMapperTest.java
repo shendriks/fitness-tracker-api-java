@@ -17,7 +17,7 @@ class MilestoneDbEntityMapperTest {
     private final MilestoneDbEntityMapper mapper = Mappers.getMapper(MilestoneDbEntityMapper.class);
 
     @Test
-    void toMilestone_shouldMapAllFields_andWrapIdTypes() {
+    void toMilestone_mapsAllFieldsAndWrapIdTypes() {
         MilestoneProjection projection = MilestoneProjection
             .builder()
             .id(42L)
@@ -46,7 +46,7 @@ class MilestoneDbEntityMapperTest {
     }
 
     @Test
-    void toMilestones_shouldMapList() {
+    void toMilestones_mapsList() {
         List<MilestoneProjection> projections = List.of(
             MilestoneProjection
                 .builder()

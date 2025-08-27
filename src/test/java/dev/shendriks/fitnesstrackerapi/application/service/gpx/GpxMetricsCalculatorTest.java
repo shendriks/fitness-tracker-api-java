@@ -27,7 +27,7 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
-    void calculateTotalLength_nullOrTooFewPoints_returnsZero() {
+    void calculateTotalLength_withNullOrTooFewPoints_returnsZero() {
         assertEquals(0.0, calculator.calculateTotalLength(null), "Expected null to return length of 0m");
         assertEquals(0.0, calculator.calculateTotalLength(List.of()), "Expected empty list to return length of 0m");
         assertEquals(
@@ -60,7 +60,7 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
-    void calculateDuration_betweenFirstAndLast_whenTimesPresent_otherwiseZero() {
+    void calculateDuration_withTimesPresent_returnsDurationOtherwiseZero() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(300);
         Instant t2 = t1.plusSeconds(330);
@@ -88,7 +88,7 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
-    void calculateSpeed_and_Pace_handleZeros_andNormalValues() {
+    void calculateSpeedAndPace_workAsExpected() {
         assertEquals(0.0, calculator.calculateSpeed(100.0, 0), "Expected speed of 0m/s for 0 duration");
         assertEquals(0.0, calculator.calculatePace(0), "Expected pace of 0s/km for 0 speed");
 
@@ -100,7 +100,7 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
-    void calculateElevationGain_sumsOnlyPositiveElevationChanges_andIgnoresMissing() {
+    void calculateElevationGain_sumsOnlyPositiveElevationChangesAndIgnoresMissing() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(300);
         Instant t2 = t1.plusSeconds(300);
@@ -140,7 +140,7 @@ class GpxMetricsCalculatorTest {
     }
 
     @Test
-    void calculateMotionAndPausingTime_classifiesBySpeedThreshold_andSkipsMissingTimes() {
+    void calculateMotionAndPausingTime_classifiesBySpeedThresholdAndSkipsMissingTimes() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(10);
         Instant t2 = t1.plusSeconds(10);

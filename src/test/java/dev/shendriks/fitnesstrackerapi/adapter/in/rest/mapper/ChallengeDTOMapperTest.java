@@ -34,7 +34,7 @@ class ChallengeDTOMapperTest {
     }
 
     @Test
-    void toChallengeResponse_shouldMapAllFieldsAndUlidToId() {
+    void toChallengeResponse_mapsAllFieldsAndUlidToId() {
         Challenge challenge = buildChallenge("TESTULID000000000000000000", true);
 
         ChallengeResponseDTO dto = mapper.toChallengeResponse(challenge);
@@ -50,7 +50,7 @@ class ChallengeDTOMapperTest {
     }
 
     @Test
-    void toChallengeResponses_shouldMapList() {
+    void toChallengeResponses_mapsList() {
         var challenges = List.of(
             buildChallenge("TESTULID000000000000000001", true),
             buildChallenge("TESTULID000000000000000002", false)

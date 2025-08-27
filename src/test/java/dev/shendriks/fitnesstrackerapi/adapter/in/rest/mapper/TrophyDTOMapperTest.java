@@ -47,7 +47,7 @@ class TrophyDTOMapperTest {
     }
 
     @Test
-    void toTrophyResponseDTO_shouldMapAllFields() {
+    void toTrophyResponseDTO_mapsAllFields() {
         Instant unlockedAt = Instant.parse("2025-08-22T12:00:00Z");
         Trophy trophy = buildTrophy(
             "TESTULID000000000000000001",
@@ -71,7 +71,7 @@ class TrophyDTOMapperTest {
     }
 
     @Test
-    void toTrophyResponseDTOs_shouldMapList() {
+    void toTrophyResponseDTOs_mapsList() {
         var trophies = List.of(
             buildTrophy(
                 "TESTULID000000000000000003",

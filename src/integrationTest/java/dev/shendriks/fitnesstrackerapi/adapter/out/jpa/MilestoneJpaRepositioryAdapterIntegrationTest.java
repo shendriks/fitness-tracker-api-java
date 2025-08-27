@@ -58,7 +58,7 @@ class MilestoneJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapte
     }
 
     @Test
-    void findAllWithCompletedByUser_returnsAll_withCorrectCompletionFlags_andOrder() {
+    void findAllWithCompletedByUser_returnsAllWithCorrectCompletionFlagsAndOrder() {
         UserId userId = createAndPersistUser();
         MilestoneDbEntity milestone1 = createAndPersistMilestone("5k Distance", 5_000L);
         MilestoneDbEntity milestone2 = createAndPersistMilestone("10k Distance", 10_000L);

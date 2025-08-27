@@ -37,7 +37,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void findAllByUser_returnsNotifications_andDelegatesToPort() {
+    void findAllByUser_returnsNotificationsAndDelegatesToPort() {
         UserId userId = new UserId(42L);
         List<Notification> notifications = List.of(
             buildNotification(1L, "TESTULID000000000000000001"),
@@ -53,7 +53,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void findAllByUserSince_returnsNotifications_andDelegatesToPort() {
+    void findAllByUserSince_returnsNotificationsAndDelegatesToPort() {
         UserId userId = new UserId(42L);
         NotificationUlid sinceUlid = new NotificationUlid("TESTULID000000000000000003");
         List<Notification> notifications = List.of(buildNotification(4L, "TESTULID000000000000000004"));

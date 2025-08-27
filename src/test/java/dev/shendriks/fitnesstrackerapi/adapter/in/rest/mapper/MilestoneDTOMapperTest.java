@@ -31,7 +31,7 @@ class MilestoneDTOMapperTest {
     }
 
     @Test
-    void toMilestoneResponseDTO_shouldMapAllFields() {
+    void toMilestoneResponseDTO_mapsAllFields() {
         Milestone milestone = buildMilestone("TESTULID000000000000000001", true);
 
         MilestoneResponseDTO milestoneResponseDTO = mapper.toMilestoneResponseDTO(milestone);
@@ -45,7 +45,7 @@ class MilestoneDTOMapperTest {
     }
 
     @Test
-    void toMilestoneResponseDTOs_shouldMapList() {
+    void toMilestoneResponseDTOs_mapsList() {
         var milestones = List.of(
             buildMilestone("TESTULID000000000000000002", true),
             buildMilestone("TESTULID000000000000000003", false)

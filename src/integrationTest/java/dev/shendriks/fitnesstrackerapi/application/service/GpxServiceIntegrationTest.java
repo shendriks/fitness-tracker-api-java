@@ -64,7 +64,7 @@ class GpxServiceIntegrationTest {
     }
 
     @Test
-    void processGpxFile_withMetadataNameAndTime_endToEnd() throws IOException {
+    void processGpxFile_withMetadataNameAndTime_worksAsExpected() throws IOException {
         // Two points near the equator roughly 1000 meters apart in longitude
         // Duration 100s. Expect speed ~= distance/duration, pace ~= 1000/speed.
         String name = "Morning Run";
@@ -107,7 +107,7 @@ class GpxServiceIntegrationTest {
     }
 
     @Test
-    void processGpxFile_withoutMetadata_usesTrackName_andFirstWaypointTime() throws IOException {
+    void processGpxFile_withoutMetadata_usesTrackNameAndFirstWaypointTime() throws IOException {
         String trackName = "Evening Walk";
         String gpx = gpxWithoutMetadataWithTrackName(trackName);
         Path file = tempDir.resolve("without_meta_it.gpx");

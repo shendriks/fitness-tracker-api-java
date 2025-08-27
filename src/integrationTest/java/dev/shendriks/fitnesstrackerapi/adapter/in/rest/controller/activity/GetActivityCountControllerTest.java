@@ -46,7 +46,7 @@ class GetActivityCountControllerTest {
     }
 
     @Test
-    void getActivityCount_whenUserHasActivities_returns200_withCorrectCount() throws Exception {
+    void getActivityCount_whenUserHasActivities_returns200withCorrectCount() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 

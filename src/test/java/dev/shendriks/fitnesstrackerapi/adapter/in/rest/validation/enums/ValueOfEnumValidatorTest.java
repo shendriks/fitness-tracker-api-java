@@ -19,7 +19,7 @@ class ValueOfEnumValidatorTest {
     }
 
     @Test
-    void testUppercaseValueIsInvalid() {
+    void uppercaseValue_isInvalid() {
         TestRecord record = new TestRecord("VALUE_1");
         Set<ConstraintViolation<TestRecord>> violations = validator.validate(record);
         assertEquals(1, violations.size(), "Expected 1 violation");
@@ -29,7 +29,7 @@ class ValueOfEnumValidatorTest {
     }
 
     @Test
-    void testInvalidValue() {
+    void invalidValue_isInvalid() {
         TestRecord record = new TestRecord("value_3");
         Set<ConstraintViolation<TestRecord>> violations = validator.validate(record);
         assertEquals(1, violations.size(), "Expected 1 violation");
@@ -39,7 +39,7 @@ class ValueOfEnumValidatorTest {
     }
 
     @Test
-    void testValidValue() {
+    void validValue_isValid() {
         TestRecord record = new TestRecord("value_1");
         Set<ConstraintViolation<TestRecord>> violations = validator.validate(record);
         assertEquals(0, violations.size(), "Expected no violations");

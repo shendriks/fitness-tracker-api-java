@@ -34,8 +34,11 @@ class ChallengeParticipationJpaRepositoryAdapterIntegrationTest extends JpaRepos
         this.adapter = adapter;
     }
 
-    private ChallengeDbEntity createAndPersistChallenge(String ulid, Instant start, Instant end) {
-        ChallengeDbEntity challenge = ChallengeDbEntity
+    @Test
+    void joinChallengeThenUpdateThenFindCurrentThenLeave_worksAsExpected() {
+        UserId userId = createAndPersistUser();
+        String challengeUlid = "TESTULID000000000000000001";
+        ChallengeDbEntity challengeDbEntity = entityManager.persist(ChallengeDbEntity
             .builder()
             .name("10k Run")
             .description("Run 10 kilometers")
@@ -43,23 +46,11 @@ class ChallengeParticipationJpaRepositoryAdapterIntegrationTest extends JpaRepos
             .activityType(ActivityType.RUNNING)
             .activityMetric(ActivityMetric.TOTAL_DISTANCE)
             .completionThreshold(10_000L)
-            .startDate(start)
-            .endDate(end)
-            .ulid(ulid)
-            .build();
-        return entityManager.persist(challenge);
-    }
-
-    @Test
-    void joinChallenge_update_findCurrent_leave_endToEnd() {
-        UserId userId = createAndPersistUser();
-        String challengeUlid = "TESTULID000000000000000001";
-        ChallengeDbEntity challengeDbEntity = createAndPersistChallenge(
-            challengeUlid,
-            Instant.now().minusSeconds(3600),
-            Instant.now().plusSeconds(3600)
-        );
-
+            .startDate(Instant.now().minusSeconds(3600))
+            .endDate(Instant.now().plusSeconds(3600))
+            .ulid(challengeUlid)
+            .build());
+        
         boolean existsBefore = adapter.existsByChallengeAndUser(userId, new ChallengeUlid(challengeUlid));
         assertFalse(existsBefore, "Expected no participation before create");
 
@@ -103,20 +94,20 @@ class ChallengeParticipationJpaRepositoryAdapterIntegrationTest extends JpaRepos
     }
 
     @Test
-    void joinChallenge_whenChallengeNotExists_throws() {
+    void joinChallenge_whenChallengeNotExists_throwsChallengeNotFoundException() {
         UserId userId = createAndPersistUser();
         assertThrows(ChallengeNotFoundException.class, () -> adapter.joinChallenge(
             userId,
-            new ChallengeUlid("SOMENONEXISTINGULID0000000")
+            new ChallengeUlid("TESTULID000000000000000002")
         ));
     }
 
     @Test
-    void leaveChallenge_whenChallengeNotExists_throws() {
+    void leaveChallenge_whenChallengeNotExists_throwsChallengeNotFoundException() {
         UserId userId = createAndPersistUser();
         assertThrows(ChallengeNotFoundException.class, () -> adapter.leaveChallenge(
             userId,
-            new ChallengeUlid("SOMENONEXISTINGULID0000000")
+            new ChallengeUlid("TESTULID000000000000000003")
         ));
     }
 }

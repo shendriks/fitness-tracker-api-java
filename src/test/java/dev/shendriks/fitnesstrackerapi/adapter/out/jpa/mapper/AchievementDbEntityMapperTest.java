@@ -15,7 +15,7 @@ class AchievementDbEntityMapperTest {
     private final AchievementDbEntityMapper mapper = Mappers.getMapper(AchievementDbEntityMapper.class);
 
     @Test
-    void toAchievement_shouldMapAllFields_andWrapIdTypes() {
+    void toAchievement_mapsAllFieldsAndWrapsIdTypes() {
         AchievementDbEntity entity = AchievementDbEntity
             .builder()
             .id(42L)

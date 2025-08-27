@@ -80,7 +80,7 @@ class ChallengeJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapte
     }
 
     @Test
-    void findAllByUser_returnsOnlyCurrent_withHasUserJoinedFlag() {
+    void findAllByUser_returnsOnlyCurrentWithHasUserJoinedFlag() {
         UserId userId = createAndPersistUser();
 
         ChallengeDbEntity current = createAndPersistChallenge(
@@ -118,7 +118,7 @@ class ChallengeJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapte
     }
 
     @Test
-    void findByUserIdAndUlid_returnsCorrectChallenge_andHasUserJoinedReflectsParticipation() {
+    void findByUserIdAndUlid_returnsCorrectChallengeAndHasUserJoinedReflectingParticipation() {
         UserId userId = createAndPersistUser();
 
         ChallengeDbEntity challengeDbEntity = createAndPersistChallenge(
@@ -142,20 +142,32 @@ class ChallengeJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapte
     }
 
     @Test
-    void findNameById_and_findNameByUlid_returnExpected() {
-        ChallengeDbEntity ch = createAndPersistChallenge(
+    void findNameById_returnExpected() {
+        ChallengeDbEntity challengeDbEntity = createAndPersistChallenge(
             "TESTULID000000000000000005",
             "Name Challenge",
             now.minus(1, ChronoUnit.DAYS),
             now.plus(1, ChronoUnit.DAYS)
         );
 
-        Optional<String> byId = adapter.findNameById(new ChallengeId(ch.getId()));
-        Optional<String> byUlid = adapter.findNameByUlid(new ChallengeUlid(ch.getUlid()));
+        Optional<String> byId = adapter.findNameById(new ChallengeId(challengeDbEntity.getId()));
 
         assertTrue(byId.isPresent());
-        assertTrue(byUlid.isPresent());
         assertEquals("Name Challenge", byId.get());
+    }    
+    
+    @Test
+    void findNameByUlid_returnExpected() {
+        ChallengeDbEntity challengeDbEntity = createAndPersistChallenge(
+            "TESTULID000000000000000006",
+            "Name Challenge",
+            now.minus(1, ChronoUnit.DAYS),
+            now.plus(1, ChronoUnit.DAYS)
+        );
+
+        Optional<String> byUlid = adapter.findNameByUlid(new ChallengeUlid(challengeDbEntity.getUlid()));
+
+        assertTrue(byUlid.isPresent());
         assertEquals("Name Challenge", byUlid.get());
     }
 }

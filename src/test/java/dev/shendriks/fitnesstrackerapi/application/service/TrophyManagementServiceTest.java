@@ -42,7 +42,7 @@ class TrophyManagementServiceTest {
     }
 
     @Test
-    void createTrophyIfNotExists_whenAlreadyExists_doesNothing() {
+    void createTrophyIfNotExists_withAlreadyExists_doesNothing() {
         when(forAccessingTrophies.existsByUserAndAchievement(userId, achievementId)).thenReturn(true);
 
         service.createTrophyIfNotExists(userId, achievementId);
@@ -53,7 +53,7 @@ class TrophyManagementServiceTest {
     }
 
     @Test
-    void createTrophyIfNotExists_whenNotExists_createsTrophy_andPublishesUnlockedEvent() {
+    void createTrophyIfNotExists_withNotExists_createsTrophyAndPublishesUnlockedEvent() {
         when(forAccessingTrophies.existsByUserAndAchievement(userId, achievementId)).thenReturn(false);
         TrophyId createdTrophyId = new TrophyId(999L);
         Trophy created = buildTrophy(userId, createdTrophyId);
@@ -73,7 +73,7 @@ class TrophyManagementServiceTest {
     }
 
     @Test
-    void deleteTrophyIfExists_byAchievementId_deletes_andPublishesLostEvent() {
+    void deleteTrophyIfExists_withAchievementId_deletesAndPublishesLostEvent() {
         service.deleteTrophyIfExists(userId, achievementId);
 
         verify(forAccessingTrophies).deleteIfNotExistsByUserAndAchievement(userId, achievementId);
@@ -87,7 +87,7 @@ class TrophyManagementServiceTest {
     }
 
     @Test
-    void deleteTrophyIfExists_byAchievementUlid_deletes_andPublishesLostEvent() {
+    void deleteTrophyIfExists_withAchievementUlid_deletesAndPublishesLostEvent() {
         service.deleteTrophyIfExists(userId, achievementUlid);
 
         verify(forAccessingTrophies).deleteIfNotExistsByUserAndAchievement(userId, achievementUlid);

@@ -48,7 +48,7 @@ class GetActivitiesControllerTest {
     }
 
     @Test
-    void getActivities_returnsAllForUser_inDescendingUlidOrder() throws Exception {
+    void getActivities_returnsAllForUserinDescendingUlidOrder() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 

@@ -54,7 +54,7 @@ class GpxServiceTest {
     }
 
     @Test
-    void processGpxFile_withMetadataNameAndTime_mapsAllFieldsFromCalculators_andMetadataNameTime() throws IOException {
+    void processGpxFile_withMetadataNameAndTime_mapsAllFieldsFromCalculatorsAndMetadataNameTime() throws IOException {
         GpxWaypointProcessor waypointProcessor = Mockito.mock(GpxWaypointProcessor.class);
         GpxMetricsCalculator metricsCalculator = Mockito.mock(GpxMetricsCalculator.class);
         KilometerMetricsCalculator kilometerMetricsCalculator = Mockito.mock(KilometerMetricsCalculator.class);
@@ -78,7 +78,6 @@ class GpxServiceTest {
                 .build()
         );
         when(waypointProcessor.getAllWayPointsOrderedByTime(any())).thenReturn(wayPoints);
-
         when(metricsCalculator.calculateTotalLength(wayPoints)).thenReturn(12345.6);
         when(metricsCalculator.calculateDuration(wayPoints)).thenReturn(3000L);
         when(metricsCalculator.calculateSpeed(12345.6, 3000L)).thenReturn(4.1152);
@@ -128,7 +127,7 @@ class GpxServiceTest {
     }
 
     @Test
-    void processGpxFile_withoutMetadataNameOrTime_usesEmptyName_andFirstWaypointTime_andMapsMissingFields() throws IOException {
+    void processGpxFile_withoutMetadataNameOrTime_usesEmptyNameAndFirstWaypointTimeAndMapsMissingFields() throws IOException {
         GpxWaypointProcessor waypointProcessor = Mockito.mock(GpxWaypointProcessor.class);
         GpxMetricsCalculator metricsCalculator = Mockito.mock(GpxMetricsCalculator.class);
         KilometerMetricsCalculator kilometerMetricsCalculator = Mockito.mock(KilometerMetricsCalculator.class);

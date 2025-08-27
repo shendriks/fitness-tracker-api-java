@@ -17,7 +17,7 @@ class NotificationDbEntityMapperTest {
     private final NotificationDbEntityMapper mapper = Mappers.getMapper(NotificationDbEntityMapper.class);
 
     @Test
-    void toNotification_shouldMapAllFields_andWrapIdTypes() {
+    void toNotification_mapsAllFieldsAndWrapIdTypes() {
         NotificationDbEntity entity = NotificationDbEntity
             .builder()
             .id(42L)
@@ -41,7 +41,7 @@ class NotificationDbEntityMapperTest {
     }
 
     @Test
-    void toNotifications_shouldMapList() {
+    void toNotifications_mapsList() {
         List<NotificationDbEntity> entities = List.of(
             NotificationDbEntity
                 .builder()

@@ -50,7 +50,7 @@ class GetMilestonesControllerTest {
     }
 
     @Test
-    void getMilestones_returnsAllWithCompletionFlag_forAuthenticatedUser() throws Exception {
+    void getMilestones_returnsAllWithCompletionFlagForAuthenticatedUser() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         MilestoneDbEntity milestone1 = milestoneRepository.save(MilestoneDbEntity

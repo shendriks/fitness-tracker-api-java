@@ -44,7 +44,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_createsFullKmSegment_andSignificantPartial() {
+    void calculateKilometerMetrics_createsFullKmSegmentAndSignificantPartial() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(10);
         Instant t2 = t0.plusSeconds(40); // first segment end
@@ -81,7 +81,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_skipsPointsWithoutTime_andUsesLastTimedPointForDistance() {
+    void calculateKilometerMetrics_skipsPointsWithoutTimeAndUsesLastTimedPointForDistance() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t2 = t0.plusSeconds(60);
         WayPoint wayPoint0 = WayPoint.builder().lat(0.0).lon(0.0).time(t0).build();
@@ -103,7 +103,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_exactlyOneKmBoundary_addsSegment_andInsignificantLeftoverIgnored() {
+    void calculateKilometerMetrics_withExactlyOneKmBoundary_addsSegmentAndInsignificantLeftoverIgnored() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(20);
         Instant t2 = t0.plusSeconds(50);
@@ -127,7 +127,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_zeroDuration_resultsInZeroSpeedAndPace() {
+    void calculateKilometerMetrics_withZeroDuration_resultsInZeroSpeedAndPace() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         WayPoint wayPoint0 = WayPoint.builder().lat(0.0).lon(0.0).time(t0).build();
         WayPoint wayPoint1 = WayPoint.builder().lat(0.0).lon(0.001).time(t0).build();
@@ -144,7 +144,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_wayPointsNotSortedByTime_throwsException() {
+    void calculateKilometerMetrics_withWayPointsNotSortedByTime_throwsWayPointsNotSortedException() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.minusSeconds(1);
 

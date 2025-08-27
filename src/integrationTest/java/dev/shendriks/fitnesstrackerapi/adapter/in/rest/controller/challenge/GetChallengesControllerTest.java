@@ -69,17 +69,8 @@ class GetChallengesControllerTest {
             .build());
     }
 
-    private void participate(UserDbEntity user, ChallengeDbEntity challenge) {
-        participationRepository.save(ChallengeParticipationDbEntity
-            .builder()
-            .user(user)
-            .challenge(challenge)
-            .percentageCompleted(0)
-            .build());
-    }
-
     @Test
-    void getChallenges_returnsOnlyCurrentChallenges_withHasUserJoinedFlag() throws Exception {
+    void getChallenges_returnsOnlyCurrentChallengesWithHasUserJoinedFlag() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 
@@ -92,8 +83,13 @@ class GetChallengesControllerTest {
         createChallenge("Future Challenge", inFuture1, inFuture2);
         ChallengeDbEntity challengeDbEntity1 = createChallenge("Current not joined Challenge", inPast1, inFuture1);
         ChallengeDbEntity challengeDbEntity2 = createChallenge("Current joined Challenge", inPast1, inFuture1);
-        participate(user, challengeDbEntity2);
-
+        participationRepository.save(ChallengeParticipationDbEntity
+            .builder()
+            .user(user)
+            .challenge(challengeDbEntity2)
+            .percentageCompleted(0)
+            .build());
+        
         String token = accessTokenHelper.getAccessToken(userUlid);
         String json = mvc.perform(get("/api/challenges")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +111,7 @@ class GetChallengesControllerTest {
     }
 
     @Test
-    void getChallenges_withoutAccessToken_returns401() throws Exception {
+    void getChallenges_withoutAuth_returns401() throws Exception {
         mvc.perform(get("/api/challenges").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }

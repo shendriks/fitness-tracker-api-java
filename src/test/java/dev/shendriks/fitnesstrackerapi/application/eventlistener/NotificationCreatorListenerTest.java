@@ -41,7 +41,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ChallengeJoinedEvent_savesNotificationWithChallengeName() {
+    void handle_withChallengeJoinedEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeUlid challengeUlid = new ChallengeUlid("TESTULID000000000000000001");
         when(forAccessingChallenges.findNameByUlid(challengeUlid)).thenReturn(Optional.of("Spring Marathon"));
@@ -59,7 +59,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ChallengeLeftEvent_savesNotificationWithChallengeName() {
+    void handle_withChallengeLeftEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeUlid challengeUlid = new ChallengeUlid("TESTULID000000000000000002");
         when(forAccessingChallenges.findNameByUlid(challengeUlid)).thenReturn(Optional.of("Cycling 500k"));
@@ -77,7 +77,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ChallengeCompletedEvent_savesNotificationWithChallengeName() {
+    void handle_withChallengeCompletedEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeId challengeId = new ChallengeId(23L);
         when(forAccessingChallenges.findNameById(challengeId)).thenReturn(Optional.of("Trail Run"));
@@ -95,7 +95,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_MilestoneCompletedEvent_savesNotificationWithMilestoneName() {
+    void handle_withMilestoneCompletedEvent_savesNotificationWithMilestoneName() {
         UserId userId = new UserId(42L);
         MilestoneId milestoneId = new MilestoneId(23L);
         when(forAccessingMilestones.findNameById(milestoneId)).thenReturn(Optional.of("Halfway There"));
@@ -113,7 +113,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ActivitySavedEvent_savesNotificationWithActivityTitle() {
+    void handle_withActivitySavedEvent_savesNotificationWithActivityTitle() {
         UserId userId = new UserId(42L);
         ActivityId activityId = new ActivityId(13L);
         when(forAccessingActivities.findTitleById(activityId)).thenReturn(Optional.of("Morning Ride"));
@@ -131,7 +131,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ActivityUpdatedEvent_savesNotificationWithActivityTitle() {
+    void handle_withActivityUpdatedEvent_savesNotificationWithActivityTitle() {
         UserId userId = new UserId(42L);
         ActivityId activityId = new ActivityId(13L);
         when(forAccessingActivities.findTitleById(activityId)).thenReturn(Optional.of("Evening Run"));
@@ -149,7 +149,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_ActivityDeletedEvent_savesNotificationWithoutLookup() {
+    void handle_withActivityDeletedEvent_savesNotificationWithoutLookup() {
         UserId userId = new UserId(42L);
         ActivityUlid activityUlid = new ActivityUlid("TESTULID000000000000000003");
 
@@ -165,7 +165,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_TrophyUnlockedEvent_savesNotification() {
+    void handle_withTrophyUnlockedEvent_savesNotification() {
         UserId userId = new UserId(42L);
         TrophyId trophyId = new TrophyId(37L);
 
@@ -181,7 +181,7 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_TrophyLostEvent_savesNotification() {
+    void handle_withTrophyLostEvent_savesNotification() {
         UserId userId = new UserId(42L);
 
         listener.handle(new TrophyLostEvent(userId));

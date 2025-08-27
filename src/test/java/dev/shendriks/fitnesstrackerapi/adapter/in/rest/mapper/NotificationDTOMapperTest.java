@@ -28,7 +28,7 @@ class NotificationDTOMapperTest {
     }
 
     @Test
-    void toNotificationResponseDTO_shouldMapAllFields() {
+    void toNotificationResponseDTO_mapsAllFields() {
         Instant createdAt = Instant.parse("2025-08-22T10:15:30Z");
         Notification notification = buildNotification(
             "TESTULID000000000000000001",
@@ -47,7 +47,7 @@ class NotificationDTOMapperTest {
     }
 
     @Test
-    void toNotificationResponseDTOs_shouldMapList() {
+    void toNotificationResponseDTOs_mapsList() {
         var notifications = List.of(
             buildNotification("TESTULID000000000000000002", "A", "Desc A", Instant.parse("2025-08-22T00:00:00Z")),
             buildNotification("TESTULID000000000000000003", "B", "Desc B", Instant.parse("2025-08-23T00:00:00Z"))

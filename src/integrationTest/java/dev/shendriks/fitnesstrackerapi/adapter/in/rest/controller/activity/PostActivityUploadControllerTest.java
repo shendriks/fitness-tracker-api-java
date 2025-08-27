@@ -77,7 +77,7 @@ class PostActivityUploadControllerTest {
     }
 
     @Test
-    void uploadActivity_validRequest_persistsActivityAndReturnsDetails() throws Exception {
+    void uploadActivity_withValidPayload_persistsAndReturnsDetails() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         MockMultipartFile gpxFile = buildValidGpxFileWithName();
@@ -143,7 +143,7 @@ class PostActivityUploadControllerTest {
     }
 
     @Test
-    void uploadActivity_withInvalidGpxSuffix_returns400() throws Exception {
+    void uploadActivity_withInvalidFileSuffix_returns400() throws Exception {
         String userUlid = "USER0000000000000000000000";
         MockMultipartFile invalidGpxFile = new MockMultipartFileBuilder()
             .withName("gpxFile")

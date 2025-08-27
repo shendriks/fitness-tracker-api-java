@@ -39,7 +39,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityResponse_shouldMapAllSimpleFieldsAndUlidToId() {
+    void toActivityResponse_mapsAllFieldsAndUlidToId() {
         Activity activity = buildActivity("TESTULID000000000000000000");
 
         ActivityResponseDTO dto = mapper.toActivityResponse(activity);
@@ -58,7 +58,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityResponses_shouldMapList() {
+    void toActivityResponses_mapsList() {
         var activities = List.of(
             buildActivity("TESTULID000000000000000001"),
             buildActivity("TESTULID000000000000000002")
@@ -72,7 +72,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityDetailsResponse_shouldMapGpsPositions_subsetFields() {
+    void toActivityDetailsResponse_mapsGpsPositions() {
         GPSPosition position1 = GPSPosition
             .builder()
             .timestamp(Instant.parse("2025-08-22T00:00:00Z"))
@@ -108,7 +108,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityCreationData_shouldConvertActivityTypeFromString() {
+    void toActivityCreationData_convertsActivityTypeFromString() {
         ActivityCreateRequestDTO request = ActivityCreateRequestDTO
             .builder()
             .activityType("running")
@@ -133,7 +133,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityUpdateData_shouldConvertActivityTypeFromString_caseInsensitive() {
+    void toActivityUpdateData_convertsActivityTypeFromStringCaseInsensitive() {
         ActivityUpdateRequestDTO request = ActivityUpdateRequestDTO
             .builder()
             .activityType("walking")
@@ -150,7 +150,7 @@ class ActivityDTOMapperTest {
     }
 
     @Test
-    void toActivityUploadData_shouldMapMultipartFile() {
+    void toActivityUploadData_mapsMultipartFile() {
         ActivityUploadRequestDTO request = ActivityUploadRequestDTO
             .builder()
             .activityType("cycling")

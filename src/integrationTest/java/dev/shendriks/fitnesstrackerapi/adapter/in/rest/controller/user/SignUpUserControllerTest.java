@@ -35,7 +35,7 @@ public class SignUpUserControllerTest {
     }
 
     @Test
-    public void registerUser_registersUser() throws Exception {
+    public void registerUser_withValidPayload_registersUser() throws Exception {
         mvc
             .perform(post("/api/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +65,7 @@ public class SignUpUserControllerTest {
     }
 
     @Test
-    public void registerUser_withEmailAlreadyRegistered_returnsError() throws Exception {
+    public void registerUser_withEmailAlreadyRegistered_returns400() throws Exception {
         mvc
             .perform(post("/api/users/signup")
                 .contentType(MediaType.APPLICATION_JSON)

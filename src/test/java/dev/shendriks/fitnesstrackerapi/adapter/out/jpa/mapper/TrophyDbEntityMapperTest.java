@@ -91,7 +91,7 @@ class TrophyDbEntityMapperTest {
     }
 
     @Test
-    void toTrophy_shouldMapAllFields_forMilestoneAchievement() {
+    void toTrophy_withMilestoneAchievement_mapsAllFields() {
         Instant createdAt = Instant.parse("2025-08-22T12:00:00Z");
         TrophyDbEntity entity = buildTrophyEntity(
             1L,
@@ -122,7 +122,7 @@ class TrophyDbEntityMapperTest {
     }
 
     @Test
-    void toTrophy_shouldMapAllFields_forChallengeAchievement() {
+    void toTrophy_withChallengeAchievement_mapsAllFields() {
         Instant createdAt = Instant.parse("2025-08-21T09:00:00Z");
         TrophyDbEntity entity = buildTrophyEntity(
             2L,
@@ -153,7 +153,7 @@ class TrophyDbEntityMapperTest {
     }
 
     @Test
-    void toTrophies_shouldMapList_mixedAchievements() {
+    void toTrophies_withMixedAchievements_mapsList() {
         List<TrophyDbEntity> entities = List.of(
             buildTrophyEntity(
                 3L,

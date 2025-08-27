@@ -54,7 +54,7 @@ class UserServiceTest {
     }
 
     @Test
-    void signUp_whenEmailAlreadyExists_throwsEmailAlreadyRegisteredException() {
+    void signUp_withEmailAlreadyExists_throwsEmailAlreadyRegisteredException() {
         UserSignupData signup = UserSignupData
             .builder()
             .name("Jane")
@@ -73,7 +73,7 @@ class UserServiceTest {
     }
 
     @Test
-    void signUp_whenEmailNotExists_createsUser_andPublishesEvent_andReturnsUser() {
+    void signUp_withEmailNotExists_createsUserAndPublishesEventAndReturnsUser() {
         UserSignupData signup = UserSignupData
             .builder()
             .name("Jane Doe")
@@ -100,7 +100,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser_whenUserNotFound_throwsUserNotFoundException() {
+    void updateUser_withUserNotFound_throwsUserNotFoundException() {
         UserId userId = new UserId(42L);
         when(forAccessingUsers.findById(userId)).thenReturn(Optional.empty());
 
@@ -121,7 +121,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser_whenCurrentPasswordDoesntMatch_throws() {
+    void updateUser_withCurrentPasswordDoesntMatch_throwsCurrentPasswordDoesntMatchException() {
         UserId userId = new UserId(42L);
         User existing = buildUser(userId, "john@example.com", "encodedCurr");
         when(forAccessingUsers.findById(userId)).thenReturn(Optional.of(existing));
@@ -144,7 +144,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser_whenEmailChangedAndAlreadyExists_throws() {
+    void updateUser_withEmailChangedAndAlreadyExists_throwsEmailAlreadyRegisteredException() {
         UserId userId = new UserId(42L);
         User existing = buildUser(userId, "john@example.com", "encodedCurr");
         when(forAccessingUsers.findById(userId)).thenReturn(Optional.of(existing));
@@ -168,7 +168,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUser_happyPath_updatesUser_andPublishesEvent_andReturnsUpdated() {
+    void updateUser_updatesUserAndPublishesEventAndReturnsUpdated() {
         UserId userId = new UserId(42L);
         User existing = buildUser(userId, "john@example.com", "encodedCurr");
         when(forAccessingUsers.findById(userId)).thenReturn(Optional.of(existing));

@@ -27,7 +27,7 @@ class ActivityDbEntityMapperTest {
     }
 
     @Test
-    void toActivity_shouldMapAllFields_andWrapIds_andMapGps() {
+    void toActivity_mapsAllFieldsAndWrapsIdsAndMapsGps() {
         ActivityDbEntity activityDbEntity = ActivityDbEntity
             .builder()
             .id(101L)
@@ -82,7 +82,7 @@ class ActivityDbEntityMapperTest {
     }
 
     @Test
-    void toActivities_shouldMapList() {
+    void toActivities_mapsList() {
         List<ActivityDbEntity> activityDbEntities = List.of(
             ActivityDbEntity
                 .builder()
@@ -136,7 +136,7 @@ class ActivityDbEntityMapperTest {
     }
 
     @Test
-    void toActivityDbEntity_shouldMapFields_andIgnoreSpecifiedOnes() {
+    void toActivityDbEntity_mapsFieldsAndIgnoreSpecifiedOnes() {
         ActivityCreationData activityCreationData = ActivityCreationData
             .builder()
             .activityType(ActivityType.RUNNING)
@@ -171,7 +171,7 @@ class ActivityDbEntityMapperTest {
     }
 
     @Test
-    void toActivityDbEntity_shouldMapFromTrack_whenGpxTimePresent() {
+    void toActivityDbEntity_whenGpxTimePresent_mapsFromTrack() {
         ActivityUploadData activityUploadData = ActivityUploadData
             .builder()
             .activityType(ActivityType.MOUNTAIN_BIKING)
@@ -225,7 +225,7 @@ class ActivityDbEntityMapperTest {
     }
 
     @Test
-    void toActivityDbEntity_shouldUseNow_whenNoGpxTime() {
+    void toActivityDbEntity_whenNoGpxTime_usesNow() {
         ActivityUploadData request = ActivityUploadData
             .builder()
             .activityType(ActivityType.RUNNING)

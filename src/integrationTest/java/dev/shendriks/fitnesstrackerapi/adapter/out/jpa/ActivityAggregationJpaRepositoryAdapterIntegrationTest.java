@@ -49,7 +49,7 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
     }
 
     @Test
-    void aggregateForUserInTimeRange_and_allTime_endToEnd() {
+    void aggregateForUserInTimeRange_aggregatesCorrectly() {
         UserId userId = createAndPersistUser();
 
         Instant from = Instant.parse("2025-08-20T00:00:00Z");
@@ -96,6 +96,19 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         assertEquals(0L, swimmingInRange.totalDuration());
         assertEquals(0L, swimmingInRange.maxDistance());
         assertEquals(0L, swimmingInRange.maxDuration());
+    }
+    
+    @Test
+    void aggregateForUserAllTime_aggregatesCorrectly() {
+        UserId userId = createAndPersistUser();
+
+        Instant outside = Instant.parse("2025-08-19T10:00:00Z"); // outside time range
+        Instant inside1 = Instant.parse("2025-08-20T10:00:00Z"); // inside time range
+        Instant inside2 = Instant.parse("2025-08-20T12:00:00Z"); // inside time range
+
+        persistActivity(userId, ActivityType.RUNNING, 100, 500, outside, "old run");
+        persistActivity(userId, ActivityType.RUNNING, 300, 1000, inside1, "run");
+        persistActivity(userId, ActivityType.CYCLING, 600, 2000, inside2, "ride");
 
         // Aggregate without time range
         ActivityAggregationMap actualAllTimeAggregationMap = adapter.aggregateForUser(userId);

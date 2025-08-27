@@ -79,7 +79,7 @@ class ListParticipationsControllerTest {
     }
 
     @Test
-    void listParticipations_returnsOnlyCurrentParticipations_and401WithoutAuth() throws Exception {
+    void listParticipations_returnsOnlyCurrentParticipations() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         Instant past1 = NOW.minusSeconds(10);
@@ -118,7 +118,7 @@ class ListParticipationsControllerTest {
     }
 
     @Test
-    void listParticipations_withoutToken_return402() throws Exception {
+    void listParticipations_withoutAuth_return401() throws Exception {
         mvc.perform(get("/api/challenge-participations").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }

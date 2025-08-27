@@ -43,7 +43,7 @@ class DeleteActivityControllerTest {
     }
 
     @Test
-    void deleteActivity_ownActivity_returns204_andIsRemoved() throws Exception {
+    void deleteActivity_withOwnActivity_returns204andIsRemoved() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity
@@ -68,7 +68,7 @@ class DeleteActivityControllerTest {
     }
 
     @Test
-    void deleteActivity_nonExisting_returns404() throws Exception {
+    void deleteActivity_withNonExisting_returns404() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String token = accessTokenHelper.getAccessToken(userUlid);
         String nonExistingUlid = "TESTULID000000000000004711";

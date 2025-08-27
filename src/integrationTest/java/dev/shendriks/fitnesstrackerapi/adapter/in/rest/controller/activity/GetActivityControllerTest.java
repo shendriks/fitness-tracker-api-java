@@ -50,7 +50,7 @@ class GetActivityControllerTest {
     }
 
     @Test
-    void getActivity_ownActivity_returns200_withDetailsAndGpsPositions() throws Exception {
+    void getActivity_withOwnActivity_returns200withDetailsAndGpsPositions() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 
@@ -109,7 +109,7 @@ class GetActivityControllerTest {
     }
 
     @Test
-    void getActivity_nonExisting_returns404() throws Exception {
+    void getActivity_withNonExisting_returns404() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String nonExistingUlid = "TESTULID000000000000004711";
 

@@ -42,7 +42,7 @@ public class PatchUserControllerTest {
     }
 
     @Test
-    public void updateUser_updatesUser() throws Exception {
+    public void updateUser_withValidPayload_updatesUser() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String accessToken = accessTokenHelper.getAccessToken(userUlid);
 
@@ -73,7 +73,7 @@ public class PatchUserControllerTest {
     }
 
     @Test
-    public void updateUser_withEmailAlreadyRegistered_returnsError() throws Exception {
+    public void updateUser_withEmailAlreadyRegistered_returns400() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String accessToken = accessTokenHelper.getAccessToken(userUlid);
 

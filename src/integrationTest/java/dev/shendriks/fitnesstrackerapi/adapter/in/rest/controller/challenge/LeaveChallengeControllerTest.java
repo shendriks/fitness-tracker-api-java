@@ -68,24 +68,20 @@ class LeaveChallengeControllerTest {
             .build());
     }
 
-    private void participate(UserDbEntity user, ChallengeDbEntity challenge) {
+    @Test
+    void leaveChallenge_withExistingParticipation_deletesAndReturns204AndIsIdempotent() throws Exception {
+        String userUlid = "USER0000000000000000000000";
+        UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
+        Instant past = NOW.minusSeconds(10);
+        Instant future = NOW.plusSeconds(10);
+        ChallengeDbEntity challenge = createChallenge("August Challenge", past, future);
         participationRepository.save(ChallengeParticipationDbEntity
             .builder()
             .user(user)
             .challenge(challenge)
             .percentageCompleted(0)
             .build());
-    }
-
-    @Test
-    void leaveChallenge_existingParticipation_deletesAndReturns204_idempotent() throws Exception {
-        String userUlid = "USER0000000000000000000000";
-        UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
-        Instant past = NOW.minusSeconds(10);
-        Instant future = NOW.plusSeconds(10);
-        ChallengeDbEntity challenge = createChallenge("August Challenge", past, future);
-        participate(user, challenge);
-
+        
         Optional<ChallengeParticipationDbEntity> afterJoin = participationRepository.findByUserIdAndChallengeUlid(user.getId(), challenge.getUlid());
         assertTrue(afterJoin.isPresent(), "Expected participation to be present after joining");
 
@@ -111,7 +107,7 @@ class LeaveChallengeControllerTest {
     }
 
     @Test
-    void leaveChallenge_nonExistingChallenge_returns404() throws Exception {
+    void leaveChallenge_withNonExistingChallenge_returns404() throws Exception {
         String userUlid = "USER0000000000000000000000";
         String token = accessTokenHelper.getAccessToken(userUlid);
         mvc.perform(post("/api/challenges/TESTULID000000000000000001/leave")

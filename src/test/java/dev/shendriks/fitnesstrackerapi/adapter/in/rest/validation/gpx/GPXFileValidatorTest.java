@@ -20,14 +20,14 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_nullFile_shouldThrowFileIsEmpty() {
+    void validate_nullFile_throwsFileIsEmpty() {
         GPXFileValidatorException ex = assertThrows(GPXFileValidatorException.class, () -> validator.validate(null));
 
         assertEquals("File is empty", ex.getMessage());
     }
 
     @Test
-    void validate_emptyFile_shouldThrowFileIsEmpty() {
+    void validate_emptyFile_throwsFileIsEmpty() {
         MultipartFile file = mockFile("track.gpx", new byte[0]);
 
         GPXFileValidatorException ex = assertThrows(GPXFileValidatorException.class, () -> validator.validate(file));
@@ -35,7 +35,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_fileTooBig_shouldThrowFileIsTooBig() {
+    void validate_fileTooBig_throwsFileIsTooBig() {
         byte[] content = new byte[10 * 1024 * 1024 + 1];
         MultipartFile file = mockFile("track.gpx", content);
 
@@ -44,7 +44,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_wrongSuffix_shouldThrowWrongSuffix() {
+    void validate_wrongSuffix_throwsWrongSuffix() {
         MultipartFile file = mockFile("track.xml", "some content".getBytes());
 
         GPXFileValidatorException ex = assertThrows(GPXFileValidatorException.class, () -> validator.validate(file));
@@ -52,7 +52,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_invalidXml_shouldThrowNoValidXml() {
+    void validate_invalidXml_throwsNoValidXml() {
         MultipartFile file = mockFile("track.gpx", "<invalid-xml>".getBytes());
 
         GPXFileValidatorException ex = assertThrows(GPXFileValidatorException.class, () -> validator.validate(file));
@@ -60,7 +60,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_wrongVersion_shouldThrowWrongVersion() {
+    void validate_wrongVersion_throwsWrongVersion() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.0" creator="test" xmlns="http://www.topografix.com/GPX/1/1">"
@@ -84,7 +84,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_noTrack_shouldThrowContainsNoTrack() {
+    void validate_noTrack_throwsContainsNoTrack() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">
@@ -100,7 +100,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_tooFewTrackPoints_shouldThrowTooFewTrackPoints() {
+    void validate_tooFewTrackPoints_throwsTooFewTrackPoints() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">
@@ -120,7 +120,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_missingTimeOnAnyPoint_shouldThrowTimeElementIsMissing() {
+    void validate_missingTimeOnAnyPoint_throwsTimeElementIsMissing() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">
@@ -143,7 +143,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_invalidLatLon_shouldThrowInvalidLatLon() {
+    void validate_invalidLatLon_throwsInvalidLatLon() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">
@@ -167,7 +167,7 @@ class GPXFileValidatorTest {
     }
 
     @Test
-    void validate_validFile_shouldPass() {
+    void validate_validFile_passes() {
         String content = """
             <?xml version="1.0" encoding="UTF-8"?>
             <gpx version="1.1" creator="test" xmlns="http://www.topografix.com/GPX/1/1">

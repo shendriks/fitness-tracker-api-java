@@ -35,7 +35,7 @@ class UserDTOMapperTest {
     }
 
     @Test
-    void toUserSignUpData_shouldNormalizeEmailAndMapAccountType() {
+    void toUserSignUpData_normalizesEmailAndMapAccountType() {
         UserSignupRequestDTO request = new UserSignupRequestDTO(
             "Alice",
             "  ALICE@example.COM  ",
@@ -53,7 +53,7 @@ class UserDTOMapperTest {
     }
 
     @Test
-    void toUserUpdateData_shouldNormalizeEmailAndMapPasswordFieldsAndAccountType() {
+    void toUserUpdateData_normalizesEmailAndMapPasswordFieldsAndAccountType() {
         UserUpdateRequestDTO request = new UserUpdateRequestDTO(
             "Bob",
             "  Bob@Example.com ",
@@ -73,7 +73,7 @@ class UserDTOMapperTest {
     }
 
     @Test
-    void toUserResponse_shouldMapAllFields_idFromUlid() {
+    void toUserResponse_mapsAllFields_idFromUlid() {
         Instant createdAt = Instant.parse("2025-08-20T10:00:00Z");
         Instant updatedAt = Instant.parse("2025-08-21T10:00:00Z");
         User user = buildUser(createdAt, updatedAt);

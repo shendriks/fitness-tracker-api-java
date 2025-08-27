@@ -46,7 +46,7 @@ class TrophyJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapterIn
     }
 
     @Test
-    void create_find_exists_deleteById_endToEnd() {
+    void createThenFindThenExistsThenDeleteById_worksAsExpected() {
         UserId userId = createAndPersistUser();
         MilestoneDbEntity milestone = createAndPersistMilestone();
         MilestoneId milestoneId = new MilestoneId(milestone.getId());

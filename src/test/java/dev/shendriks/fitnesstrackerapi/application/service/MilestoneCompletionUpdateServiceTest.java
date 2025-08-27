@@ -23,7 +23,6 @@ import static org.mockito.Mockito.*;
 class MilestoneCompletionUpdateServiceTest {
     private final UserId userId = new UserId(42L);
     private final MilestoneId milestoneId = new MilestoneId(23L);
-
     private ApplicationEventPublisher eventPublisher;
     private ForAccessingMilestones forAccessingMilestones;
     private ForAggregatingActivities forAggregatingActivities;
@@ -71,7 +70,7 @@ class MilestoneCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateAllMilestoneCompletionsForUser_whenBecameComplete_publishesEvent_andCreatesTrophy() {
+    void updateAllMilestoneCompletionsForUser_withBecameComplete_publishesEventAndCreatesTrophy() {
         Milestone milestone = buildMilestoneWithCompleted(false);
         when(forAccessingMilestones.findAllWithCompletedByUser(userId)).thenReturn(List.of(milestone));
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
@@ -97,7 +96,7 @@ class MilestoneCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateAllMilestoneCompletionsForUser_whenBecameIncomplete_publishesEvent_andDeletesTrophy() {
+    void updateAllMilestoneCompletionsForUser_withBecameIncomplete_publishesEventAndDeletesTrophy() {
         Milestone milestone = buildMilestoneWithCompleted(true);
         when(forAccessingMilestones.findAllWithCompletedByUser(userId)).thenReturn(List.of(milestone));
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
@@ -123,7 +122,7 @@ class MilestoneCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateAllMilestoneCompletionsForUser_whenNoTransition_publishesNoEvents_orTrophyActions() {
+    void updateAllMilestoneCompletionsForUser_withNoTransition_publishesNoEventsNorTrophyActions() {
         Milestone milestone = buildMilestoneWithCompleted(false);
         when(forAccessingMilestones.findAllWithCompletedByUser(userId)).thenReturn(List.of(milestone));
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
@@ -141,7 +140,7 @@ class MilestoneCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateAllMilestoneCompletionsForUser_delegatesForEachMilestone_andAggregatesOnce() {
+    void updateAllMilestoneCompletionsForUser_delegatesForEachMilestoneAndAggregatesOnce() {
         when(forAccessingMilestones.findAllWithCompletedByUser(userId)).thenReturn(List.of(
             buildMilestoneWithCompleted(false),
             buildMilestoneWithCompleted(true)

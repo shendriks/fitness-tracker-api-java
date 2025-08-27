@@ -58,7 +58,7 @@ class GetTrophiesControllerTest {
     }
 
     @Test
-    void getTrophies_returnsUsersTrophies_and401WithoutAuth() throws Exception {
+    void getTrophies_returnsUsersTrophies() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         MilestoneDbEntity milestoneDbEntity = milestoneRepository.save(MilestoneDbEntity
@@ -115,7 +115,7 @@ class GetTrophiesControllerTest {
     }
 
     @Test
-    void getTrophies_whenNoAccessToken_returnsError() throws Exception {
+    void getTrophies_withoutAuth_returns401() throws Exception {
         mvc.perform(get("/api/trophies").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }

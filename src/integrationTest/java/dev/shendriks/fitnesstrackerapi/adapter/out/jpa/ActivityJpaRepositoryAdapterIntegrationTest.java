@@ -32,7 +32,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
     }
 
     @Test
-    void saveAndFindAndCount_withActivityCreationData_endToEnd() {
+    void saveAndFindAndCount_withActivityCreationData() {
         UserId userId = createAndPersistUser();
 
         assertEquals(0L, adapter.countByUser(userId), "Expected activity count to be 0");
@@ -83,7 +83,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
     }
 
     @Test
-    void updateForUser_updatesFields_andFindTitleByIdReflects_worksAsExpected() {
+    void updateForUser_updatesFieldsAndFindTitleByIdReflects() {
         UserId userId = createAndPersistUser();
 
         ActivityCreationData create = ActivityCreationData
@@ -152,7 +152,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
     }
 
     @Test
-    void saveForUser_withUploadDataAndGPSTrack_persistsMetricsAndGps_thenDelete() {
+    void saveForUser_withUploadDataAndGPSTrack_persistsMetricsAndGpsThenDelete() {
         UserId userId = createAndPersistUser();
 
         ActivityUploadData upload = ActivityUploadData

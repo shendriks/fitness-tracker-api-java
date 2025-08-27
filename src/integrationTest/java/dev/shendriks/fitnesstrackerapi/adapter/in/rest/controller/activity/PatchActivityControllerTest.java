@@ -45,7 +45,7 @@ class PatchActivityControllerTest {
     }
 
     @Test
-    void patchActivity_ownActivity_validPayload_updatesAndReturns200() throws Exception {
+    void patchActivity_withOwnActivityAndValidPayload_updatesAndReturns200() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
@@ -125,7 +125,7 @@ class PatchActivityControllerTest {
     }
 
     @Test
-    void patchActivity_nonExisting_returns404() throws Exception {
+    void patchActivity_withNonExisting_returns404() throws Exception {
         String userUlid = "USER0000000000000000000000";
 
         String token = accessTokenHelper.getAccessToken(userUlid);
@@ -157,7 +157,7 @@ class PatchActivityControllerTest {
     }
 
     @Test
-    void patchActivity_invalidActivityType_returns400() throws Exception {
+    void patchActivity_withInvalidActivityType_returns400() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()

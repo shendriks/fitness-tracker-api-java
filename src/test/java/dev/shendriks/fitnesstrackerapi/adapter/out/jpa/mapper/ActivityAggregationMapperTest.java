@@ -17,7 +17,7 @@ class ActivityAggregationMapperTest {
     private final ActivityAggregationMapper mapper = Mappers.getMapper(ActivityAggregationMapper.class);
 
     @Test
-    void toActivityAggregation_shouldMapAllFields() {
+    void toActivityAggregation_mapsAllFields() {
         ActivityAggregationDbProjection projection = ActivityAggregationDbProjection
             .builder()
             .count(5L)
@@ -38,7 +38,7 @@ class ActivityAggregationMapperTest {
     }
 
     @Test
-    void toActivityTypeAggregations_shouldMapList() {
+    void toActivityTypeAggregations_mapsList() {
         List<ActivityTypeAggregationDbProjection> projections = List.of(
             ActivityTypeAggregationDbProjection
                 .builder()
@@ -80,7 +80,7 @@ class ActivityAggregationMapperTest {
     }
 
     @Test
-    void toActivityAggregationMap_shouldCombineAndPadMissingTypes() {
+    void toActivityAggregationMap_combinesAndPadsMissingTypes() {
         ActivityAggregationDbProjection total = ActivityAggregationDbProjection
             .builder()
             .count(10L)

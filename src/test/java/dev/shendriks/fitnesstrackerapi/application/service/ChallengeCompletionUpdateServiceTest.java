@@ -84,7 +84,7 @@ class ChallengeCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateChallengeCompletion_whenBecameComplete_publishesEvent_andCreatesTrophy_andUpdatesPercentage() {
+    void updateChallengeCompletion_withBecameComplete_publishesEventAndCreatesTrophyAndUpdatesPercentage() {
         ChallengeParticipation participation = buildParticipationWithCurrentPercentage(0);
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
             .thenReturn(AchievementCompletionResult
@@ -111,7 +111,7 @@ class ChallengeCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateChallengeCompletion_whenBecameIncomplete_publishesEvent_andDeletesTrophy_andUpdatesPercentage() {
+    void updateChallengeCompletion_withBecameIncomplete_publishesEventAndDeletesTrophyAndUpdatesPercentage() {
         ChallengeParticipation participation = buildParticipationWithCurrentPercentage(100);
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
             .thenReturn(AchievementCompletionResult
@@ -139,7 +139,7 @@ class ChallengeCompletionUpdateServiceTest {
     }
 
     @Test
-    void updateChallengeCompletion_whenNoTransition_onlyUpdatesPercentage_andNoEventsOrTrophies() {
+    void updateChallengeCompletion_withNoTransition_onlyUpdatesPercentageAndNoEventsOrTrophies() {
         ChallengeParticipation participation = buildParticipationWithCurrentPercentage(50);
         when(achievementCompletionCalculator.calculateAchievementCompletion(any()))
             .thenReturn(AchievementCompletionResult

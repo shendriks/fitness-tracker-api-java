@@ -18,7 +18,7 @@ class PingControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    void ping_shouldReturnPongMessage() {
+    void ping_returnsPongMessage() {
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/api/ping", String.class))
             .contains("{\"message\":\"Pong!\"}");
     }

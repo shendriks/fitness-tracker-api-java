@@ -55,7 +55,7 @@ class ChallengeParticipationDbEntityMapperTest {
     }
 
     @Test
-    void toChallengeParticipation_shouldMapAllFields_andWrapIds_andUserId_andSetHasUserJoinedTrue() {
+    void toChallengeParticipation_mapsAllFieldsAndWrapIdsAndUserIdAndSetHasUserJoinedTrue() {
         ChallengeParticipationDbEntity entity = buildParticipationEntity(
             "TESTULID000000000000000001",
             "TESTULID000000000000000002",
@@ -87,7 +87,7 @@ class ChallengeParticipationDbEntityMapperTest {
     }
 
     @Test
-    void toChallengeParticipations_shouldMapList() {
+    void toChallengeParticipations_mapsList() {
         List<ChallengeParticipationDbEntity> entities = List.of(
             buildParticipationEntity("TESTULID000000000000000003", "TESTULID000000000000000004", 1L, 10),
             buildParticipationEntity("TESTULID000000000000000005", "TESTULID000000000000000006", 2L, 20)

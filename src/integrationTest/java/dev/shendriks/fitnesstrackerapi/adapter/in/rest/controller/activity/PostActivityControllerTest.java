@@ -47,7 +47,7 @@ class PostActivityControllerTest {
     }
 
     @Test
-    void postActivity_validRequest_persistsAndReturns200() throws Exception {
+    void postActivity_withValidPayload_persistsAndReturns200() throws Exception {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 
@@ -114,7 +114,7 @@ class PostActivityControllerTest {
     }
 
     @Test
-    void postActivity_invalidActivityType_returns400() throws Exception {
+    void postActivity_withInvalidActivityType_returns400() throws Exception {
         String userUlid = "USER0000000000000000000000";
 
         String token = accessTokenHelper.getAccessToken(userUlid);

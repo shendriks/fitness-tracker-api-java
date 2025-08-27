@@ -78,7 +78,7 @@ class ActivityServiceTest {
     }
 
     @Test
-    void getActivityByUser_returnsActivity_whenFound() {
+    void getActivityByUser_withFound_returnsActivity() {
         Activity activity = Activity
             .builder()
             .id(activityId)
@@ -104,7 +104,7 @@ class ActivityServiceTest {
     }
 
     @Test
-    void getActivityByUser_throws_whenNotFound() {
+    void getActivityByUser_withNotFound_throwsActivityNotFoundException() {
         when(forAccessingActivities.findByUserAndId(userId, activityUlid)).thenReturn(Optional.empty());
 
         assertThrows(ActivityNotFoundException.class, () -> service.getActivityByUser(userId, activityUlid));

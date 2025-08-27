@@ -49,7 +49,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void joinChallenge_whenAlreadyJoined_doesNothing() {
+    void joinChallenge_withAlreadyJoined_doesNothing() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(true);
         when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
@@ -64,7 +64,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void joinChallenge_whenChallengeFound_createsParticipation_updatesCompletion_andPublishesEvent() {
+    void joinChallenge_withChallengeFound_createsParticipationAndUpdatesCompletionAndPublishesEvent() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
 
         Challenge challenge = Challenge
@@ -111,7 +111,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void joinChallenge_whenChallengeMissing_throwsNotFound_andDoesNothingElse() {
+    void joinChallenge_withChallengeMissing_throwsNotFoundAndDoesNothingElse() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
         when(forAccessingChallenges.findByUserIdAndUlid(userId, challengeUlid)).thenReturn(Optional.empty());
         when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(false);
@@ -124,7 +124,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void leaveChallenge_whenNotJoined_doesNothing() {
+    void leaveChallenge_withNotJoined_doesNothing() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
         when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
@@ -136,7 +136,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void leaveChallenge_whenJoined_leaves_deletesTrophy_andPublishesEvent() {
+    void leaveChallenge_withJoined_leavesAndDeletesTrophyAndPublishesEvent() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(true);
         when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 

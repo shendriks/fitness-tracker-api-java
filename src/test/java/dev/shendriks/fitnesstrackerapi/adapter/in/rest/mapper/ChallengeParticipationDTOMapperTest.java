@@ -58,7 +58,7 @@ class ChallengeParticipationDTOMapperTest {
     }
 
     @Test
-    void toChallengeParticipationResponseDTO_shouldMapAllFields() {
+    void toChallengeParticipationResponseDTO_mapsAllFields() {
         ChallengeParticipation participation = buildParticipation(
             "TESTULID000000000000000001",
             "TESTULID000000000000000002",
@@ -83,7 +83,7 @@ class ChallengeParticipationDTOMapperTest {
     }
 
     @Test
-    void toChallengeParticipationResponseDTOs_shouldMapList() {
+    void toChallengeParticipationResponseDTOs_mapsList() {
         List<ChallengeParticipation> participations = List.of(
             buildParticipation("TESTULID000000000000000003", "TESTULID000000000000000004", 10),
             buildParticipation("TESTULID000000000000000005", "TESTULID000000000000000006", 20)
