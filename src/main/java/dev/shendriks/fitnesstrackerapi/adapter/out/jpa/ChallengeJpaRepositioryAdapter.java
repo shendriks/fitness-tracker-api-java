@@ -31,6 +31,11 @@ public class ChallengeJpaRepositioryAdapter implements ForAccessingChallenges {
     }
 
     @Override
+    public boolean existsByUlid(ChallengeUlid challengeUlid) {
+        return challengeDbEntityRepository.existsByUlid(challengeUlid.getValue());
+    }
+
+    @Override
     public Optional<Challenge> findByUserIdAndUlid(UserId userId, ChallengeUlid challengeUlid) {
         Optional<ChallengeProjection> entity = challengeDbEntityRepository.findByUserIdAndUlidWithUserJoined(
             userId.value(),

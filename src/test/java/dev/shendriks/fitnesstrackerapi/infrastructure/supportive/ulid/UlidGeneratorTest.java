@@ -17,7 +17,7 @@ class UlidGeneratorTest {
         assertInstanceOf(String.class, actualResult);
         assertTrue(((String) actualResult).matches(ULID_REGEX), "Expected " + actualResult + " to match " + ULID_REGEX);
     }
-    
+
     @Test
     void generate_generatesSuccessiveUlids() {
         UlidGenerator generator = new UlidGenerator();

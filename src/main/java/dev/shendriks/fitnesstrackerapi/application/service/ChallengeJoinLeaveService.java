@@ -7,7 +7,6 @@ import dev.shendriks.fitnesstrackerapi.application.port.in.challenge.JoinChallen
 import dev.shendriks.fitnesstrackerapi.application.port.in.challenge.LeaveChallengeUseCase;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingChallengeParticipations;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingChallenges;
-import dev.shendriks.fitnesstrackerapi.domain.entity.Challenge;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ChallengeParticipation;
 import dev.shendriks.fitnesstrackerapi.domain.value.ChallengeUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
@@ -28,15 +27,15 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
 
     @Override
     public void joinChallenge(UserId userId, ChallengeUlid challengeUlid) {
+        if (!forAccessingChallenges.existsByUlid(challengeUlid)) {
+            throw new ChallengeNotFoundException(challengeUlid.getValue());
+        }
+
         if (forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }
 
-        Challenge challenge = forAccessingChallenges
-            .findByUserIdAndUlid(userId, challengeUlid)
-            .orElseThrow(() -> new ChallengeNotFoundException(challengeUlid.getValue()));
-
-        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.joinChallenge(userId, challenge.getUlid());
+        ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.joinChallenge(userId, challengeUlid);
         challengeCompletionUpdateService.updateChallengeCompletion(challengeParticipation);
 
         eventPublisher.publishEvent(new ChallengeJoinedEvent(userId, challengeUlid));
@@ -44,6 +43,10 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
 
     @Override
     public void leaveChallenge(UserId userId, ChallengeUlid challengeUlid) {
+        if (!forAccessingChallenges.existsByUlid(challengeUlid)) {
+            throw new ChallengeNotFoundException(challengeUlid.getValue());
+        }
+
         if (!forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)) {
             return;
         }

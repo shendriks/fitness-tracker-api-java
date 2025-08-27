@@ -51,13 +51,13 @@ class ChallengeJoinLeaveServiceTest {
     @Test
     void joinChallenge_whenAlreadyJoined_doesNothing() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(true);
+        when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
         service.joinChallenge(userId, challengeUlid);
 
         verify(forAccessingChallengeParticipations).existsByChallengeAndUser(userId, challengeUlid);
         verifyNoMoreInteractions(forAccessingChallengeParticipations);
 
-        verifyNoInteractions(forAccessingChallenges);
         verifyNoInteractions(challengeCompletionUpdateService);
         verifyNoInteractions(eventPublisher);
         verifyNoInteractions(trophyManagementService);
@@ -94,10 +94,10 @@ class ChallengeJoinLeaveServiceTest {
             .percentageCompleted(0)
             .build();
         when(forAccessingChallengeParticipations.joinChallenge(userId, challenge.getUlid())).thenReturn(participation);
+        when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
         service.joinChallenge(userId, challengeUlid);
 
-        verify(forAccessingChallenges).findByUserIdAndUlid(userId, challengeUlid);
         verify(forAccessingChallengeParticipations).joinChallenge(userId, challenge.getUlid());
         verify(challengeCompletionUpdateService).updateChallengeCompletion(participation);
 
@@ -114,10 +114,10 @@ class ChallengeJoinLeaveServiceTest {
     void joinChallenge_whenChallengeMissing_throwsNotFound_andDoesNothingElse() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
         when(forAccessingChallenges.findByUserIdAndUlid(userId, challengeUlid)).thenReturn(Optional.empty());
+        when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(false);
 
         assertThrows(ChallengeNotFoundException.class, () -> service.joinChallenge(userId, challengeUlid));
 
-        verify(forAccessingChallenges).findByUserIdAndUlid(userId, challengeUlid);
         verify(forAccessingChallengeParticipations, never()).joinChallenge(any(), any());
         verifyNoInteractions(challengeCompletionUpdateService);
         verifyNoInteractions(eventPublisher);
@@ -126,6 +126,7 @@ class ChallengeJoinLeaveServiceTest {
     @Test
     void leaveChallenge_whenNotJoined_doesNothing() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
+        when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
         service.leaveChallenge(userId, challengeUlid);
 
@@ -137,6 +138,7 @@ class ChallengeJoinLeaveServiceTest {
     @Test
     void leaveChallenge_whenJoined_leaves_deletesTrophy_andPublishesEvent() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(true);
+        when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
         service.leaveChallenge(userId, challengeUlid);
 

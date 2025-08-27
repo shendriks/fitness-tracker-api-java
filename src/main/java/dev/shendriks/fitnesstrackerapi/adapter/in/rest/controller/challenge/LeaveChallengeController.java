@@ -46,6 +46,7 @@ public class LeaveChallengeController {
             name = "id",
             description = "The challenge id",
             required = true,
+            schema = @Schema(implementation = String.class),
             examples = @ExampleObject(value = "01K0PNG2QTMTD3E221WKEVVRMN")
         )
         String id

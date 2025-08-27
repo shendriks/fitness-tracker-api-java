@@ -72,4 +72,7 @@ public interface ChallengeDbEntityRepository extends JpaRepository<ChallengeDbEn
 
     @Query("SELECT c.name FROM ChallengeDbEntity c WHERE c.ulid = :ulid")
     Optional<String> findNameByUlid(@Param("ulid") String ulid);
+
+    @Query("SELECT COUNT(c) > 0 FROM ChallengeDbEntity c WHERE c.ulid = :ulid")
+    boolean existsByUlid(@Param("ulid") String ulid);
 }
