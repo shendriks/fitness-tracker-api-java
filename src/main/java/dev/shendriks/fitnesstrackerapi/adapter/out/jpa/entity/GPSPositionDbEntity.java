@@ -24,8 +24,6 @@ public class GPSPositionDbEntity {
     private Double longitude;
     @Column()
     private Double altitude;
-    @Column()
-    private Double accuracy;
     @ManyToOne
     @JoinColumn(name = "activity_id", nullable = false)
     private ActivityDbEntity activity;

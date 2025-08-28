@@ -216,12 +216,10 @@ class ActivityDbEntityMapperTest {
         assertEquals(0.0, actualActivityDbEntity.getGpsPositions().getFirst().getLatitude());
         assertEquals(1.0, actualActivityDbEntity.getGpsPositions().getFirst().getLongitude());
         assertNull(actualActivityDbEntity.getGpsPositions().getFirst().getAltitude());
-        assertNull(actualActivityDbEntity.getGpsPositions().getFirst().getAccuracy());
 
         assertEquals(0.1, actualActivityDbEntity.getGpsPositions().get(1).getLatitude());
         assertEquals(1.1, actualActivityDbEntity.getGpsPositions().get(1).getLongitude());
         assertEquals(10.0, actualActivityDbEntity.getGpsPositions().get(1).getAltitude());
-        assertNull(actualActivityDbEntity.getGpsPositions().get(1).getAccuracy());
     }
 
     @Test

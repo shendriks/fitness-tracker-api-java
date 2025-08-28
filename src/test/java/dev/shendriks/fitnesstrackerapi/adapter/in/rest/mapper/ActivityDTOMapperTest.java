@@ -79,7 +79,6 @@ class ActivityDTOMapperTest {
             .latitude(0.0)
             .longitude(0.0)
             .altitude(0.0)
-            .accuracy(5.0)
             .build();
         GPSPosition position2 = GPSPosition
             .builder()
@@ -87,7 +86,6 @@ class ActivityDTOMapperTest {
             .latitude(0.2)
             .longitude(0.1)
             .altitude(0.0)
-            .accuracy(6.0)
             .build();
         Activity activity = buildActivity("TESTULID000000000000000003", List.of(position1, position2));
 
