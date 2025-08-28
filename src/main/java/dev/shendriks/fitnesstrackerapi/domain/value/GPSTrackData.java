@@ -10,7 +10,7 @@ import java.util.Optional;
 public record GPSTrackData(
     String name,
     Optional<Instant> gpxTime,
-    double totalLength,
+    double distance,
     long duration,
     double speed,
     double pace,

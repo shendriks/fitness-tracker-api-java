@@ -40,7 +40,7 @@ public abstract class ActivityDbEntityMapper {
         activity.setDescription(request.description());
         activity.setStartDate(gpsTrackData.gpxTime().orElse(Instant.now(clock)));
         activity.setDuration((int) gpsTrackData.duration());
-        activity.setDistance((int) gpsTrackData.totalLength());
+        activity.setDistance((int) gpsTrackData.distance());
         activity.setCalories(0);
         activity.setGpsPositions(
             gpsTrackData

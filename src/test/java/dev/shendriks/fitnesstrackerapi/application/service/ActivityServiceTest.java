@@ -204,7 +204,7 @@ class ActivityServiceTest {
             .builder()
             .name("track")
             .gpxTime(Optional.empty())
-            .totalLength(1000)
+            .distance(1000)
             .duration(600)
             .speed(10)
             .pace(6)

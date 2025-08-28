@@ -166,7 +166,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .builder()
             .name("Trail Run")
             .gpxTime(Optional.of(Instant.parse("2025-08-23T10:00:00Z")))
-            .totalLength(1234.56)
+            .distance(1234.56)
             .duration(789)
             .speed(0)
             .pace(0)

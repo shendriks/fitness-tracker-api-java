@@ -100,7 +100,7 @@ class GpxServiceTest {
         assertEquals(name, actualGPSTrackData.name());
         assertTrue(actualGPSTrackData.gpxTime().isPresent());
         assertEquals(metaTime, actualGPSTrackData.gpxTime().get());
-        assertEquals(12345.6, actualGPSTrackData.totalLength());
+        assertEquals(12345.6, actualGPSTrackData.distance());
         assertEquals(3000L, actualGPSTrackData.duration());
         assertEquals(4.1152, actualGPSTrackData.speed());
         assertEquals(14.6, actualGPSTrackData.pace());
@@ -163,7 +163,7 @@ class GpxServiceTest {
         assertEquals("", actualGPSTrackData.name(), "Expected empty name when no metadata/track name available");
         assertTrue(actualGPSTrackData.gpxTime().isPresent());
         assertEquals(firstTime, actualGPSTrackData.gpxTime().get(), "Expected gpxTime from first waypoint when metadata time missing");
-        assertEquals(1000.0, actualGPSTrackData.totalLength());
+        assertEquals(1000.0, actualGPSTrackData.distance());
         assertEquals(600L, actualGPSTrackData.duration());
         assertEquals(1.6667, actualGPSTrackData.speed());
         assertEquals(36.0, actualGPSTrackData.pace());

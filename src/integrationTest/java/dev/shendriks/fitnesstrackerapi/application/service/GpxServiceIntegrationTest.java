@@ -91,7 +91,7 @@ class GpxServiceIntegrationTest {
         assertEquals(60.0, positions.get(1).altitude().get());
 
         // Basic metric sanity checks with tolerances
-        assertTrue(actualGPSTrackData.totalLength() > 900 && actualGPSTrackData.totalLength() < 1100, "Expected distance around 1km");
+        assertTrue(actualGPSTrackData.distance() > 900 && actualGPSTrackData.distance() < 1100, "Expected distance around 1km");
         assertEquals(100L, actualGPSTrackData.duration(), "Expected duration 100s");
         assertTrue(actualGPSTrackData.speed() > 9 && actualGPSTrackData.speed() < 12, "Expected speed around ~10 m/s for ~1km/100s");
         assertTrue(actualGPSTrackData.pace() > 80 && actualGPSTrackData.pace() < 120, "Expected pace around ~100 s/km");
@@ -129,7 +129,7 @@ class GpxServiceIntegrationTest {
         assertTrue(positions.get(1).altitude().isEmpty(), "Expected no altitude for second position");
 
         // Sanity metrics: small distance, 300 seconds duration
-        assertTrue(actualGPSTrackData.totalLength() > 0, "Expected distance > 0m");
+        assertTrue(actualGPSTrackData.distance() > 0, "Expected distance > 0m");
         assertEquals(300L, actualGPSTrackData.duration(), "Expected duration 300s");
         assertTrue(actualGPSTrackData.speed() >= 0, "Expected speed >= 0m/s");
         assertTrue(actualGPSTrackData.pace() >= 0, "Expected pace >= 0s/km");
