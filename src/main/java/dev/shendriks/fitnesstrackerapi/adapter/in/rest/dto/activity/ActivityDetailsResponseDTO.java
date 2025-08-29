@@ -8,13 +8,13 @@ import java.util.List;
 public record ActivityDetailsResponseDTO(
     String id,
     ActivityType activityType,
-    int duration,
+    Double duration,
+    Double distance,
     int calories,
     Instant createdAt,
     Instant updatedAt,
     String title,
     String description,
-    int distance,
     Instant startDate,
     List<GPSPositionResponseDTO> gpsPositions
 ) {

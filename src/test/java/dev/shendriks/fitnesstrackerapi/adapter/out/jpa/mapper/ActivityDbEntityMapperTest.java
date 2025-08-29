@@ -34,8 +34,8 @@ class ActivityDbEntityMapperTest {
             .id(101L)
             .ulid("TESTULID000000000000000001")
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(3600))
-            .distance(Distance.ofMeters(25750))
+            .duration(Duration.ofSeconds(3600.0))
+            .distance(Distance.ofMeters(25750.0))
             .calories(800)
             .createdAt(Instant.parse("2025-08-01T10:15:30Z"))
             .updatedAt(Instant.parse("2025-08-02T10:15:30Z"))
@@ -66,13 +66,13 @@ class ActivityDbEntityMapperTest {
         assertEquals(new ActivityId(101L), actualActivity.id());
         assertEquals(new ActivityUlid("TESTULID000000000000000001"), actualActivity.ulid());
         assertEquals(ActivityType.CYCLING, actualActivity.activityType());
-        assertEquals(3600, actualActivity.duration());
+        assertEquals(3600.0, actualActivity.duration().toSeconds(), Constant.EPSILON);
+        assertEquals(25750.0, actualActivity.distance().toMeters(), Constant.EPSILON);
         assertEquals(800, actualActivity.calories());
         assertEquals(Instant.parse("2025-08-01T10:15:30Z"), actualActivity.createdAt());
         assertEquals(Instant.parse("2025-08-02T10:15:30Z"), actualActivity.updatedAt());
         assertEquals("Morning Ride", actualActivity.title());
         assertEquals("Sunny morning ride", actualActivity.description());
-        assertEquals(25750, actualActivity.distance());
         assertEquals(Instant.parse("2025-08-01T07:00:00Z"), actualActivity.startDate());
         assertNotNull(actualActivity.gpsPositions());
         assertEquals(2, actualActivity.gpsPositions().size());
@@ -90,8 +90,8 @@ class ActivityDbEntityMapperTest {
                 .id(1L)
                 .ulid("TESTULID000000000000000002")
                 .activityType(ActivityType.WALKING)
-                .duration(Duration.ofSeconds(100))
-                .distance(Distance.ofMeters(123))
+                .duration(Duration.ofSeconds(100.0))
+                .distance(Distance.ofMeters(123.0))
                 .calories(10)
                 .title("Walk")
                 .description("desc")
@@ -102,8 +102,8 @@ class ActivityDbEntityMapperTest {
                 .id(2L)
                 .ulid("TESTULID000000000000000003")
                 .activityType(ActivityType.SWIMMING)
-                .duration(Duration.ofSeconds(200))
-                .distance(Distance.ofMeters(456))
+                .duration(Duration.ofSeconds(200.0))
+                .distance(Distance.ofMeters(456.0))
                 .calories(20)
                 .title("Swim")
                 .description("desc")
@@ -120,9 +120,9 @@ class ActivityDbEntityMapperTest {
         assertEquals("Walk", activities.getFirst().title());
         assertEquals("desc", activities.getFirst().description());
         assertEquals(Instant.parse("2025-08-01T00:00:00Z"), activities.getFirst().startDate());
-        assertEquals(100, activities.getFirst().duration());
+        assertEquals(100.0, activities.getFirst().duration().toSeconds(), Constant.EPSILON);
+        assertEquals(123.0, activities.getFirst().distance().toMeters(), Constant.EPSILON);
         assertEquals(10, activities.getFirst().calories());
-        assertEquals(123, activities.getFirst().distance());
         assertEquals(ActivityType.WALKING, activities.getFirst().activityType());
 
         assertEquals(new ActivityId(2L), activities.get(1).id());
@@ -130,9 +130,9 @@ class ActivityDbEntityMapperTest {
         assertEquals("Swim", activities.get(1).title());
         assertEquals("desc", activities.get(1).description());
         assertEquals(Instant.parse("2025-08-02T00:00:00Z"), activities.get(1).startDate());
-        assertEquals(200, activities.get(1).duration());
+        assertEquals(200.0, activities.get(1).duration().toSeconds(), Constant.EPSILON);
+        assertEquals(456.0, activities.get(1).distance().toMeters(), Constant.EPSILON);
         assertEquals(20, activities.get(1).calories());
-        assertEquals(456, activities.get(1).distance());
         assertEquals(ActivityType.SWIMMING, activities.get(1).activityType());
     }
 
@@ -141,11 +141,11 @@ class ActivityDbEntityMapperTest {
         ActivityCreationData activityCreationData = ActivityCreationData
             .builder()
             .activityType(ActivityType.RUNNING)
-            .duration(1234)
+            .duration(Duration.ofSeconds(1234.0))
+            .distance(Distance.ofMeters(890.0))
             .calories(567)
             .title("Test Title")
             .description("Test Description")
-            .distance(890)
             .startDate(Instant.parse("2025-08-01T12:00:00Z"))
             .build();
 
@@ -183,13 +183,13 @@ class ActivityDbEntityMapperTest {
             .builder()
             .name("name")
             .gpxTime(Optional.of(Instant.parse("2025-08-01T09:30:00Z")))
-            .distance(12345.67)
-            .duration(5432)
-            .speed(0.0)
-            .pace(0.0)
-            .elevationGain(0.0)
-            .motionTime(0)
-            .pausingTime(0)
+            .distance(Distance.ofMeters(12345.67))
+            .duration(Duration.ofSeconds(5432.0))
+            .speed(Speed.zero())
+            .pace(Pace.zero())
+            .elevationGain(Distance.zero())
+            .motionTime(Duration.zero())
+            .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .kilometerPaces(List.of())
             .gpsPositions(List.of(
@@ -235,13 +235,13 @@ class ActivityDbEntityMapperTest {
             .builder()
             .name("name")
             .gpxTime(Optional.empty())
-            .distance(1000.0)
-            .duration(100)
-            .speed(0.0)
-            .pace(0.0)
-            .elevationGain(0.0)
-            .motionTime(0)
-            .pausingTime(0)
+            .distance(Distance.ofMeters(1000.0))
+            .duration(Duration.ofSeconds(100.0))
+            .speed(Speed.zero())
+            .pace(Pace.zero())
+            .elevationGain(Distance.zero())
+            .motionTime(Duration.zero())
+            .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .kilometerPaces(List.of())
             .gpsPositions(List.of())

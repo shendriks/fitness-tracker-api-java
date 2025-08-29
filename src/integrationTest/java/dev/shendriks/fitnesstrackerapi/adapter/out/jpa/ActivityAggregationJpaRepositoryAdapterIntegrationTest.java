@@ -30,7 +30,7 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         this.adapter = adapter;
     }
 
-    private void persistActivity(UserId userId, ActivityType type, int duration, int distance, Instant startDate, String title) {
+    private void persistActivity(UserId userId, ActivityType type, Double duration, Double distance, Instant startDate, String title) {
         UserDbEntity user = entityManager.find(UserDbEntity.class, userId.value());
         ActivityDbEntity entity = ActivityDbEntity
             .builder()
@@ -58,9 +58,9 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         Instant inside1 = Instant.parse("2025-08-20T10:00:00Z"); // inside time range
         Instant inside2 = Instant.parse("2025-08-20T12:00:00Z"); // inside time range
 
-        persistActivity(userId, ActivityType.RUNNING, 100, 500, outside, "old run");
-        persistActivity(userId, ActivityType.RUNNING, 300, 1000, inside1, "run");
-        persistActivity(userId, ActivityType.CYCLING, 600, 2000, inside2, "ride");
+        persistActivity(userId, ActivityType.RUNNING, 100.0, 500.0, outside, "old run");
+        persistActivity(userId, ActivityType.RUNNING, 300.0, 1000.0, inside1, "run");
+        persistActivity(userId, ActivityType.CYCLING, 600.0, 2000.0, inside2, "ride");
 
         // Aggregate in time range
         ActivityAggregationMap actualActivityAggregationMap = adapter.aggregateForUserInTimeRange(userId, from, to);
@@ -105,9 +105,9 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
         Instant inside1 = Instant.parse("2025-08-20T10:00:00Z"); // inside time range
         Instant inside2 = Instant.parse("2025-08-20T12:00:00Z"); // inside time range
 
-        persistActivity(userId, ActivityType.RUNNING, 100, 500, outside, "old run");
-        persistActivity(userId, ActivityType.RUNNING, 300, 1000, inside1, "run");
-        persistActivity(userId, ActivityType.CYCLING, 600, 2000, inside2, "ride");
+        persistActivity(userId, ActivityType.RUNNING, 100.0, 500.0, outside, "old run");
+        persistActivity(userId, ActivityType.RUNNING, 300.0, 1000.0, inside1, "run");
+        persistActivity(userId, ActivityType.CYCLING, 600.0, 2000.0, inside2, "ride");
 
         // Aggregate without time range
         ActivityAggregationMap actualAllTimeAggregationMap = adapter.aggregateForUser(userId);

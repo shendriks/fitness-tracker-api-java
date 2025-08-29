@@ -16,14 +16,14 @@ public record ActivityCreateRequestDTO(
     @Schema(implementation = ActivityType.class)
     String activityType,
     @Min(0)
-    int duration,
+    Double duration,
+    @Min(0)
+    Double distance,
     @Min(0)
     int calories,
     @NotBlank
     String title,
     String description,
-    @Min(0)
-    int distance,
     Instant startDate
 ) {
 }

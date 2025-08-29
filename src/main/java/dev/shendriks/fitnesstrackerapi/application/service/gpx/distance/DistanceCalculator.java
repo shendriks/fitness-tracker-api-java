@@ -1,7 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx.distance;
 
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import io.jenetics.jpx.WayPoint;
 
 public interface DistanceCalculator {
-    double calculateDistance(WayPoint p1, WayPoint p2);
+    Distance calculateDistance(WayPoint p1, WayPoint p2);
 }

@@ -8,11 +8,11 @@ import java.time.Instant;
 @Builder
 public record ActivityCreationData(
     ActivityType activityType,
-    int duration,
+    Duration duration,
+    Distance distance,
     int calories,
     String title,
     String description,
-    int distance,
     Instant startDate
 ) {
 }

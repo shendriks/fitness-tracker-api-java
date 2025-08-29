@@ -41,21 +41,21 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         ActivityCreationData activityCreationData1 = ActivityCreationData
             .builder()
             .activityType(ActivityType.RUNNING)
-            .duration(1800)
+            .duration(Duration.ofSeconds(1800.0))
+            .distance(Distance.ofMeters(10000.0))
             .calories(500)
             .title("Morning Run")
             .description("Nice run")
-            .distance(10000)
             .startDate(Instant.parse("2025-08-20T06:00:00Z"))
             .build();
         ActivityCreationData activityCreationData2 = ActivityCreationData
             .builder()
             .activityType(ActivityType.CYCLING)
-            .duration(3600)
+            .duration(Duration.ofSeconds(3600.0))
+            .distance(Distance.ofMeters(25000.0))
             .calories(800)
             .title("Evening Ride")
             .description("Chill ride")
-            .distance(25000)
             .startDate(Instant.parse("2025-08-21T18:30:00Z"))
             .build();
 
@@ -90,11 +90,11 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         ActivityCreationData create = ActivityCreationData
             .builder()
             .activityType(ActivityType.WALKING)
-            .duration(900)
+            .duration(Duration.ofSeconds(900.0))
+            .distance(Distance.ofMeters(1200.0))
             .calories(100)
             .title("Short Walk")
             .description("To the park")
-            .distance(1200)
             .startDate(Instant.parse("2025-08-22T09:00:00Z"))
             .build();
 
@@ -102,8 +102,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
 
         assertInstanceOf(ActivityId.class, actualActivity.id());
         assertInstanceOf(ActivityUlid.class, actualActivity.ulid());
-        assertEquals(900, actualActivity.duration());
-        assertEquals(1200, actualActivity.distance());
+        assertEquals(900.0, actualActivity.duration().toSeconds(), Constant.EPSILON);
+        assertEquals(1200.0, actualActivity.distance().toMeters(), Constant.EPSILON);
         assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualActivity.startDate());
         assertEquals(ActivityType.WALKING, actualActivity.activityType());
         assertEquals("Short Walk", actualActivity.title());
@@ -133,8 +133,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         assertEquals(ActivityType.SWIMMING, actualUpdatedActivity.activityType());
         assertEquals("Swim Session", actualUpdatedActivity.title());
         assertEquals("Pool laps", actualUpdatedActivity.description());
-        assertEquals(900.0, actualUpdatedActivity.duration());
-        assertEquals(1200.0, actualUpdatedActivity.distance());
+        assertEquals(900.0, actualUpdatedActivity.duration().toSeconds(), Constant.EPSILON);
+        assertEquals(1200.0, actualUpdatedActivity.distance().toMeters(), Constant.EPSILON);
         assertEquals(Instant.parse("2025-08-22T09:00:00Z"), actualUpdatedActivity.startDate());
 
         ActivityDbEntity actualActivityDbEntity = entityManager.find(ActivityDbEntity.class, actualUpdatedActivity.id().value());
@@ -167,13 +167,13 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .builder()
             .name("Trail Run")
             .gpxTime(Optional.of(Instant.parse("2025-08-23T10:00:00Z")))
-            .distance(1234.56)
-            .duration(789)
-            .speed(0)
-            .pace(0)
-            .elevationGain(0)
-            .motionTime(0)
-            .pausingTime(0)
+            .distance(Distance.ofMeters(1234.56))
+            .duration(Duration.ofSeconds(789.0))
+            .speed(Speed.zero())
+            .pace(Pace.zero())
+            .elevationGain(Distance.zero())
+            .motionTime(Duration.zero())
+            .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .kilometerPaces(List.of())
             .gpsPositions(List.of(
@@ -185,8 +185,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         Activity actualSavedActivity = adapter.saveForUser(userId, upload, gps);
 
         assertNotNull(actualSavedActivity.id());
-        assertEquals(789.0, actualSavedActivity.duration(), Constant.EPSILON);
-        assertEquals(1234.56, actualSavedActivity.distance(), Constant.EPSILON);
+        assertEquals(789.0, actualSavedActivity.duration().toSeconds(), Constant.EPSILON);
+        assertEquals(1234.56, actualSavedActivity.distance().toMeters(), Constant.EPSILON);
         assertEquals("Trail Run", actualSavedActivity.title());
         assertEquals("Through the woods", actualSavedActivity.description());
         assertEquals(2, actualSavedActivity.gpsPositions().size(), "Expected two GPS positions");

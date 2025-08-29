@@ -2,23 +2,28 @@ package dev.shendriks.fitnesstrackerapi.domain.value;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Distance {
-    private final double distanceInMeters;
+    @EqualsAndHashCode.Include
+    private Double distanceInMeters;
 
-    private Distance(double distanceInMeters) {
+    private Distance(Double distanceInMeters) {
         this.distanceInMeters = distanceInMeters;
     }
 
     public static Distance zero() {
-        return new Distance(0);
+        return new Distance(0.0);
     }
 
-    public static Distance ofMeters(double distance) {
+    public static Distance ofMeters(Double distance) {
         return new Distance(distance);
     }
 
-    public double toMeters() {
+    public Double toMeters() {
         return distanceInMeters;
+    }
+
+    public void add(Distance distance) {
+        distanceInMeters += distance.distanceInMeters;
     }
 }

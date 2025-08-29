@@ -2,23 +2,28 @@ package dev.shendriks.fitnesstrackerapi.domain.value;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Duration {
-    private final double durationInSeconds;
+    @EqualsAndHashCode.Include
+    private Double durationInSeconds;
 
-    private Duration(double durationInSeconds) {
+    private Duration(Double durationInSeconds) {
         this.durationInSeconds = durationInSeconds;
     }
 
     public static Duration zero() {
-        return new Duration(0);
+        return new Duration(0.0);
     }
 
-    public static Duration ofSeconds(double duration) {
+    public static Duration ofSeconds(Double duration) {
         return new Duration(duration);
     }
 
-    public double toSeconds() {
+    public Double toSeconds() {
         return durationInSeconds;
+    }
+
+    public void add(Duration duration) {
+        this.durationInSeconds += duration.durationInSeconds;
     }
 }

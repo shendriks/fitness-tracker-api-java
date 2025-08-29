@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.application.service;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,15 +92,28 @@ class GpxServiceIntegrationTest {
         assertEquals(60.0, positions.get(1).altitude().get());
 
         // Basic metric sanity checks with tolerances
-        assertTrue(actualGPSTrackData.distance() > 900 && actualGPSTrackData.distance() < 1100, "Expected distance around 1km");
-        assertEquals(100L, actualGPSTrackData.duration(), "Expected duration 100s");
-        assertTrue(actualGPSTrackData.speed() > 9 && actualGPSTrackData.speed() < 12, "Expected speed around ~10 m/s for ~1km/100s");
-        assertTrue(actualGPSTrackData.pace() > 80 && actualGPSTrackData.pace() < 120, "Expected pace around ~100 s/km");
-        assertTrue(actualGPSTrackData.elevationGain() >= 10.0 - 0.001 && actualGPSTrackData.elevationGain() <= 10.0 + 0.001, "Expected elevation gain 10m");
+        assertTrue(
+            actualGPSTrackData.distance().toMeters() > 900
+                && actualGPSTrackData.distance().toMeters() < 1100,
+            "Expected distance around 1km"
+        );
+        assertEquals(100.0, actualGPSTrackData.duration().toSeconds(), Constant.EPSILON, "Expected duration 100s");
+        assertTrue(
+            actualGPSTrackData.speed().toMetersPerSecond() > 9
+                && actualGPSTrackData.speed().toMetersPerSecond() < 12,
+            "Expected speed around ~10 m/s for ~1km/100s");
+        assertTrue(
+            actualGPSTrackData.pace().toSecondsPerKilometer() > 80
+                && actualGPSTrackData.pace().toSecondsPerKilometer() < 120,
+            "Expected pace around ~100 s/km");
+        assertTrue(
+            actualGPSTrackData.elevationGain().toMeters() >= 10.0 - 0.001
+                && actualGPSTrackData.elevationGain().toMeters() <= 10.0 + 0.001,
+            "Expected elevation gain 10m");
 
         // Motion/pausing time depends on speed threshold in calculator; with ~10 m/s it should be all motion
-        assertEquals(100L, actualGPSTrackData.motionTime(), "Expected motion time 100s");
-        assertEquals(0L, actualGPSTrackData.pausingTime(), "Expected pausing time 0s");
+        assertEquals(100.0, actualGPSTrackData.motionTime().toSeconds(), Constant.EPSILON, "Expected motion time 100s");
+        assertEquals(0.0, actualGPSTrackData.pausingTime().toSeconds(), Constant.EPSILON, "Expected pausing time 0s");
 
         // Kilometer metrics: for ~1km segment we expect at least one entry
         assertFalse(actualGPSTrackData.kilometerSpeeds().isEmpty(), "Expected at least one kilometer speed entry");
@@ -129,13 +143,18 @@ class GpxServiceIntegrationTest {
         assertTrue(positions.get(1).altitude().isEmpty(), "Expected no altitude for second position");
 
         // Sanity metrics: small distance, 300 seconds duration
-        assertTrue(actualGPSTrackData.distance() > 0, "Expected distance > 0m");
-        assertEquals(300L, actualGPSTrackData.duration(), "Expected duration 300s");
-        assertTrue(actualGPSTrackData.speed() >= 0, "Expected speed >= 0m/s");
-        assertTrue(actualGPSTrackData.pace() >= 0, "Expected pace >= 0s/km");
+        assertTrue(actualGPSTrackData.distance().toMeters() > 0, "Expected distance > 0m");
+        assertEquals(300.0, actualGPSTrackData.duration().toSeconds(), Constant.EPSILON, "Expected duration 300s");
+        assertTrue(actualGPSTrackData.speed().toMetersPerSecond() >= 0, "Expected speed >= 0m/s");
+        assertTrue(actualGPSTrackData.pace().toSecondsPerKilometer() >= 0, "Expected pace >= 0s/km");
         // No elevation tags -> elevation gain should be 0
-        assertEquals(0.0, actualGPSTrackData.elevationGain(), "Expected elevation gain 0m");
+        assertEquals(0.0, actualGPSTrackData.elevationGain().toMeters(), Constant.EPSILON, "Expected elevation gain 0m");
         // With small movement but above threshold between timed points, should count as motion
-        assertEquals(300L, actualGPSTrackData.motionTime() + actualGPSTrackData.pausingTime(), "Expected motion time + pausing time == duration");
+        assertEquals(
+            300.0,
+            actualGPSTrackData.motionTime().toSeconds() + actualGPSTrackData.pausingTime().toSeconds(),
+            Constant.EPSILON,
+            "Expected motion time + pausing time == duration"
+        );
     }
 }

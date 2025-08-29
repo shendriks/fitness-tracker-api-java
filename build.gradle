@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket:3.5.5'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.5'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.5.5'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
     implementation 'com.auth0:java-jwt:4.5.0'
@@ -59,7 +59,7 @@ dependencies {
 
 jacoco {
     toolVersion = '0.8.13'
-    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+//    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
 
 //compileJava {
@@ -94,7 +94,8 @@ jacocoTestReport {
     reports {
         xml.required = false
         csv.required = true
-        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        html.outputLocation = layout.buildDirectory.dir('jacoco/report/html')
+        csv.outputLocation = layout.buildDirectory.file('jacoco/report/csv/jacocoTestReport.csv')
     }
     getExecutionData().setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
 }

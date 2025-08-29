@@ -25,8 +25,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,8 +58,8 @@ class GetActivityControllerTest {
         ActivityDbEntity activity = ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(1800))
-            .distance(Distance.ofMeters(10_000))
+            .duration(Duration.ofSeconds(1800.0))
+            .distance(Distance.ofMeters(10000.0))
             .calories(500)
             .title("Morning Run")
             .description("Nice run")
@@ -95,8 +94,10 @@ class GetActivityControllerTest {
         });
         assertEquals(activity.getUlid(), detail.get("id"));
         assertEquals("Morning Run", detail.get("title"));
-        assertEquals(1800, detail.get("duration"));
-        assertEquals(10000, detail.get("distance"));
+        assertInstanceOf(Double.class, detail.get("duration"));
+        assertInstanceOf(Double.class, detail.get("distance"));
+        assertEquals(1800.0, (Double) detail.get("duration"), Constant.EPSILON);
+        assertEquals(10000.0, (Double) detail.get("distance"), Constant.EPSILON);
 
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> gps = (List<Map<String, Object>>) detail.get("gpsPositions");
@@ -135,8 +136,8 @@ class GetActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(3600))
-            .distance(Distance.ofMeters(25000))
+            .duration(Duration.ofSeconds(3600.0))
+            .distance(Distance.ofMeters(25000.0))
             .calories(800)
             .title("Other User Ride")
             .description("Not yours")

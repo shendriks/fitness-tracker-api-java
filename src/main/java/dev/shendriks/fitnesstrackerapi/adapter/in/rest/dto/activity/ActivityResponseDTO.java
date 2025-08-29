@@ -7,13 +7,13 @@ import java.time.Instant;
 public record ActivityResponseDTO(
     String id,
     ActivityType activityType,
-    int duration,
+    Double duration,
+    Double distance,
     int calories,
     Instant createdAt,
     Instant updatedAt,
     String title,
     String description,
-    int distance,
     Instant startDate
 ) {
 }

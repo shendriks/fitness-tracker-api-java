@@ -125,10 +125,10 @@ class ActivityAggregationMapperTest {
         List<ActivityTypeAggregationDbProjection> byTypeProjections = List.of(
             new ActivityTypeAggregationDbProjection(
                 ActivityType.RUNNING,//.getValue(), 
-                6L, 
-                18000.0, 
-                5000.0, 
-                7000.0, 
+                6L,
+                18000.0,
+                5000.0,
+                7000.0,
                 2000.0
             ),
 //                .builder()
@@ -163,10 +163,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(10L)
-                .totalDistance(Distance.ofMeters(50000L))
-                .totalDuration(Duration.ofSeconds(10000L))
-                .maxDistance(Distance.ofMeters(20000L))
-                .maxDuration(Duration.ofSeconds(4000L))
+                .totalDistance(Distance.ofMeters(50000.0))
+                .totalDuration(Duration.ofSeconds(10000.0))
+                .maxDistance(Distance.ofMeters(20000.0))
+                .maxDuration(Duration.ofSeconds(4000.0))
                 .build(),
             actualActivityAggregationMap.getTotal()
         );
@@ -174,10 +174,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(6L)
-                .totalDistance(Distance.ofMeters(18000L))
-                .totalDuration(Duration.ofSeconds(5000L))
-                .maxDistance(Distance.ofMeters(7000L))
-                .maxDuration(Duration.ofSeconds(2000L))
+                .totalDistance(Distance.ofMeters(18000.0))
+                .totalDuration(Duration.ofSeconds(5000.0))
+                .maxDistance(Distance.ofMeters(7000.0))
+                .maxDuration(Duration.ofSeconds(2000.0))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.RUNNING)
         );
@@ -185,10 +185,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(4L)
-                .totalDistance(Distance.ofMeters(32000L))
-                .totalDuration(Duration.ofSeconds(5000L))
-                .maxDistance(Distance.ofMeters(20000L))
-                .maxDuration(Duration.ofSeconds(2500L))
+                .totalDistance(Distance.ofMeters(32000.0))
+                .totalDuration(Duration.ofSeconds(5000.0))
+                .maxDistance(Distance.ofMeters(20000.0))
+                .maxDuration(Duration.ofSeconds(2500.0))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.CYCLING)
         );

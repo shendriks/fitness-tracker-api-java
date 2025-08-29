@@ -4,6 +4,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.*;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.mock.web.MockMultipartFile;
@@ -26,13 +27,13 @@ class ActivityDTOMapperTest {
             .id(new ActivityId(1L))
             .ulid(new ActivityUlid(ulid))
             .activityType(ActivityType.MOUNTAIN_BIKING)
-            .duration(7200)
+            .duration(Duration.ofSeconds(7200.0))
+            .distance(Distance.ofMeters(12345.0))
             .calories(1200)
             .createdAt(Instant.parse("2025-08-22T00:00:00Z"))
             .updatedAt(Instant.parse("2025-08-22T00:00:00Z"))
             .title("Sample Title")
             .description("Sample Description")
-            .distance(12345)
             .startDate(Instant.parse("2025-08-22T00:00:00Z"))
             .gpsPositions(positions)
             .build();
@@ -47,13 +48,13 @@ class ActivityDTOMapperTest {
         assertNotNull(dto);
         assertEquals("TESTULID000000000000000000", dto.id());
         assertEquals(activity.activityType(), dto.activityType());
-        assertEquals(activity.duration(), dto.duration());
+        assertEquals(activity.duration().toSeconds(), dto.duration(), Constant.EPSILON);
+        assertEquals(activity.distance().toMeters(), dto.distance(), Constant.EPSILON);
         assertEquals(activity.calories(), dto.calories());
         assertEquals(activity.createdAt(), dto.createdAt());
         assertEquals(activity.updatedAt(), dto.updatedAt());
         assertEquals(activity.title(), dto.title());
         assertEquals(activity.description(), dto.description());
-        assertEquals(activity.distance(), dto.distance());
         assertEquals(activity.startDate(), dto.startDate());
     }
 
@@ -110,11 +111,11 @@ class ActivityDTOMapperTest {
         ActivityCreateRequestDTO request = ActivityCreateRequestDTO
             .builder()
             .activityType("running")
-            .duration(3600)
+            .duration(3600.0)
+            .distance(10000.0)
             .calories(900)
             .title("Morning Run")
             .description("Nice run")
-            .distance(10000)
             .startDate(Instant.parse("2024-05-10T06:00:00Z"))
             .build();
 
@@ -122,11 +123,11 @@ class ActivityDTOMapperTest {
 
         assertNotNull(activityCreationData);
         assertEquals(ActivityType.RUNNING, activityCreationData.activityType());
-        assertEquals(3600, activityCreationData.duration());
+        assertEquals(3600.0, activityCreationData.duration().toSeconds(), Constant.EPSILON);
+        assertEquals(10000.0, activityCreationData.distance().toMeters(), Constant.EPSILON);
         assertEquals(900, activityCreationData.calories());
         assertEquals("Morning Run", activityCreationData.title());
         assertEquals("Nice run", activityCreationData.description());
-        assertEquals(10000, activityCreationData.distance());
         assertEquals(Instant.parse("2024-05-10T06:00:00Z"), activityCreationData.startDate());
     }
 
