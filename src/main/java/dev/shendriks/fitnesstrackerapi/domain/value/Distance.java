@@ -2,9 +2,8 @@ package dev.shendriks.fitnesstrackerapi.domain.value;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 public class Distance {
-    @EqualsAndHashCode.Include
     private Double distanceInMeters;
 
     private Distance(Double distanceInMeters) {
@@ -25,5 +24,9 @@ public class Distance {
 
     public void add(Distance distance) {
         distanceInMeters += distance.distanceInMeters;
+    }
+
+    public void addMeters(Double distance) {
+        distanceInMeters += distance;
     }
 }

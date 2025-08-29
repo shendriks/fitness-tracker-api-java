@@ -2,9 +2,8 @@ package dev.shendriks.fitnesstrackerapi.domain.value;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 public class Duration {
-    @EqualsAndHashCode.Include
     private Double durationInSeconds;
 
     private Duration(Double durationInSeconds) {

@@ -61,7 +61,7 @@ public class GpxMetricsCalculator {
             Double elevation1 = nonEmptyElevations.get(i - 1);
             Double elevation2 = nonEmptyElevations.get(i);
             double elevationDiff = elevation2 - elevation1;
-            elevationGain.add(Distance.ofMeters(elevationDiff > 0 ? elevationDiff : 0.0));
+            elevationGain.addMeters(elevationDiff > 0 ? elevationDiff : 0.0);
         }
 
         return elevationGain;
