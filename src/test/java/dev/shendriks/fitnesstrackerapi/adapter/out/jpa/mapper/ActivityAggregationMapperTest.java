@@ -50,12 +50,12 @@ class ActivityAggregationMapperTest {
     void toActivityTypeAggregations_mapsList() {
         List<ActivityTypeAggregationDbProjection> projections = List.of(
             new ActivityTypeAggregationDbProjection(
-                ActivityType.RUNNING.getValue(),
+                ActivityType.RUNNING,//.getValue(),
                 3L,
                 9000.0,
                 3600.0,
                 5000.0,
-                1800.00
+                1800.0
             ),
 //                .builder()
 //                .type(ActivityType.RUNNING)
@@ -66,7 +66,7 @@ class ActivityAggregationMapperTest {
 //                .maxDuration(Duration.ofSeconds(1800.0))
 //                .build(),
             new ActivityTypeAggregationDbProjection(
-                ActivityType.CYCLING.getValue(),
+                ActivityType.CYCLING,//.getValue(),
                 2L,
                 20000.0,
                 4000.0,
@@ -124,7 +124,12 @@ class ActivityAggregationMapperTest {
 //            .build();
         List<ActivityTypeAggregationDbProjection> byTypeProjections = List.of(
             new ActivityTypeAggregationDbProjection(
-                ActivityType.RUNNING.getValue(), 6L, 18000.0, 5000.0, 7000.0, 2000.0
+                ActivityType.RUNNING,//.getValue(), 
+                6L, 
+                18000.0, 
+                5000.0, 
+                7000.0, 
+                2000.0
             ),
 //                .builder()
 //                .type(ActivityType.RUNNING)
@@ -135,7 +140,7 @@ class ActivityAggregationMapperTest {
 //                .maxDuration(Duration.ofSeconds(2000L))
 //                .build(),
             new ActivityTypeAggregationDbProjection(
-                ActivityType.CYCLING.getValue(),
+                ActivityType.CYCLING,//.getValue(),
                 4L,
                 32000.0,
                 5000.0,

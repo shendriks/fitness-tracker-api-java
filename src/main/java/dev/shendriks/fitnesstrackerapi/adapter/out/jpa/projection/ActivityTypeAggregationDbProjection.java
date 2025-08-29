@@ -17,14 +17,14 @@ public class ActivityTypeAggregationDbProjection {
     Duration maxDuration;
 
     public ActivityTypeAggregationDbProjection(
-        String type,
+        ActivityType type,
         Long count,
         Double totalDistance,
         Double totalDuration,
         Double maxDistance,
         Double maxDuration
     ) {
-        this.type = ActivityType.fromString(type);
+        this.type = type;
         this.count = count;
         this.totalDistance = Distance.ofMeters(totalDistance);
         this.totalDuration = Duration.ofSeconds(totalDuration);
