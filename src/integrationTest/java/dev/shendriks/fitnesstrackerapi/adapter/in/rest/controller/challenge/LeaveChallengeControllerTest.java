@@ -81,7 +81,7 @@ class LeaveChallengeControllerTest {
             .challenge(challenge)
             .percentageCompleted(0)
             .build());
-        
+
         Optional<ChallengeParticipationDbEntity> afterJoin = participationRepository.findByUserIdAndChallengeUlid(user.getId(), challenge.getUlid());
         assertTrue(afterJoin.isPresent(), "Expected participation to be present after joining");
 

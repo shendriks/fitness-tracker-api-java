@@ -14,13 +14,13 @@ public record Activity(
     ActivityId id,
     ActivityUlid ulid,
     ActivityType activityType,
-    int duration,
+    double duration,
     int calories,
+    double distance,
     Instant createdAt,
     Instant updatedAt,
     String title,
     String description,
-    int distance,
     Instant startDate,
     List<GPSPosition> gpsPositions
 ) {

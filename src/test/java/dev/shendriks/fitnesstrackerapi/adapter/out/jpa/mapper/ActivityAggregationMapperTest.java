@@ -3,9 +3,8 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection.ActivityAggregationDbProjection;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.projection.ActivityTypeAggregationDbProjection;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregation;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregationMap;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityTypeAggregation;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -18,46 +17,70 @@ class ActivityAggregationMapperTest {
 
     @Test
     void toActivityAggregation_mapsAllFields() {
-        ActivityAggregationDbProjection projection = ActivityAggregationDbProjection
-            .builder()
-            .count(5L)
-            .totalDistance(12345L)
-            .totalDuration(6789L)
-            .maxDistance(4000L)
-            .maxDuration(3600L)
-            .build();
+        ActivityAggregationDbProjection projection = new ActivityAggregationDbProjection(
+            5L,
+            12345.0,
+            6789.0,
+//            new BigDecimal("12345.0"), 
+//            new BigDecimal("6789.0"),
+            4000.0,
+            3600.0
+//            new BigDecimal("4000.0"),
+//            new BigDecimal("3600.0")
+        );
+//            .builder()
+//            .count(5L)
+//            .totalDistance(Distance.ofMeters(12345.0))
+//            .totalDuration(Duration.ofSeconds(6789.0))
+//            .maxDistance(Distance.ofMeters(4000.0))
+//            .maxDuration(Duration.ofSeconds(3600.0))
+//            .build();
 
         ActivityAggregation actualAggregation = mapper.toActivityAggregation(projection);
 
         assertNotNull(actualAggregation);
         assertEquals(5L, actualAggregation.count());
-        assertEquals(12345L, actualAggregation.totalDistance());
-        assertEquals(6789L, actualAggregation.totalDuration());
-        assertEquals(4000L, actualAggregation.maxDistance());
-        assertEquals(3600L, actualAggregation.maxDuration());
+        assertEquals(12345.0, actualAggregation.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(6789.0, actualAggregation.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(4000.0, actualAggregation.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(3600.0, actualAggregation.maxDuration().toSeconds(), Constant.EPSILON);
     }
 
     @Test
     void toActivityTypeAggregations_mapsList() {
         List<ActivityTypeAggregationDbProjection> projections = List.of(
-            ActivityTypeAggregationDbProjection
-                .builder()
-                .type(ActivityType.RUNNING)
-                .count(3L)
-                .totalDistance(9000L)
-                .totalDuration(3600L)
-                .maxDistance(5000L)
-                .maxDuration(1800L)
-                .build(),
-            ActivityTypeAggregationDbProjection
-                .builder()
-                .type(ActivityType.CYCLING)
-                .count(2L)
-                .totalDistance(20000L)
-                .totalDuration(4000L)
-                .maxDistance(15000L)
-                .maxDuration(2500L)
-                .build()
+            new ActivityTypeAggregationDbProjection(
+                ActivityType.RUNNING.getValue(),
+                3L,
+                9000.0,
+                3600.0,
+                5000.0,
+                1800.00
+            ),
+//                .builder()
+//                .type(ActivityType.RUNNING)
+//                .count(3L)
+//                .totalDistance(Distance.ofMeters(9000.0))
+//                .totalDuration(Duration.ofSeconds(3600.0))
+//                .maxDistance(Distance.ofMeters(5000.0))
+//                .maxDuration(Duration.ofSeconds(1800.0))
+//                .build(),
+            new ActivityTypeAggregationDbProjection(
+                ActivityType.CYCLING.getValue(),
+                2L,
+                20000.0,
+                4000.0,
+                15000.0,
+                2500.0
+            )
+//                .builder()
+//                .type(ActivityType.CYCLING)
+//                .count(2L)
+//                .totalDistance(Distance.ofMeters(20000.0))
+//                .totalDuration(Duration.ofSeconds(4000.0))
+//                .maxDistance(Distance.ofMeters(15000.0))
+//                .maxDuration(Duration.ofSeconds(2500.0))
+//                .build()
         );
 
         List<ActivityTypeAggregation> actualTypeAggregation = mapper.toActivityTypeAggregations(projections);
@@ -67,47 +90,66 @@ class ActivityAggregationMapperTest {
         ActivityTypeAggregation cyclingAggregation = actualTypeAggregation.get(1);
         assertEquals(ActivityType.RUNNING, runningAggregation.type());
         assertEquals(3L, runningAggregation.count());
-        assertEquals(9000L, runningAggregation.totalDistance());
-        assertEquals(3600L, runningAggregation.totalDuration());
-        assertEquals(5000L, runningAggregation.maxDistance());
-        assertEquals(1800L, runningAggregation.maxDuration());
+        assertEquals(9000.0, runningAggregation.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(3600.0, runningAggregation.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(5000.0, runningAggregation.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(1800.0, runningAggregation.maxDuration().toSeconds(), Constant.EPSILON);
         assertEquals(ActivityType.CYCLING, cyclingAggregation.type());
         assertEquals(2L, cyclingAggregation.count());
-        assertEquals(20000L, cyclingAggregation.totalDistance());
-        assertEquals(4000L, cyclingAggregation.totalDuration());
-        assertEquals(15000L, cyclingAggregation.maxDistance());
-        assertEquals(2500L, cyclingAggregation.maxDuration());
+        assertEquals(20000.0, cyclingAggregation.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(4000.0, cyclingAggregation.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(15000.0, cyclingAggregation.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(2500.0, cyclingAggregation.maxDuration().toSeconds(), Constant.EPSILON);
     }
 
     @Test
     void toActivityAggregationMap_combinesAndPadsMissingTypes() {
-        ActivityAggregationDbProjection total = ActivityAggregationDbProjection
-            .builder()
-            .count(10L)
-            .totalDistance(50000L)
-            .totalDuration(10000L)
-            .maxDistance(20000L)
-            .maxDuration(4000L)
-            .build();
+        ActivityAggregationDbProjection total = new ActivityAggregationDbProjection(
+            10L,
+            50000.0,
+            10000.0,
+//            new BigDecimal("50000.0"),
+//            new BigDecimal("10000.0"),
+            20000.0,
+            4000.0
+//            new BigDecimal("20000.0"),
+//            new BigDecimal("4000.0")
+        );
+//            .builder()
+//            .count(10L)
+//            .totalDistance(Distance.ofMeters(50000L))
+//            .totalDuration(Duration.ofSeconds(10000L))
+//            .maxDistance(Distance.ofMeters(20000L))
+//            .maxDuration(Duration.ofSeconds(4000L))
+//            .build();
         List<ActivityTypeAggregationDbProjection> byTypeProjections = List.of(
-            ActivityTypeAggregationDbProjection
-                .builder()
-                .type(ActivityType.RUNNING)
-                .count(6L)
-                .totalDistance(18000L)
-                .totalDuration(5000L)
-                .maxDistance(7000L)
-                .maxDuration(2000L)
-                .build(),
-            ActivityTypeAggregationDbProjection
-                .builder()
-                .type(ActivityType.CYCLING)
-                .count(4L)
-                .totalDistance(32000L)
-                .totalDuration(5000L)
-                .maxDistance(20000L)
-                .maxDuration(2500L)
-                .build()
+            new ActivityTypeAggregationDbProjection(
+                ActivityType.RUNNING.getValue(), 6L, 18000.0, 5000.0, 7000.0, 2000.0
+            ),
+//                .builder()
+//                .type(ActivityType.RUNNING)
+//                .count(6L)
+//                .totalDistance(Distance.ofMeters(18000L))
+//                .totalDuration(Duration.ofSeconds(5000L))
+//                .maxDistance(Distance.ofMeters(7000L))
+//                .maxDuration(Duration.ofSeconds(2000L))
+//                .build(),
+            new ActivityTypeAggregationDbProjection(
+                ActivityType.CYCLING.getValue(),
+                4L,
+                32000.0,
+                5000.0,
+                20000.0,
+                2500.0
+            )
+//                .builder()
+//                .type(ActivityType.CYCLING)
+//                .count(4L)
+//                .totalDistance(Distance.ofMeters(32000L))
+//                .totalDuration(Duration.ofSeconds(5000L))
+//                .maxDistance(Distance.ofMeters(20000L))
+//                .maxDuration(Duration.ofSeconds(2500L))
+//                .build()
         );
 
         ActivityAggregationMap actualActivityAggregationMap = mapper.toActivityAggregationMap(total, byTypeProjections);
@@ -116,10 +158,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(10L)
-                .totalDistance(50000L)
-                .totalDuration(10000L)
-                .maxDistance(20000L)
-                .maxDuration(4000L)
+                .totalDistance(Distance.ofMeters(50000L))
+                .totalDuration(Duration.ofSeconds(10000L))
+                .maxDistance(Distance.ofMeters(20000L))
+                .maxDuration(Duration.ofSeconds(4000L))
                 .build(),
             actualActivityAggregationMap.getTotal()
         );
@@ -127,10 +169,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(6L)
-                .totalDistance(18000L)
-                .totalDuration(5000L)
-                .maxDistance(7000L)
-                .maxDuration(2000L)
+                .totalDistance(Distance.ofMeters(18000L))
+                .totalDuration(Duration.ofSeconds(5000L))
+                .maxDistance(Distance.ofMeters(7000L))
+                .maxDuration(Duration.ofSeconds(2000L))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.RUNNING)
         );
@@ -138,10 +180,10 @@ class ActivityAggregationMapperTest {
             ActivityAggregation
                 .builder()
                 .count(4L)
-                .totalDistance(32000L)
-                .totalDuration(5000L)
-                .maxDistance(20000L)
-                .maxDuration(2500L)
+                .totalDistance(Distance.ofMeters(32000L))
+                .totalDuration(Duration.ofSeconds(5000L))
+                .maxDistance(Distance.ofMeters(20000L))
+                .maxDuration(Duration.ofSeconds(2500L))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.CYCLING)
         );

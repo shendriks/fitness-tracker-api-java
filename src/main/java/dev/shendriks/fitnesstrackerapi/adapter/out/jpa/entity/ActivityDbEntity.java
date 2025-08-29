@@ -1,7 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DistanceConverter;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DurationConverter;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,8 +35,14 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityType activityType;
+    //    @Type(value = DurationType.class)
+    @Convert(converter = DurationConverter.class)
     @Column(nullable = false)
-    private int duration;
+    private Duration duration;
+    //    @Type(value = DistanceType.class)
+    @Convert(converter = DistanceConverter.class)
+    @Column(nullable = false)
+    private Distance distance;
     @Column(nullable = false)
     private int calories;
     @CreationTimestamp
@@ -42,7 +52,12 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     private Instant updatedAt;
     @Builder.Default
-    @OneToMany(mappedBy = "activity", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "activity",
+        orphanRemoval = true,
+        cascade = CascadeType.PERSIST,
+        fetch = FetchType.LAZY
+    )
     private List<GPSPositionDbEntity> gpsPositions = List.of();
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -53,7 +68,6 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private int distance;
-    @Column(nullable = false)
     private Instant startDate;
 }
+

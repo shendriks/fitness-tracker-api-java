@@ -9,6 +9,8 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,21 +57,21 @@ class GetActivitiesControllerTest {
         ActivityDbEntity a1 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(1800)
+            .duration(Duration.ofSeconds(1800))
+            .distance(Distance.ofMeters(10000))
             .calories(500)
             .title("Morning Run")
             .description("Nice run")
-            .distance(10000)
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
             .build());
         ActivityDbEntity a2 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.CYCLING)
-            .duration(3600)
+            .duration(Duration.ofSeconds(3600))
+            .distance(Distance.ofMeters(25000))
             .calories(800)
             .title("Evening Ride")
             .description("Chill ride")
-            .distance(25000)
             .startDate(Instant.parse("2025-08-22T18:30:00Z"))
             .build());
 
@@ -102,11 +104,11 @@ class GetActivitiesControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(1200)
+            .duration(Duration.ofSeconds(1200))
+            .distance(Distance.ofMeters(3000))
             .calories(300)
             .title("Seeded User Activity")
             .description("Run")
-            .distance(3000)
             .startDate(Instant.parse("2025-08-22T07:00:00Z"))
             .build());
 
@@ -121,11 +123,11 @@ class GetActivitiesControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.WALKING)
-            .duration(600)
+            .duration(Duration.ofSeconds(600))
+            .distance(Distance.ofMeters(1000))
             .calories(100)
             .title("Other User Activity")
             .description("Walk")
-            .distance(1000)
             .startDate(Instant.parse("2025-08-22T08:00:00Z"))
             .build());
 

@@ -6,6 +6,7 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -33,13 +34,13 @@ class ActivityDbEntityMapperTest {
             .id(101L)
             .ulid("TESTULID000000000000000001")
             .activityType(ActivityType.CYCLING)
-            .duration(3600)
+            .duration(Duration.ofSeconds(3600))
+            .distance(Distance.ofMeters(25750))
             .calories(800)
             .createdAt(Instant.parse("2025-08-01T10:15:30Z"))
             .updatedAt(Instant.parse("2025-08-02T10:15:30Z"))
             .title("Morning Ride")
             .description("Sunny morning ride")
-            .distance(25750)
             .startDate(Instant.parse("2025-08-01T07:00:00Z"))
             .build();
         activityDbEntity.setGpsPositions(List.of(
@@ -89,11 +90,11 @@ class ActivityDbEntityMapperTest {
                 .id(1L)
                 .ulid("TESTULID000000000000000002")
                 .activityType(ActivityType.WALKING)
-                .duration(100)
+                .duration(Duration.ofSeconds(100))
+                .distance(Distance.ofMeters(123))
                 .calories(10)
                 .title("Walk")
                 .description("desc")
-                .distance(123)
                 .startDate(Instant.parse("2025-08-01T00:00:00Z"))
                 .build(),
             ActivityDbEntity
@@ -101,11 +102,11 @@ class ActivityDbEntityMapperTest {
                 .id(2L)
                 .ulid("TESTULID000000000000000003")
                 .activityType(ActivityType.SWIMMING)
-                .duration(200)
+                .duration(Duration.ofSeconds(200))
+                .distance(Distance.ofMeters(456))
                 .calories(20)
                 .title("Swim")
                 .description("desc")
-                .distance(456)
                 .startDate(Instant.parse("2025-08-02T00:00:00Z"))
                 .build()
         );
@@ -153,11 +154,11 @@ class ActivityDbEntityMapperTest {
         assertNotNull(actualActivityDbEntity);
         // mapped fields
         assertEquals(ActivityType.RUNNING, actualActivityDbEntity.getActivityType());
-        assertEquals(1234, actualActivityDbEntity.getDuration());
+        assertEquals(1234, actualActivityDbEntity.getDuration().toSeconds());
         assertEquals(567, actualActivityDbEntity.getCalories());
         assertEquals("Test Title", actualActivityDbEntity.getTitle());
         assertEquals("Test Description", actualActivityDbEntity.getDescription());
-        assertEquals(890, actualActivityDbEntity.getDistance());
+        assertEquals(890, actualActivityDbEntity.getDistance().toMeters());
         assertEquals(Instant.parse("2025-08-01T12:00:00Z"), actualActivityDbEntity.getStartDate());
         // ignored fields
         assertEquals(0L, actualActivityDbEntity.getId());
@@ -204,8 +205,8 @@ class ActivityDbEntityMapperTest {
         assertEquals("Trail Fun", actualActivityDbEntity.getTitle());
         assertEquals("Great ride", actualActivityDbEntity.getDescription());
         assertEquals(Instant.parse("2025-08-01T09:30:00Z"), actualActivityDbEntity.getStartDate());
-        assertEquals(5432, actualActivityDbEntity.getDuration());
-        assertEquals(12345, actualActivityDbEntity.getDistance());
+        assertEquals(5432.00, actualActivityDbEntity.getDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(12345.67, actualActivityDbEntity.getDistance().toMeters(), Constant.EPSILON);
         assertEquals(0, actualActivityDbEntity.getCalories());
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertEquals(2, actualActivityDbEntity.getGpsPositions().size());

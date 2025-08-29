@@ -22,10 +22,10 @@ class AchievementCompletionCalculatorTest {
         ActivityAggregation total = ActivityAggregation
             .builder()
             .count(15)
-            .totalDistance(15000)
-            .totalDuration(9000)
-            .maxDistance(10000)
-            .maxDuration(3600)
+            .totalDistance(Distance.ofMeters(15000))
+            .totalDuration(Duration.ofSeconds(9000))
+            .maxDistance(Distance.ofMeters(10000))
+            .maxDuration(Duration.ofSeconds(3600))
             .build();
 
         List<ActivityTypeAggregation> byType = List.of(
@@ -33,19 +33,19 @@ class AchievementCompletionCalculatorTest {
                 .builder()
                 .type(ActivityType.RUNNING)
                 .count(7)
-                .totalDistance(7000)
-                .totalDuration(4200)
-                .maxDistance(5000)
-                .maxDuration(2000)
+                .totalDistance(Distance.ofMeters(7000))
+                .totalDuration(Duration.ofSeconds(4200))
+                .maxDistance(Distance.ofMeters(5000))
+                .maxDuration(Duration.ofSeconds(2000))
                 .build(),
             ActivityTypeAggregation
                 .builder()
                 .type(ActivityType.CYCLING)
                 .count(8)
-                .totalDistance(8000)
-                .totalDuration(4800)
-                .maxDistance(10000)
-                .maxDuration(3600)
+                .totalDistance(Distance.ofMeters(8000))
+                .totalDuration(Duration.ofSeconds(4800))
+                .maxDistance(Distance.ofMeters(10000))
+                .maxDuration(Duration.ofSeconds(3600))
                 .build()
         );
 

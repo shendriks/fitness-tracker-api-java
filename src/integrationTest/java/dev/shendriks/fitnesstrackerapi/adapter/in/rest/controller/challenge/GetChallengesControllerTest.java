@@ -89,7 +89,7 @@ class GetChallengesControllerTest {
             .challenge(challengeDbEntity2)
             .percentageCompleted(0)
             .build());
-        
+
         String token = accessTokenHelper.getAccessToken(userUlid);
         String json = mvc.perform(get("/api/challenges")
                 .contentType(MediaType.APPLICATION_JSON)

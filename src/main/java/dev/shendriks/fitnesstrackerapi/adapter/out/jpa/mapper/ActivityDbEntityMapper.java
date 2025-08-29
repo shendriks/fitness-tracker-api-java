@@ -15,11 +15,17 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.SETTER)
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    injectionStrategy = InjectionStrategy.SETTER,
+    imports = {Distance.class, Duration.class}
+)
 public abstract class ActivityDbEntityMapper {
     @Setter(onMethod_ = {@Autowired})
     private Clock clock;
 
+    @Mapping(target = "duration", expression = "java(activityDbEntity.getDuration().toSeconds())")
+    @Mapping(target = "distance", expression = "java(activityDbEntity.getDistance().toMeters())")
     public abstract Activity toActivity(ActivityDbEntity activityDbEntity);
 
     public abstract List<Activity> toActivities(List<ActivityDbEntity> activityDbEntities);
@@ -31,6 +37,8 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "gpsPositions", ignore = true)
     @Mapping(target = "state", ignore = true)
+    @Mapping(target = "duration", expression = "java(Duration.ofSeconds(activityCreationData.duration()))")
+    @Mapping(target = "distance", expression = "java(Distance.ofMeters(activityCreationData.distance()))")
     public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData);
 
     public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData) {
@@ -39,8 +47,8 @@ public abstract class ActivityDbEntityMapper {
         activity.setTitle(request.title());
         activity.setDescription(request.description());
         activity.setStartDate(gpsTrackData.gpxTime().orElse(Instant.now(clock)));
-        activity.setDuration((int) gpsTrackData.duration());
-        activity.setDistance((int) gpsTrackData.distance());
+        activity.setDuration(Duration.ofSeconds(gpsTrackData.duration()));
+        activity.setDistance(Distance.ofMeters(gpsTrackData.distance()));
         activity.setCalories(0);
         activity.setGpsPositions(
             gpsTrackData

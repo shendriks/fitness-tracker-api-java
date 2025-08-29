@@ -3,9 +3,8 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregation;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregationMap;
-import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
@@ -37,11 +36,11 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
             .builder()
             .user(user)
             .activityType(type)
-            .duration(duration)
+            .duration(Duration.ofSeconds(duration))
+            .distance(Distance.ofMeters(distance))
             .calories(0)
             .title(title)
             .description(title + " desc")
-            .distance(distance)
             .startDate(startDate)
             .build();
         entityManager.persist(entity);
@@ -69,35 +68,35 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
 
         // Totals should reflect only in-range activities
         assertEquals(2L, totalInRange.count());
-        assertEquals(3000L, totalInRange.totalDistance());
-        assertEquals(900L, totalInRange.totalDuration());
-        assertEquals(2000L, totalInRange.maxDistance());
-        assertEquals(600L, totalInRange.maxDuration());
+        assertEquals(3000.0, totalInRange.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(900.0, totalInRange.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(2000.0, totalInRange.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, totalInRange.maxDuration().toSeconds(), Constant.EPSILON);
 
         // Per-type in-range
         ActivityAggregation runningInRange = actualActivityAggregationMap.getByType(ActivityType.RUNNING);
         assertEquals(1L, runningInRange.count());
-        assertEquals(1000L, runningInRange.totalDistance());
-        assertEquals(300L, runningInRange.totalDuration());
-        assertEquals(1000L, runningInRange.maxDistance());
-        assertEquals(300L, runningInRange.maxDuration());
+        assertEquals(1000.0, runningInRange.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(300.0, runningInRange.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(1000.0, runningInRange.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(300.0, runningInRange.maxDuration().toSeconds(), Constant.EPSILON);
 
         ActivityAggregation cyclingInRange = actualActivityAggregationMap.getByType(ActivityType.CYCLING);
         assertEquals(1L, cyclingInRange.count());
-        assertEquals(2000L, cyclingInRange.totalDistance());
-        assertEquals(600L, cyclingInRange.totalDuration());
-        assertEquals(2000L, cyclingInRange.maxDistance());
-        assertEquals(600L, cyclingInRange.maxDuration());
+        assertEquals(2000.0, cyclingInRange.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, cyclingInRange.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(2000.0, cyclingInRange.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, cyclingInRange.maxDuration().toSeconds(), Constant.EPSILON);
 
         // A type with no activities should be zeroed
         ActivityAggregation swimmingInRange = actualActivityAggregationMap.getByType(ActivityType.SWIMMING);
         assertEquals(0L, swimmingInRange.count());
-        assertEquals(0L, swimmingInRange.totalDistance());
-        assertEquals(0L, swimmingInRange.totalDuration());
-        assertEquals(0L, swimmingInRange.maxDistance());
-        assertEquals(0L, swimmingInRange.maxDuration());
+        assertEquals(0.0, swimmingInRange.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(0.0, swimmingInRange.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(0.0, swimmingInRange.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(0.0, swimmingInRange.maxDuration().toSeconds(), Constant.EPSILON);
     }
-    
+
     @Test
     void aggregateForUserAllTime_aggregatesCorrectly() {
         UserId userId = createAndPersistUser();
@@ -116,32 +115,32 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
 
         // Now all 3 activities are included
         assertEquals(3L, totalAll.count());
-        assertEquals(3500L, totalAll.totalDistance());
-        assertEquals(1000L, totalAll.totalDuration());
-        assertEquals(2000L, totalAll.maxDistance());
-        assertEquals(600L, totalAll.maxDuration());
+        assertEquals(3500.0, totalAll.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(1000.0, totalAll.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(2000.0, totalAll.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, totalAll.maxDuration().toSeconds(), Constant.EPSILON);
 
         // Per-type for all time
         ActivityAggregation runningAll = actualAllTimeAggregationMap.getByType(ActivityType.RUNNING);
         assertEquals(2L, runningAll.count());
-        assertEquals(1500L, runningAll.totalDistance());
-        assertEquals(400L, runningAll.totalDuration());
-        assertEquals(1000L, runningAll.maxDistance());
-        assertEquals(300L, runningAll.maxDuration());
+        assertEquals(1500.0, runningAll.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(400.0, runningAll.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(1000.0, runningAll.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(300.0, runningAll.maxDuration().toSeconds(), Constant.EPSILON);
 
         ActivityAggregation cyclingAll = actualAllTimeAggregationMap.getByType(ActivityType.CYCLING);
         assertEquals(1L, cyclingAll.count());
-        assertEquals(2000L, cyclingAll.totalDistance());
-        assertEquals(600L, cyclingAll.totalDuration());
-        assertEquals(2000L, cyclingAll.maxDistance());
-        assertEquals(600L, cyclingAll.maxDuration());
+        assertEquals(2000.0, cyclingAll.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, cyclingAll.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(2000.0, cyclingAll.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(600.0, cyclingAll.maxDuration().toSeconds(), Constant.EPSILON);
 
         // A type with no activities should be zeroed
         ActivityAggregation swimmingAll = actualAllTimeAggregationMap.getByType(ActivityType.SWIMMING);
         assertEquals(0L, swimmingAll.count());
-        assertEquals(0L, swimmingAll.totalDistance());
-        assertEquals(0L, swimmingAll.totalDuration());
-        assertEquals(0L, swimmingAll.maxDistance());
-        assertEquals(0L, swimmingAll.maxDuration());
+        assertEquals(0.0, swimmingAll.totalDistance().toMeters(), Constant.EPSILON);
+        assertEquals(0.0, swimmingAll.totalDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(0.0, swimmingAll.maxDistance().toMeters(), Constant.EPSILON);
+        assertEquals(0.0, swimmingAll.maxDuration().toSeconds(), Constant.EPSILON);
     }
 }

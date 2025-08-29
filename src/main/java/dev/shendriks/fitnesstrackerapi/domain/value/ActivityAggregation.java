@@ -5,12 +5,12 @@ import lombok.Builder;
 @Builder
 public record ActivityAggregation(
     long count,
-    long totalDistance,
-    long totalDuration,
-    long maxDistance,
-    long maxDuration
+    Distance totalDistance,
+    Duration totalDuration,
+    Distance maxDistance,
+    Duration maxDuration
 ) {
     public static ActivityAggregation zero() {
-        return new ActivityAggregation(0L, 0L, 0L, 0L, 0L);
+        return new ActivityAggregation(0L, Distance.zero(), Duration.zero(), Distance.zero(), Duration.zero());
     }
 }

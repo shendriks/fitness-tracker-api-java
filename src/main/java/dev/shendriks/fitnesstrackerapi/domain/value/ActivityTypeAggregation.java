@@ -9,12 +9,12 @@ public record ActivityTypeAggregation(
 
     long count,
 
-    long totalDistance,
+    Distance totalDistance,
 
-    long totalDuration,
+    Duration totalDuration,
 
-    long maxDistance,
+    Distance maxDistance,
 
-    long maxDuration
+    Duration maxDuration
 ) {
 }

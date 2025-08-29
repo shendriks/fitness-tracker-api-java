@@ -8,6 +8,8 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,11 +53,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(100)
+            .duration(Duration.ofSeconds(100))
+            .distance(Distance.ofMeters(1234))
             .calories(10)
             .title("Old Title")
             .description("Old Desc")
-            .distance(1234)
             .startDate(Instant.parse("2025-08-20T10:00:00Z"))
             .build());
 
@@ -102,11 +104,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(200)
+            .duration(Duration.ofSeconds(200))
+            .distance(Distance.ofMeters(2000))
             .calories(20)
             .title("Other Title")
             .description("Other Desc")
-            .distance(2000)
             .startDate(Instant.parse("2025-08-22T10:00:00Z"))
             .build());
 
@@ -163,11 +165,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(100)
+            .duration(Duration.ofSeconds(100))
+            .distance(Distance.ofMeters(1234))
             .calories(10)
             .title("Old Title")
             .description("Old Desc")
-            .distance(1234)
             .startDate(Instant.parse("2025-08-20T10:00:00Z"))
             .build());
 

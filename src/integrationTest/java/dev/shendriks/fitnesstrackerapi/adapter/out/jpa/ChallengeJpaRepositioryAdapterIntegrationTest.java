@@ -154,8 +154,8 @@ class ChallengeJpaRepositioryAdapterIntegrationTest extends JpaRepositioryAdapte
 
         assertTrue(byId.isPresent());
         assertEquals("Name Challenge", byId.get());
-    }    
-    
+    }
+
     @Test
     void findNameByUlid_returnExpected() {
         ChallengeDbEntity challengeDbEntity = createAndPersistChallenge(

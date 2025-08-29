@@ -9,6 +9,8 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,31 +55,31 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(100)
+            .duration(Duration.ofSeconds(100))
+            .distance(Distance.ofMeters(1000))
             .calories(50)
             .title("a1")
             .description("d1")
-            .distance(1000)
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
             .build());
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.CYCLING)
-            .duration(200)
+            .duration(Duration.ofSeconds(200))
+            .distance(Distance.ofMeters(2000))
             .calories(60)
             .title("a2")
             .description("d2")
-            .distance(2000)
             .startDate(Instant.parse("2025-08-22T06:00:00Z"))
             .build());
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(300)
+            .duration(Duration.ofSeconds(300))
+            .distance(Distance.ofMeters(3000))
             .calories(70)
             .title("a3")
             .description("d3")
-            .distance(3000)
             .startDate(Instant.parse("2025-08-23T06:00:00Z"))
             .build());
 
@@ -103,11 +105,11 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(180)
+            .duration(Duration.ofSeconds(180))
+            .distance(Distance.ofMeters(4000))
             .calories(120)
             .title("mine")
             .description("only one")
-            .distance(4000)
             .startDate(Instant.parse("2025-08-21T07:00:00Z"))
             .build());
 
@@ -121,21 +123,21 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(120)
+            .duration(Duration.ofSeconds(120))
+            .distance(Distance.ofMeters(5000))
             .calories(80)
             .title("o1")
             .description("x")
-            .distance(5000)
             .startDate(Instant.parse("2025-08-24T12:00:00Z"))
             .build());
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.RUNNING)
-            .duration(220)
+            .duration(Duration.ofSeconds(220))
+            .distance(Distance.ofMeters(7000))
             .calories(180)
             .title("o2")
             .description("y")
-            .distance(7000)
             .startDate(Instant.parse("2025-08-25T12:00:00Z"))
             .build());
 
