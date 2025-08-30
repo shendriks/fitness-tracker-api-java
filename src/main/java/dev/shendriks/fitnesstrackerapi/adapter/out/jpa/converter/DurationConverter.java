@@ -5,14 +5,20 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class DurationConverter implements AttributeConverter<Duration, Double> {
+public class DurationConverter implements AttributeConverter<Duration, Long> {
     @Override
-    public Double convertToDatabaseColumn(Duration attribute) {
+    public Long convertToDatabaseColumn(Duration attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.toSeconds();
     }
 
     @Override
-    public Duration convertToEntityAttribute(Double dbData) {
+    public Duration convertToEntityAttribute(Long dbData) {
+        if (dbData == null) {
+            return null;
+        }
         return Duration.ofSeconds(dbData);
     }
 }

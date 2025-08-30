@@ -5,7 +5,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityDeta
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityUploadRequestDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper.ActivityDTOMapper;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.UploadActivityUseCase;
-import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUploadData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.openapi.OpenApiTagName;
@@ -67,7 +67,7 @@ public class PostActivityUploadController {
         ActivityUploadRequestDTO request
     ) {
         ActivityUploadData activityUploadData = activityMapper.toActivityUploadData(request);
-        Activity activity = uploadActivityUseCase.uploadActivityForUser(user.id(), activityUploadData);
+        ActivityDetails activity = uploadActivityUseCase.uploadActivityForUser(user.id(), activityUploadData);
         ActivityDetailsResponseDTO activityDetailsResponse = activityMapper.toActivityDetailsResponse(activity);
         return ResponseEntity.ok(activityDetailsResponse);
     }

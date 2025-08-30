@@ -11,6 +11,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,8 +58,9 @@ class GetActivitiesControllerTest {
         ActivityDbEntity a1 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(1800.0))
+            .duration(Duration.ofSeconds(1800L))
             .distance(Distance.ofMeters(10000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1800 / 10000.0))
             .calories(500)
             .title("Morning Run")
             .description("Nice run")
@@ -67,8 +69,9 @@ class GetActivitiesControllerTest {
         ActivityDbEntity a2 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(3600.0))
+            .duration(Duration.ofSeconds(3600L))
             .distance(Distance.ofMeters(25000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(3600 / 25000.0))
             .calories(800)
             .title("Evening Ride")
             .description("Chill ride")
@@ -104,8 +107,9 @@ class GetActivitiesControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(1200.0))
+            .duration(Duration.ofSeconds(1200L))
             .distance(Distance.ofMeters(3000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1200 / 3000.0))
             .calories(300)
             .title("Seeded User Activity")
             .description("Run")
@@ -123,8 +127,9 @@ class GetActivitiesControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.WALKING)
-            .duration(Duration.ofSeconds(600.0))
+            .duration(Duration.ofSeconds(600L))
             .distance(Distance.ofMeters(1000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(600 / 1000.0))
             .calories(100)
             .title("Other User Activity")
             .description("Walk")

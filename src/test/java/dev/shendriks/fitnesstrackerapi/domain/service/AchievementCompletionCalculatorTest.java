@@ -23,9 +23,9 @@ class AchievementCompletionCalculatorTest {
             .builder()
             .count(15)
             .totalDistance(Distance.ofMeters(15000.0))
-            .totalDuration(Duration.ofSeconds(9000.0))
+            .totalDuration(Duration.ofSeconds(9000L))
             .maxDistance(Distance.ofMeters(10000.0))
-            .maxDuration(Duration.ofSeconds(3600.0))
+            .maxDuration(Duration.ofSeconds(3600L))
             .build();
 
         List<ActivityTypeAggregation> byType = List.of(
@@ -34,18 +34,18 @@ class AchievementCompletionCalculatorTest {
                 .type(ActivityType.RUNNING)
                 .count(7)
                 .totalDistance(Distance.ofMeters(7000.0))
-                .totalDuration(Duration.ofSeconds(4200.0))
+                .totalDuration(Duration.ofSeconds(4200L))
                 .maxDistance(Distance.ofMeters(5000.0))
-                .maxDuration(Duration.ofSeconds(2000.0))
+                .maxDuration(Duration.ofSeconds(2000L))
                 .build(),
             ActivityTypeAggregation
                 .builder()
                 .type(ActivityType.CYCLING)
                 .count(8)
                 .totalDistance(Distance.ofMeters(8000.0))
-                .totalDuration(Duration.ofSeconds(4800.0))
+                .totalDuration(Duration.ofSeconds(4800L))
                 .maxDistance(Distance.ofMeters(10000.0))
-                .maxDuration(Duration.ofSeconds(3600.0))
+                .maxDuration(Duration.ofSeconds(3600L))
                 .build()
         );
 

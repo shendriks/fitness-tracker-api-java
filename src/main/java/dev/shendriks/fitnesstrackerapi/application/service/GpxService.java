@@ -51,13 +51,11 @@ public class GpxService {
         Distance distance = metricsCalculator.calculateDistance(wayPoints);
         Duration duration = metricsCalculator.calculateDuration(wayPoints);
         Speed speed = speedCalculator.calculateSpeed(distance, duration);
-        Pace pace = speed.toPace();
         Distance elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
         MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
 
         KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
         List<Speed> kilometerSpeeds = kilometerMetrics.speeds();
-        List<Pace> kilometerPaces = kilometerMetrics.paces();
 
         List<GPSPositionData> gpsPositions = wayPoints
             .stream()
@@ -75,12 +73,10 @@ public class GpxService {
             distance,
             duration,
             speed,
-            pace,
             elevationGain,
             motionAndPausingTime.motionTime(),
             motionAndPausingTime.pausingTime(),
             kilometerSpeeds,
-            kilometerPaces,
             gpsPositions
         );
     }

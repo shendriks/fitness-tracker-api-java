@@ -7,8 +7,10 @@ import java.time.Instant;
 public record ActivityResponseDTO(
     String id,
     ActivityType activityType,
-    Double duration,
+    Long duration,
     Double distance,
+    Double averageSpeed,
+    @Deprecated
     int calories,
     Instant createdAt,
     Instant updatedAt,

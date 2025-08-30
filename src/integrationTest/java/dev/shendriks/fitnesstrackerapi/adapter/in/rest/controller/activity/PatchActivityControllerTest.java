@@ -10,6 +10,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,8 +54,9 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(Duration.ofSeconds(100.0))
+            .duration(Duration.ofSeconds(100L))
             .distance(Distance.ofMeters(1234.0))
+            .averageSpeed(Speed.ofMetersPerSecond(100 / 1234.0))
             .calories(10)
             .title("Old Title")
             .description("Old Desc")
@@ -104,8 +106,9 @@ class PatchActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(200.0))
+            .duration(Duration.ofSeconds(200L))
             .distance(Distance.ofMeters(2000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(200 / 2000.0))
             .calories(20)
             .title("Other Title")
             .description("Other Desc")
@@ -165,8 +168,9 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(Duration.ofSeconds(100.0))
+            .duration(Duration.ofSeconds(100L))
             .distance(Distance.ofMeters(1234.0))
+            .averageSpeed(Speed.ofMetersPerSecond(100 / 1234.0))
             .calories(10)
             .title("Old Title")
             .description("Old Desc")

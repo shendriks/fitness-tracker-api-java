@@ -53,9 +53,8 @@ public class KilometerMetricsCalculator {
 
             if (kilometerSegmentDistance.toMeters() >= 1000.0) {
                 Instant kilometerSegmentEndTime = currentPoint.getTime().get();
-                Duration segmentDuration = Duration.ofSeconds((double) java.time.Duration
-                    .between(kilometerSegmentStartTime, kilometerSegmentEndTime)
-                    .getSeconds());
+                Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
+                    .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
                 Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
                 Pace segmentPace = segmentSpeed.toPace();
 
@@ -71,9 +70,8 @@ public class KilometerMetricsCalculator {
 
         if (isSegmentSignificant(kilometerSegmentDistance)) {
             Instant kilometerSegmentEndTime = wayPoints.getLast().getTime().orElseThrow();
-            Duration segmentDuration = Duration.ofSeconds((double) java.time.Duration
-                .between(kilometerSegmentStartTime, kilometerSegmentEndTime)
-                .getSeconds());
+            Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
+                .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
             Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
             Pace segmentPace = segmentSpeed.toPace();
 

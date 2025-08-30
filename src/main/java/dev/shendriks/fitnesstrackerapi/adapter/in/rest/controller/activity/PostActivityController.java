@@ -2,10 +2,10 @@ package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.activity;
 
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityCreateRequestDTO;
-import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityResponseDTO;
+import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityDetailsResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper.ActivityDTOMapper;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.CreateActivityUseCase;
-import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityCreationData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.openapi.OpenApiTagName;
@@ -40,7 +40,7 @@ public class PostActivityController {
         @ApiResponse(
             responseCode = "200",
             description = "The created activity",
-            content = @Content
+            content = @Content(schema = @Schema(implementation = ActivityDetailsResponseDTO.class))
         ),
         @ApiResponse(
             responseCode = "400",
@@ -50,7 +50,7 @@ public class PostActivityController {
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @PostMapping("/api/activities")
-    public ResponseEntity<ActivityResponseDTO> postActivity(
+    public ResponseEntity<ActivityDetailsResponseDTO> postActivity(
         @AuthenticationPrincipal(errorOnInvalidType = true) User user,
         @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "The activity to create",
@@ -79,8 +79,8 @@ public class PostActivityController {
 //        }
 //
         ActivityCreationData activityCreationData = activityMapper.toActivityCreationData(request);
-        Activity activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
-        ActivityResponseDTO activityResponse = activityMapper.toActivityResponse(activity);
+        ActivityDetails activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
+        ActivityDetailsResponseDTO activityResponse = activityMapper.toActivityDetailsResponse(activity);
 
         return ResponseEntity.ok(activityResponse);
     }

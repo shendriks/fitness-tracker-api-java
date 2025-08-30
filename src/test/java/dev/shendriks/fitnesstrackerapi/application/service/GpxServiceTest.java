@@ -79,15 +79,15 @@ class GpxServiceTest {
         );
         when(waypointProcessor.getAllWayPointsOrderedByTime(any())).thenReturn(wayPoints);
         when(metricsCalculator.calculateDistance(wayPoints)).thenReturn(Distance.ofMeters(12345.6));
-        when(metricsCalculator.calculateDuration(wayPoints)).thenReturn(Duration.ofSeconds(3000.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(12345.6), Duration.ofSeconds(3000.0)))
+        when(metricsCalculator.calculateDuration(wayPoints)).thenReturn(Duration.ofSeconds(3000L));
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(12345.6), Duration.ofSeconds(3000L)))
             .thenReturn(Speed.ofMetersPerSecond(4.1152));
         when(metricsCalculator.calculateElevationGain(wayPoints)).thenReturn(Distance.ofMeters(200.0));
         when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(
             MotionAndPausingTime
                 .builder()
-                .motionTime(Duration.ofSeconds(2500.0))
-                .pausingTime(Duration.ofSeconds(500.0))
+                .motionTime(Duration.ofSeconds(2500L))
+                .pausingTime(Duration.ofSeconds(500L))
                 .build()
         );
         when(kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints)).thenReturn(
@@ -106,16 +106,12 @@ class GpxServiceTest {
         assertEquals(12345.6, actualGPSTrackData.distance().toMeters(), Constant.EPSILON);
         assertEquals(3000.0, actualGPSTrackData.duration().toSeconds(), Constant.EPSILON);
         assertEquals(4.1152, actualGPSTrackData.speed().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(243.00155520995335, actualGPSTrackData.pace().toSecondsPerKilometer(), Constant.EPSILON);
         assertEquals(200.0, actualGPSTrackData.elevationGain().toMeters(), Constant.EPSILON);
         assertEquals(2500.0, actualGPSTrackData.motionTime().toSeconds(), Constant.EPSILON);
         assertEquals(500.0, actualGPSTrackData.pausingTime().toSeconds(), Constant.EPSILON);
         assertEquals(2, actualGPSTrackData.kilometerSpeeds().size(), "Expected two kilometer speeds");
-        assertEquals(2, actualGPSTrackData.kilometerPaces().size(), "Expected two kilometer paces");
         assertEquals(10.0, actualGPSTrackData.kilometerSpeeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
         assertEquals(9.5, actualGPSTrackData.kilometerSpeeds().getLast().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(6.0, actualGPSTrackData.kilometerPaces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
-        assertEquals(6.3, actualGPSTrackData.kilometerPaces().getLast().toSecondsPerKilometer(), Constant.EPSILON);
 
         List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());
@@ -150,14 +146,14 @@ class GpxServiceTest {
         when(waypointProcessor.getAllWayPointsOrderedByTime(any())).thenReturn(wayPoints);
 
         when(metricsCalculator.calculateDistance(wayPoints)).thenReturn(Distance.ofMeters(1000.0));
-        when(metricsCalculator.calculateDuration(wayPoints)).thenReturn(Duration.ofSeconds(600.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(600.0)))
+        when(metricsCalculator.calculateDuration(wayPoints)).thenReturn(Duration.ofSeconds(600L));
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(600L)))
             .thenReturn(Speed.ofMetersPerSecond(1.6667));
         when(metricsCalculator.calculateElevationGain(wayPoints)).thenReturn(Distance.zero());
         when(metricsCalculator.calculateMotionAndPausingTime(wayPoints)).thenReturn(
             MotionAndPausingTime
                 .builder()
-                .motionTime(Duration.ofSeconds(600.0))
+                .motionTime(Duration.ofSeconds(600L))
                 .pausingTime(Duration.zero())
                 .build()
         );
@@ -178,14 +174,11 @@ class GpxServiceTest {
         assertEquals(1000.0, actualGPSTrackData.distance().toMeters(), Constant.EPSILON);
         assertEquals(600.0, actualGPSTrackData.duration().toSeconds(), Constant.EPSILON);
         assertEquals(1.6667, actualGPSTrackData.speed().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(599.9880002399951, actualGPSTrackData.pace().toSecondsPerKilometer(), Constant.EPSILON);
         assertEquals(0.0, actualGPSTrackData.elevationGain().toMeters(), Constant.EPSILON);
         assertEquals(600.0, actualGPSTrackData.motionTime().toSeconds(), Constant.EPSILON);
         assertEquals(0L, actualGPSTrackData.pausingTime().toSeconds(), Constant.EPSILON);
         assertEquals(1, actualGPSTrackData.kilometerSpeeds().size(), "Expected one kilometer speed");
-        assertEquals(1, actualGPSTrackData.kilometerPaces().size(), "Expected one kilometer pace");
         assertEquals(1.6, actualGPSTrackData.kilometerSpeeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(37.0, actualGPSTrackData.kilometerPaces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
 
         List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());

@@ -20,9 +20,9 @@ public class ActivityTypeAggregationDbProjection {
         ActivityType type,
         Long count,
         Double totalDistance,
-        Double totalDuration,
+        Long totalDuration,
         Double maxDistance,
-        Double maxDuration
+        Long maxDuration
     ) {
         this.type = type;
         this.count = count;

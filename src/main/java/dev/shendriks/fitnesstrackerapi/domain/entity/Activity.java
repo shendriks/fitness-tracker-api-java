@@ -5,7 +5,6 @@ import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.Builder;
 
 import java.time.Instant;
-import java.util.List;
 
 @Builder
 public record Activity(
@@ -13,13 +12,14 @@ public record Activity(
     ActivityUlid ulid,
     ActivityType activityType,
     Duration duration,
+    @Deprecated
     int calories,
     Distance distance,
-    Instant createdAt,
-    Instant updatedAt,
     String title,
     String description,
     Instant startDate,
-    List<GPSPosition> gpsPositions
+    Instant createdAt,
+    Instant updatedAt,
+    Speed averageSpeed
 ) {
 }

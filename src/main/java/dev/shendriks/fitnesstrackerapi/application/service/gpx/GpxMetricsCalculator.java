@@ -42,7 +42,7 @@ public class GpxMetricsCalculator {
             return Duration.zero();
         }
 
-        return Duration.ofSeconds((double) java.time.Duration.between(firstTime, lastTime).getSeconds());
+        return Duration.ofJavaDuration(java.time.Duration.between(firstTime, lastTime));
     }
 
     public Distance calculateElevationGain(List<WayPoint> points) {
@@ -80,7 +80,7 @@ public class GpxMetricsCalculator {
             Instant time1 = wayPoint1.getTime().orElseThrow();
             Instant time2 = wayPoint2.getTime().orElseThrow();
 
-            Duration timeBetweenPoints = Duration.ofSeconds((double) java.time.Duration.between(time1, time2).getSeconds());
+            Duration timeBetweenPoints = Duration.ofJavaDuration(java.time.Duration.between(time1, time2));
             Distance distance = distanceCalculator.calculateDistance(wayPoint1, wayPoint2);
             Speed speed = speedCalculator.calculateSpeed(distance, timeBetweenPoints);
 

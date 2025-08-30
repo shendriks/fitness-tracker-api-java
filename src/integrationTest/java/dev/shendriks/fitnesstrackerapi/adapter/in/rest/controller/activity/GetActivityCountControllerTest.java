@@ -11,6 +11,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,8 +56,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(100.0))
+            .duration(Duration.ofSeconds(100L))
             .distance(Distance.ofMeters(1000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(100 / 1000.0))
             .calories(50)
             .title("a1")
             .description("d1")
@@ -65,8 +67,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(200.0))
+            .duration(Duration.ofSeconds(200L))
             .distance(Distance.ofMeters(2000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(200 / 2000.0))
             .calories(60)
             .title("a2")
             .description("d2")
@@ -75,8 +78,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(Duration.ofSeconds(300.0))
+            .duration(Duration.ofSeconds(300L))
             .distance(Distance.ofMeters(3000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(300 / 3000.0))
             .calories(70)
             .title("a3")
             .description("d3")
@@ -105,8 +109,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(180.0))
+            .duration(Duration.ofSeconds(180L))
             .distance(Distance.ofMeters(4000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(180 / 4000.0))
             .calories(120)
             .title("mine")
             .description("only one")
@@ -123,8 +128,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(120.0))
+            .duration(Duration.ofSeconds(120L))
             .distance(Distance.ofMeters(5000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(120 / 5000.0))
             .calories(80)
             .title("o1")
             .description("x")
@@ -133,8 +139,9 @@ class GetActivityCountControllerTest {
         activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(220.0))
+            .duration(Duration.ofSeconds(220L))
             .distance(Distance.ofMeters(7000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(220 / 7000.0))
             .calories(180)
             .title("o2")
             .description("y")

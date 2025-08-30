@@ -67,9 +67,9 @@ class KilometerMetricsCalculatorTest {
         when(distanceCalculator.calculateDistance(wayPoint1, wayPoint2)).thenReturn(Distance.ofMeters(700.0));
         when(distanceCalculator.calculateDistance(wayPoint2, wayPoint3)).thenReturn(Distance.ofMeters(150.0));
 
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40L)))
             .thenReturn(Speed.ofMetersPerSecond(1100.0 / 40.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(150.0), Duration.ofSeconds(30.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(150.0), Duration.ofSeconds(30L)))
             .thenReturn(Speed.ofMetersPerSecond(150.0 / 30.0));
 
         KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
@@ -90,9 +90,9 @@ class KilometerMetricsCalculatorTest {
         assertEquals(expectedPace2, actualMetrics.paces().get(1).toSecondsPerKilometer(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40.0));
+            .calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40L));
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40.0));
+            .calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40L));
         verifyNoMoreInteractions(speedCalculator);
     }
 
@@ -106,7 +106,7 @@ class KilometerMetricsCalculatorTest {
         List<WayPoint> wayPoints = List.of(wayPoint0, wayPoint1, wayPoint2);
 
         when(distanceCalculator.calculateDistance(wayPoint0, wayPoint2)).thenReturn(Distance.ofMeters(1000.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60L)))
             .thenReturn(Speed.ofMetersPerSecond(1000.0 / 60.0));
 
         KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
@@ -120,7 +120,7 @@ class KilometerMetricsCalculatorTest {
         assertEquals(expectedPace, actualMetrics.paces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60.0));
+            .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60L));
         verifyNoMoreInteractions(speedCalculator);
     }
 
@@ -136,7 +136,7 @@ class KilometerMetricsCalculatorTest {
 
         when(distanceCalculator.calculateDistance(wayPoint0, wayPoint1)).thenReturn(Distance.ofMeters(600.0));
         when(distanceCalculator.calculateDistance(wayPoint1, wayPoint2)).thenReturn(Distance.ofMeters(400.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50L)))
             .thenReturn(Speed.ofMetersPerSecond(1000.0 / 50.0));
 
         KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
@@ -150,7 +150,7 @@ class KilometerMetricsCalculatorTest {
         assertEquals(expectedPace, actualMetrics.paces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50.0));
+            .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50L));
         verifyNoMoreInteractions(speedCalculator);
     }
 

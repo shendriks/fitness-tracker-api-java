@@ -4,21 +4,25 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class Duration {
-    private Double durationInSeconds;
+    private Long durationInSeconds;
 
-    private Duration(Double durationInSeconds) {
+    private Duration(Long durationInSeconds) {
         this.durationInSeconds = durationInSeconds;
     }
 
     public static Duration zero() {
-        return new Duration(0.0);
+        return new Duration(0L);
     }
 
-    public static Duration ofSeconds(Double duration) {
+    public static Duration ofSeconds(Long duration) {
         return new Duration(duration);
     }
 
-    public Double toSeconds() {
+    public static Duration ofJavaDuration(java.time.Duration duration) {
+        return new Duration(duration.getSeconds());
+    }
+
+    public Long toSeconds() {
         return durationInSeconds;
     }
 

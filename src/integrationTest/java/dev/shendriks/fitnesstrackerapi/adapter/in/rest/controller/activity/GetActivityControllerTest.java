@@ -12,6 +12,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,8 +60,9 @@ class GetActivityControllerTest {
         ActivityDbEntity activity = ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(Duration.ofSeconds(1800.0))
+            .duration(Duration.ofSeconds(1800L))
             .distance(Distance.ofMeters(10000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1800 / 10000.0))
             .calories(500)
             .title("Morning Run")
             .description("Nice run")
@@ -94,9 +97,7 @@ class GetActivityControllerTest {
         });
         assertEquals(activity.getUlid(), detail.get("id"));
         assertEquals("Morning Run", detail.get("title"));
-        assertInstanceOf(Double.class, detail.get("duration"));
-        assertInstanceOf(Double.class, detail.get("distance"));
-        assertEquals(1800.0, (Double) detail.get("duration"), Constant.EPSILON);
+        assertEquals(1800, detail.get("duration"));
         assertEquals(10000.0, (Double) detail.get("distance"), Constant.EPSILON);
 
         @SuppressWarnings("unchecked")
@@ -136,8 +137,9 @@ class GetActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(Duration.ofSeconds(3600.0))
+            .duration(Duration.ofSeconds(3600L))
             .distance(Distance.ofMeters(25000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(3600 / 25000.0))
             .calories(800)
             .title("Other User Ride")
             .description("Not yours")

@@ -16,9 +16,9 @@ public interface ActivityAggregationProjectionRepository extends JpaRepository<A
             activityType AS type,
             COUNT(id) AS count,
             COALESCE(SUM(CAST(distance AS DOUBLE)), 0) AS totalDistance,
-            COALESCE(SUM(CAST(duration AS DOUBLE)), 0) AS totalDuration,
+            COALESCE(SUM(CAST(duration AS LONG)), 0) AS totalDuration,
             COALESCE(MAX(CAST(distance AS DOUBLE)), 0) AS maxDistance,
-            COALESCE(MAX(CAST(duration AS DOUBLE)), 0) AS maxDuration
+            COALESCE(MAX(CAST(duration AS LONG)), 0) AS maxDuration
         FROM ActivityDbEntity
         WHERE user.id = :userId
         AND (:from IS NULL OR startDate >= :from)
@@ -35,9 +35,9 @@ public interface ActivityAggregationProjectionRepository extends JpaRepository<A
         SELECT
             COUNT(id) AS count,
             COALESCE(SUM(CAST(distance AS DOUBLE)), 0) AS totalDistance,
-            COALESCE(SUM(CAST(duration AS DOUBLE)), 0) AS totalDuration,
+            COALESCE(SUM(CAST(duration AS LONG)), 0) AS totalDuration,
             COALESCE(MAX(CAST(distance AS DOUBLE)), 0) AS maxDistance,
-            COALESCE(MAX(CAST(duration AS DOUBLE)), 0) AS maxDuration
+            COALESCE(MAX(CAST(duration AS LONG)), 0) AS maxDuration
         FROM ActivityDbEntity
         WHERE user.id = :userId
         AND (:from IS NULL OR startDate >= :from)

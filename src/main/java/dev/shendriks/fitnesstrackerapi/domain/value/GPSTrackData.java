@@ -13,12 +13,10 @@ public record GPSTrackData(
     Distance distance,
     Duration duration,
     Speed speed,
-    Pace pace,
     Distance elevationGain,
     Duration motionTime,
     Duration pausingTime,
     List<Speed> kilometerSpeeds,
-    List<Pace> kilometerPaces,
     List<GPSPositionData> gpsPositions
 ) {
 }

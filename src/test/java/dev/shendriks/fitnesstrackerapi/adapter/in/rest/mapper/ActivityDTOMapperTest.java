@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper;
 
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.*;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
@@ -18,18 +19,31 @@ class ActivityDTOMapperTest {
     private final ActivityDTOMapper mapper = Mappers.getMapper(ActivityDTOMapper.class);
 
     private static Activity buildActivity(String ulid) {
-        return buildActivity(ulid, List.of());
-    }
-
-    private static Activity buildActivity(String ulid, List<GPSPosition> positions) {
         return Activity
             .builder()
             .id(new ActivityId(1L))
             .ulid(new ActivityUlid(ulid))
             .activityType(ActivityType.MOUNTAIN_BIKING)
-            .duration(Duration.ofSeconds(7200.0))
+            .duration(Duration.ofSeconds(7200L))
             .distance(Distance.ofMeters(12345.0))
-            .calories(1200)
+            .averageSpeed(Speed.ofMetersPerSecond(7200 / 12345.0))
+            .createdAt(Instant.parse("2025-08-22T00:00:00Z"))
+            .updatedAt(Instant.parse("2025-08-22T00:00:00Z"))
+            .title("Sample Title")
+            .description("Sample Description")
+            .startDate(Instant.parse("2025-08-22T00:00:00Z"))
+            .build();
+    }
+
+    private static ActivityDetails buildActivityDetails(String ulid, List<GPSPosition> positions) {
+        return ActivityDetails
+            .builder()
+            .id(new ActivityId(1L))
+            .ulid(new ActivityUlid(ulid))
+            .activityType(ActivityType.MOUNTAIN_BIKING)
+            .duration(Duration.ofSeconds(7200L))
+            .distance(Distance.ofMeters(12345.0))
+            .averageSpeed(Speed.ofMetersPerSecond(7200 / 12345.0))
             .createdAt(Instant.parse("2025-08-22T00:00:00Z"))
             .updatedAt(Instant.parse("2025-08-22T00:00:00Z"))
             .title("Sample Title")
@@ -50,7 +64,6 @@ class ActivityDTOMapperTest {
         assertEquals(activity.activityType(), dto.activityType());
         assertEquals(activity.duration().toSeconds(), dto.duration(), Constant.EPSILON);
         assertEquals(activity.distance().toMeters(), dto.distance(), Constant.EPSILON);
-        assertEquals(activity.calories(), dto.calories());
         assertEquals(activity.createdAt(), dto.createdAt());
         assertEquals(activity.updatedAt(), dto.updatedAt());
         assertEquals(activity.title(), dto.title());
@@ -88,7 +101,7 @@ class ActivityDTOMapperTest {
             .longitude(0.1)
             .altitude(0.0)
             .build();
-        Activity activity = buildActivity("TESTULID000000000000000003", List.of(position1, position2));
+        ActivityDetails activity = buildActivityDetails("TESTULID000000000000000003", List.of(position1, position2));
 
         ActivityDetailsResponseDTO activityDetailsResponseDTO = mapper.toActivityDetailsResponse(activity);
 
@@ -111,7 +124,7 @@ class ActivityDTOMapperTest {
         ActivityCreateRequestDTO request = ActivityCreateRequestDTO
             .builder()
             .activityType("running")
-            .duration(3600.0)
+            .duration(3600L)
             .distance(10000.0)
             .calories(900)
             .title("Morning Run")

@@ -7,11 +7,11 @@ import java.util.Optional;
 public record GPSTrackResponseDTO(
     String name,
     Optional<Instant> gpxTime,
-    Double distance,
+    Long distance,
     Double duration,
     Double speed,
     Double pace,
-    Double elevationGain,
+    Long elevationGain,
     Double motionTime,
     Double pausingTime,
     List<Double> kilometerSpeeds,

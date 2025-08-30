@@ -159,11 +159,11 @@ class GpxMetricsCalculatorTest {
         when(distanceCalculator.calculateDistance(wayPoint2, wayPoint3)).thenReturn(Distance.ofMeters(2.0));
         when(distanceCalculator.calculateDistance(wayPoint3, wayPoint5)).thenReturn(Distance.ofMeters(20.0));
         when(distanceCalculator.calculateDistance(wayPoint5, wayPoint6)).thenReturn(Distance.ofMeters(10.0));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10L)))
             .thenReturn(Speed.ofMetersPerSecond(0.5));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(2.0), Duration.ofSeconds(10.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(2.0), Duration.ofSeconds(10L)))
             .thenReturn(Speed.ofMetersPerSecond(0.2));
-        when(speedCalculator.calculateSpeed(Distance.ofMeters(20.0), Duration.ofSeconds(20.0)))
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(20.0), Duration.ofSeconds(20L)))
             .thenReturn(Speed.ofMetersPerSecond(1.0));
         when(speedCalculator.calculateSpeed(Distance.ofMeters(10.0), Duration.zero()))
             .thenReturn(Speed.zero());
@@ -173,19 +173,19 @@ class GpxMetricsCalculatorTest {
         assertEquals(
             MotionAndPausingTime
                 .builder()
-                .motionTime(Duration.ofSeconds(30.0))
-                .pausingTime(Duration.ofSeconds(10.0))
+                .motionTime(Duration.ofSeconds(30L))
+                .pausingTime(Duration.ofSeconds(10L))
                 .build(),
             actualMotionAndPausingTime,
             "Expected motion time of 30s and pausing time of 10s"
         );
 
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10.0));
+            .calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10L));
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(2.0), Duration.ofSeconds(10.0));
+            .calculateSpeed(Distance.ofMeters(2.0), Duration.ofSeconds(10L));
         verify(speedCalculator, times(1))
-            .calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10.0));
+            .calculateSpeed(Distance.ofMeters(5.0), Duration.ofSeconds(10L));
         verify(speedCalculator, times(1))
             .calculateSpeed(Distance.ofMeters(10.0), Duration.zero());
         verifyNoMoreInteractions(speedCalculator);

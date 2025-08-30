@@ -78,7 +78,6 @@ class PostActivityControllerTest {
         assertNotNull(response.get("id"));
         assertEquals("running", response.get("activityType"));
         assertEquals(3600, ((Number) response.get("duration")).intValue());
-        assertEquals(900, ((Number) response.get("calories")).intValue());
         assertEquals("Morning Run", response.get("title"));
         assertEquals("Nice run", response.get("description"));
         assertEquals(10000, ((Number) response.get("distance")).intValue());

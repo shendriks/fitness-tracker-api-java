@@ -103,10 +103,6 @@ class GpxServiceIntegrationTest {
                 && actualGPSTrackData.speed().toMetersPerSecond() < 12,
             "Expected speed around ~10 m/s for ~1km/100s");
         assertTrue(
-            actualGPSTrackData.pace().toSecondsPerKilometer() > 80
-                && actualGPSTrackData.pace().toSecondsPerKilometer() < 120,
-            "Expected pace around ~100 s/km");
-        assertTrue(
             actualGPSTrackData.elevationGain().toMeters() >= 10.0 - 0.001
                 && actualGPSTrackData.elevationGain().toMeters() <= 10.0 + 0.001,
             "Expected elevation gain 10m");
@@ -117,7 +113,6 @@ class GpxServiceIntegrationTest {
 
         // Kilometer metrics: for ~1km segment we expect at least one entry
         assertFalse(actualGPSTrackData.kilometerSpeeds().isEmpty(), "Expected at least one kilometer speed entry");
-        assertFalse(actualGPSTrackData.kilometerPaces().isEmpty(), "Expected at least one kilometer pace entry");
     }
 
     @Test
@@ -146,7 +141,6 @@ class GpxServiceIntegrationTest {
         assertTrue(actualGPSTrackData.distance().toMeters() > 0, "Expected distance > 0m");
         assertEquals(300.0, actualGPSTrackData.duration().toSeconds(), Constant.EPSILON, "Expected duration 300s");
         assertTrue(actualGPSTrackData.speed().toMetersPerSecond() >= 0, "Expected speed >= 0m/s");
-        assertTrue(actualGPSTrackData.pace().toSecondsPerKilometer() >= 0, "Expected pace >= 0s/km");
         // No elevation tags -> elevation gain should be 0
         assertEquals(0.0, actualGPSTrackData.elevationGain().toMeters(), Constant.EPSILON, "Expected elevation gain 0m");
         // With small movement but above threshold between timed points, should count as motion

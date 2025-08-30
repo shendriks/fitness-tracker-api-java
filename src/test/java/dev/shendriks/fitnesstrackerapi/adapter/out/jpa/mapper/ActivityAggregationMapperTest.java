@@ -20,11 +20,11 @@ class ActivityAggregationMapperTest {
         ActivityAggregationDbProjection projection = new ActivityAggregationDbProjection(
             5L,
             12345.0,
-            6789.0,
+            6789L,
 //            new BigDecimal("12345.0"), 
 //            new BigDecimal("6789.0"),
             4000.0,
-            3600.0
+            3600L
 //            new BigDecimal("4000.0"),
 //            new BigDecimal("3600.0")
         );
@@ -53,9 +53,9 @@ class ActivityAggregationMapperTest {
                 ActivityType.RUNNING,//.getValue(),
                 3L,
                 9000.0,
-                3600.0,
+                3600L,
                 5000.0,
-                1800.0
+                1800L
             ),
 //                .builder()
 //                .type(ActivityType.RUNNING)
@@ -69,9 +69,9 @@ class ActivityAggregationMapperTest {
                 ActivityType.CYCLING,//.getValue(),
                 2L,
                 20000.0,
-                4000.0,
+                4000L,
                 15000.0,
-                2500.0
+                2500L
             )
 //                .builder()
 //                .type(ActivityType.CYCLING)
@@ -107,11 +107,11 @@ class ActivityAggregationMapperTest {
         ActivityAggregationDbProjection total = new ActivityAggregationDbProjection(
             10L,
             50000.0,
-            10000.0,
+            10000L,
 //            new BigDecimal("50000.0"),
 //            new BigDecimal("10000.0"),
             20000.0,
-            4000.0
+            4000L
 //            new BigDecimal("20000.0"),
 //            new BigDecimal("4000.0")
         );
@@ -127,9 +127,9 @@ class ActivityAggregationMapperTest {
                 ActivityType.RUNNING,//.getValue(), 
                 6L,
                 18000.0,
-                5000.0,
+                5000L,
                 7000.0,
-                2000.0
+                2000L
             ),
 //                .builder()
 //                .type(ActivityType.RUNNING)
@@ -143,9 +143,9 @@ class ActivityAggregationMapperTest {
                 ActivityType.CYCLING,//.getValue(),
                 4L,
                 32000.0,
-                5000.0,
+                5000L,
                 20000.0,
-                2500.0
+                2500L
             )
 //                .builder()
 //                .type(ActivityType.CYCLING)
@@ -164,9 +164,9 @@ class ActivityAggregationMapperTest {
                 .builder()
                 .count(10L)
                 .totalDistance(Distance.ofMeters(50000.0))
-                .totalDuration(Duration.ofSeconds(10000.0))
+                .totalDuration(Duration.ofSeconds(10000L))
                 .maxDistance(Distance.ofMeters(20000.0))
-                .maxDuration(Duration.ofSeconds(4000.0))
+                .maxDuration(Duration.ofSeconds(4000L))
                 .build(),
             actualActivityAggregationMap.getTotal()
         );
@@ -175,9 +175,9 @@ class ActivityAggregationMapperTest {
                 .builder()
                 .count(6L)
                 .totalDistance(Distance.ofMeters(18000.0))
-                .totalDuration(Duration.ofSeconds(5000.0))
+                .totalDuration(Duration.ofSeconds(5000L))
                 .maxDistance(Distance.ofMeters(7000.0))
-                .maxDuration(Duration.ofSeconds(2000.0))
+                .maxDuration(Duration.ofSeconds(2000L))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.RUNNING)
         );
@@ -186,9 +186,9 @@ class ActivityAggregationMapperTest {
                 .builder()
                 .count(4L)
                 .totalDistance(Distance.ofMeters(32000.0))
-                .totalDuration(Duration.ofSeconds(5000.0))
+                .totalDuration(Duration.ofSeconds(5000L))
                 .maxDistance(Distance.ofMeters(20000.0))
-                .maxDuration(Duration.ofSeconds(2500.0))
+                .maxDuration(Duration.ofSeconds(2500L))
                 .build(),
             actualActivityAggregationMap.getByType(ActivityType.CYCLING)
         );

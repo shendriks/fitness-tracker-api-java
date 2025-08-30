@@ -14,7 +14,7 @@ import java.util.Objects;
 public class DurationType implements UserType<Duration> {
     @Override
     public int getSqlType() {
-        return Types.DOUBLE;
+        return Types.BIGINT;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class DurationType implements UserType<Duration> {
 
     @Override
     public Duration nullSafeGet(ResultSet rs, int i, SharedSessionContractImplementor ssci, Object o) throws SQLException {
-        double durationValue = rs.getDouble(i);
+        long durationValue = rs.getLong(i);
         return Duration.ofSeconds(durationValue);
     }
 
@@ -43,8 +43,8 @@ public class DurationType implements UserType<Duration> {
         if (Objects.isNull(duration))
             st.setNull(i, Types.DOUBLE);
         else {
-            double durationValue = duration.toSeconds();
-            st.setDouble(i, durationValue);
+            long durationValue = duration.toSeconds();
+            st.setLong(i, durationValue);
         }
     }
 

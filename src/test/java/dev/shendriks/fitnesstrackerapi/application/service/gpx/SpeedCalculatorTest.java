@@ -21,7 +21,7 @@ public class SpeedCalculatorTest {
         Double speed = calculator.calculateSpeed(Distance.ofMeters(100.0), Duration.zero()).toMetersPerSecond();
         assertEquals(0.0, speed, Constant.EPSILON, "Expected speed of 0m/s for 0 duration");
 
-        speed = calculator.calculateSpeed(Distance.ofMeters(100.0), Duration.ofSeconds(10.0)).toMetersPerSecond();
-        assertEquals(10.0, speed, "Expected speed of 10m/s for 100m in 10s");
+        speed = calculator.calculateSpeed(Distance.ofMeters(100.0), Duration.ofSeconds(10L)).toMetersPerSecond();
+        assertEquals(10.0, speed, Constant.EPSILON, "Expected speed of 10m/s for 100m in 10s");
     }
 }

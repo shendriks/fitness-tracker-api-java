@@ -17,9 +17,9 @@ public class ActivityAggregationDbProjection {
     public ActivityAggregationDbProjection(
         Long count,
         Double totalDistance,
-        Double totalDuration,
+        Long totalDuration,
         Double maxDistance,
-        Double maxDuration
+        Long maxDuration
     ) {
         this.count = count;
         this.totalDistance = Distance.ofMeters(totalDistance);
