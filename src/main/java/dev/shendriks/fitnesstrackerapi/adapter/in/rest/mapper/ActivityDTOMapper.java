@@ -44,24 +44,4 @@ public abstract class ActivityDTOMapper {
     public Double mapSpeed(Speed speed) {
         return speed.toMetersPerSecond();
     }
-
-//    public Long mapMotionTime(Duration motionTime) {
-//        if (motionTime == null) {
-//            return null;
-//        }
-//        return motionTime.toSeconds();
-//    }
-//    public Long mapPausingTime(Duration pausingTime) {
-//        if (pausingTime == null) {
-//            return null;
-//        }
-//        return pausingTime.toSeconds();
-//    }
-//    
-//    public Double mapElevationGain(Distance elevationGain) {
-//        if (elevationGain == null) {
-//            return null;
-//        }
-//        return elevationGain.toMeters();
-//    }
 }
