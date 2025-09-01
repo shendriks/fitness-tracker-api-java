@@ -1,27 +1,23 @@
 package dev.shendriks.fitnesstrackerapi.domain.entity;
 
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityId;
-import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUlid;
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.Builder;
 
 import java.time.Instant;
-import java.util.List;
 
 @Builder
 public record Activity(
     ActivityId id,
     ActivityUlid ulid,
     ActivityType activityType,
-    int duration,
-    int calories,
-    Instant createdAt,
-    Instant updatedAt,
+    Duration duration,
+    Distance distance,
     String title,
     String description,
-    int distance,
     Instant startDate,
-    List<GPSPosition> gpsPositions
+    Instant createdAt,
+    Instant updatedAt,
+    Speed averageSpeed
 ) {
 }

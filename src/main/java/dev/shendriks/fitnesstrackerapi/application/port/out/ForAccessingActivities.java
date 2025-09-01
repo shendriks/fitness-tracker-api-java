@@ -1,6 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.application.port.out;
 
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 
 import java.util.List;
@@ -13,13 +14,13 @@ public interface ForAccessingActivities {
 
     List<Activity> findAllByUser(UserId userId);
 
-    Optional<Activity> findByUserAndId(UserId userId, ActivityUlid activityUlid);
+    Optional<ActivityDetails> findByUserAndId(UserId userId, ActivityUlid activityUlid);
 
-    Activity saveForUser(UserId userId, ActivityCreationData activityCreationData);
+    ActivityDetails saveForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed);
 
-    Activity saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData);
+    ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData);
 
-    Activity updateForUser(UserId userId, ActivityUlid achievementUlid, ActivityUpdateData activityUpdateData);
+    ActivityDetails updateForUser(UserId userId, ActivityUlid achievementUlid, ActivityUpdateData activityUpdateData);
 
     Optional<String> findTitleById(ActivityId activityId);
 }

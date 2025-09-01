@@ -8,6 +8,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.UserDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEntityRepository;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -59,7 +60,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "running",
                         "duration": 3600,
-                        "calories": 900,
                         "title": "Morning Run",
                         "description": "Nice run",
                         "distance": 10000,
@@ -77,7 +77,6 @@ class PostActivityControllerTest {
         assertNotNull(response.get("id"));
         assertEquals("running", response.get("activityType"));
         assertEquals(3600, ((Number) response.get("duration")).intValue());
-        assertEquals(900, ((Number) response.get("calories")).intValue());
         assertEquals("Morning Run", response.get("title"));
         assertEquals("Nice run", response.get("description"));
         assertEquals(10000, ((Number) response.get("distance")).intValue());
@@ -87,11 +86,10 @@ class PostActivityControllerTest {
         assertEquals(1, activityDbEntities.size(), "Expected one activity persisted");
         ActivityDbEntity activityDbEntity = activityDbEntities.getFirst();
         assertEquals(ActivityType.RUNNING, activityDbEntity.getActivityType());
-        assertEquals(3600, activityDbEntity.getDuration());
-        assertEquals(900, activityDbEntity.getCalories());
+        assertEquals(3600, activityDbEntity.getDuration().toSeconds(), Constant.EPSILON);
+        assertEquals(10000, activityDbEntity.getDistance().toMeters(), Constant.EPSILON);
         assertEquals("Morning Run", activityDbEntity.getTitle());
         assertEquals("Nice run", activityDbEntity.getDescription());
-        assertEquals(10000, activityDbEntity.getDistance());
         assertEquals(Instant.parse("2025-08-21T06:00:00Z"), activityDbEntity.getStartDate());
     }
 
@@ -103,7 +101,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "walking",
                         "duration": 100,
-                        "calories": 10,
                         "title": "Walk",
                         "description": "No token",
                         "distance": 500,
@@ -125,7 +122,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "NOT_A_TYPE",
                         "duration": 100,
-                        "calories": 10,
                         "title": "Title",
                         "description": "Desc",
                         "distance": 1000,

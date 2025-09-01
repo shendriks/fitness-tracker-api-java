@@ -2,7 +2,9 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper;
 
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.GPSPositionDbEntity;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.KilometerSpeedDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
@@ -15,10 +17,16 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.SETTER)
+@Mapper(
+    componentModel = MappingConstants.ComponentModel.SPRING,
+    injectionStrategy = InjectionStrategy.SETTER,
+    imports = {Distance.class, Duration.class}
+)
 public abstract class ActivityDbEntityMapper {
     @Setter(onMethod_ = {@Autowired})
     private Clock clock;
+
+    public abstract ActivityDetails toActivityDetails(ActivityDbEntity activityDbEntity);
 
     public abstract Activity toActivity(ActivityDbEntity activityDbEntity);
 
@@ -31,7 +39,12 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "gpsPositions", ignore = true)
     @Mapping(target = "state", ignore = true)
-    public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData);
+    @Mapping(target = "averageSpeed", source = "averageSpeed")
+    @Mapping(target = "kilometerSpeeds", ignore = true)
+    @Mapping(target = "elevationGain", ignore = true)
+    @Mapping(target = "motionTime", ignore = true)
+    @Mapping(target = "pausingTime", ignore = true)
+    public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData, Speed averageSpeed);
 
     public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData) {
         ActivityDbEntity activity = new ActivityDbEntity();
@@ -39,9 +52,12 @@ public abstract class ActivityDbEntityMapper {
         activity.setTitle(request.title());
         activity.setDescription(request.description());
         activity.setStartDate(gpsTrackData.gpxTime().orElse(Instant.now(clock)));
-        activity.setDuration((int) gpsTrackData.duration());
-        activity.setDistance((int) gpsTrackData.totalLength());
-        activity.setCalories(0);
+        activity.setDuration(gpsTrackData.duration());
+        activity.setDistance(gpsTrackData.distance());
+        activity.setAverageSpeed(gpsTrackData.speed());
+        activity.setElevationGain(gpsTrackData.elevationGain());
+        activity.setMotionTime(gpsTrackData.motionTime());
+        activity.setPausingTime(gpsTrackData.pausingTime());
         activity.setGpsPositions(
             gpsTrackData
                 .gpsPositions()
@@ -56,11 +72,26 @@ public abstract class ActivityDbEntityMapper {
                 .peek((position) -> position.setActivity(activity))
                 .toList()
         );
+        activity.setKilometerSpeeds(
+            gpsTrackData
+                .kilometerSpeeds()
+                .stream()
+                .map(speed -> KilometerSpeedDbEntity
+                    .builder()
+                    .speed(speed)
+                    .build())
+                .peek((speedDbEntity) -> speedDbEntity.setActivity(activity))
+                .toList()
+        );
         return activity;
     }
 
     public ActivityId mapActivityId(Long id) {
         return new ActivityId(id);
+    }
+
+    public Speed mapKilometerSpeed(KilometerSpeedDbEntity kilometerSpeedDbEntity) {
+        return kilometerSpeedDbEntity.getSpeed();
     }
 
     public ActivityUlid mapActivityUlid(String ulid) {

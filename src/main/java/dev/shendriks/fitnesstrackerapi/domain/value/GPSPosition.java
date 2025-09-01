@@ -9,7 +9,6 @@ public record GPSPosition(
     Instant timestamp,
     Double latitude,
     Double longitude,
-    Double altitude,
-    Double accuracy
+    Double altitude
 ) {
 }

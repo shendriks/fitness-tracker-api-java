@@ -1,57 +1,53 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Component
 @AllArgsConstructor
 public class GpxMetricsCalculator {
     private static final double SPEED_THRESHOLD_METERS_PER_SECOND = 0.5;
     private final DistanceCalculator distanceCalculator;
+    private final SpeedCalculator speedCalculator;
 
-    public double calculateTotalLength(List<WayPoint> points) {
+    public Distance calculateDistance(List<WayPoint> points) {
         if (points == null || points.size() < 2) {
-            return 0;
+            return Distance.zero();
         }
 
-        return IntStream
-            .range(1, points.size())
-            .mapToDouble(i -> distanceCalculator.calculateDistance(
+        Distance distance = Distance.zero();
+        for (var i = 1; i < points.size(); i++) {
+            distance.add(distanceCalculator.calculateDistance(
                 points.get(i - 1),
-                points.get(i)))
-            .sum();
+                points.get(i)));
+        }
+
+        return distance;
     }
 
-    public long calculateDuration(List<WayPoint> points) {
+    public Duration calculateDuration(List<WayPoint> points) {
         Instant firstTime = points.getFirst().getTime().orElse(null);
         Instant lastTime = points.getLast().getTime().orElse(null);
 
         if (firstTime == null || lastTime == null) {
-            return 0;
+            return Duration.zero();
         }
 
-        return Duration.between(firstTime, lastTime).getSeconds();
+        return Duration.ofJavaDuration(java.time.Duration.between(firstTime, lastTime));
     }
 
-    public double calculateSpeed(double totalLength, long duration) {
-        return duration > 0 ? totalLength / duration : 0;
-    }
-
-    public double calculatePace(double speed) {
-        return speed > 0 ? 1000 / speed : 0;
-    }
-
-    public double calculateElevationGain(List<WayPoint> points) {
+    public Distance calculateElevationGain(List<WayPoint> points) {
         if (points == null || points.size() < 2) {
-            return 0;
+            return Distance.zero();
         }
 
         List<Double> nonEmptyElevations = points
@@ -60,17 +56,20 @@ public class GpxMetricsCalculator {
             .map(p -> p.getElevation().get().doubleValue())
             .toList();
 
-        return IntStream.range(1, nonEmptyElevations.size()).mapToDouble(i -> {
-            double elevation1 = nonEmptyElevations.get(i - 1);
-            double elevation2 = nonEmptyElevations.get(i);
+        Distance elevationGain = Distance.zero();
+        for (var i = 1; i < nonEmptyElevations.size(); i++) {
+            Double elevation1 = nonEmptyElevations.get(i - 1);
+            Double elevation2 = nonEmptyElevations.get(i);
             double elevationDiff = elevation2 - elevation1;
-            return elevationDiff > 0 ? elevationDiff : 0;
-        }).sum();
+            elevationGain.addMeters(elevationDiff > 0 ? elevationDiff : 0.0);
+        }
+
+        return elevationGain;
     }
 
     public MotionAndPausingTime calculateMotionAndPausingTime(List<WayPoint> points) {
-        long totalMotionTime = 0;
-        long totalPausingTime = 0;
+        Duration totalMotionTime = Duration.zero();
+        Duration totalPausingTime = Duration.zero();
 
         List<WayPoint> pointsWithTime = points.stream().filter(p -> p.getTime().isPresent()).toList();
 
@@ -81,14 +80,14 @@ public class GpxMetricsCalculator {
             Instant time1 = wayPoint1.getTime().orElseThrow();
             Instant time2 = wayPoint2.getTime().orElseThrow();
 
-            long timeBetweenPoints = Duration.between(time1, time2).getSeconds();
-            double distance = distanceCalculator.calculateDistance(wayPoint1, wayPoint2);
-            double speed = timeBetweenPoints > 0 ? distance / timeBetweenPoints : 0;
+            Duration timeBetweenPoints = Duration.ofJavaDuration(java.time.Duration.between(time1, time2));
+            Distance distance = distanceCalculator.calculateDistance(wayPoint1, wayPoint2);
+            Speed speed = speedCalculator.calculateSpeed(distance, timeBetweenPoints);
 
-            if (speed >= SPEED_THRESHOLD_METERS_PER_SECOND) {
-                totalMotionTime += timeBetweenPoints;
+            if (speed.toMetersPerSecond() >= SPEED_THRESHOLD_METERS_PER_SECOND) {
+                totalMotionTime.add(timeBetweenPoints);
             } else {
-                totalPausingTime += timeBetweenPoints;
+                totalPausingTime.add(timeBetweenPoints);
             }
         }
 

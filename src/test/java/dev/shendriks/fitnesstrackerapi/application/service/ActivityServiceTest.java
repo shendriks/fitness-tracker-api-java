@@ -5,7 +5,9 @@ import dev.shendriks.fitnesstrackerapi.application.event.ActivitySavedEvent;
 import dev.shendriks.fitnesstrackerapi.application.event.ActivityUpdatedEvent;
 import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.SpeedCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,7 @@ class ActivityServiceTest {
     private ForAccessingActivities forAccessingActivities;
     private ApplicationEventPublisher eventPublisher;
     private GpxService gpxService;
+    private SpeedCalculator speedCalculator;
     private ActivityService service;
 
     @BeforeEach
@@ -37,7 +40,8 @@ class ActivityServiceTest {
         forAccessingActivities = mock(ForAccessingActivities.class);
         eventPublisher = mock(ApplicationEventPublisher.class);
         gpxService = mock(GpxService.class);
-        service = new ActivityService(forAccessingActivities, eventPublisher, gpxService);
+        speedCalculator = mock(SpeedCalculator.class);
+        service = new ActivityService(forAccessingActivities, eventPublisher, gpxService, speedCalculator);
     }
 
     @Test
@@ -57,15 +61,13 @@ class ActivityServiceTest {
             .id(activityId)
             .ulid(activityUlid)
             .activityType(ActivityType.RUNNING)
-            .duration(3600)
-            .calories(500)
+            .duration(Duration.ofSeconds(3600L))
+            .distance(Distance.ofMeters(10000.0))
             .createdAt(Instant.now())
             .updatedAt(Instant.now())
             .title("Morning Run")
             .description("Nice run")
-            .distance(10000)
             .startDate(Instant.now())
-            .gpsPositions(List.of())
             .build();
         when(forAccessingActivities.findAllByUser(userId)).thenReturn(List.of(activity));
 
@@ -79,24 +81,23 @@ class ActivityServiceTest {
 
     @Test
     void getActivityByUser_withFound_returnsActivity() {
-        Activity activity = Activity
+        ActivityDetails activity = ActivityDetails
             .builder()
             .id(activityId)
             .ulid(activityUlid)
             .activityType(ActivityType.WALKING)
-            .duration(10)
-            .calories(1)
+            .duration(Duration.ofSeconds(10L))
+            .distance(Distance.ofMeters(0.0))
             .createdAt(Instant.now())
             .updatedAt(Instant.now())
             .title("")
             .description("")
-            .distance(0)
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
         when(forAccessingActivities.findByUserAndId(userId, activityUlid)).thenReturn(Optional.of(activity));
 
-        Activity actualActivity = service.getActivityByUser(userId, activityUlid);
+        ActivityDetails actualActivity = service.getActivityByUser(userId, activityUlid);
 
         assertEquals(activity, actualActivity);
         verify(forAccessingActivities).findByUserAndId(userId, activityUlid);
@@ -117,31 +118,33 @@ class ActivityServiceTest {
         ActivityCreationData creationData = ActivityCreationData
             .builder()
             .activityType(ActivityType.CYCLING)
-            .duration(1800)
-            .calories(300)
+            .duration(Duration.ofSeconds(1800L))
+            .distance(Distance.ofMeters(15000.0))
             .title("Ride")
             .description("Desc")
-            .distance(15000)
             .startDate(Instant.now())
             .build();
-        Activity activity = Activity
+        Speed averageSpeed = Speed.ofMetersPerSecond(1800 / 15000.0);
+        ActivityDetails activity = ActivityDetails
             .builder()
             .id(activityId)
             .ulid(activityUlid)
             .activityType(ActivityType.CYCLING)
-            .duration(1800)
-            .calories(300)
+            .duration(Duration.ofSeconds(1800L))
+            .distance(Distance.ofMeters(15000.0))
+            .averageSpeed(averageSpeed)
             .createdAt(Instant.now())
             .updatedAt(Instant.now())
             .title("Ride")
             .description("Desc")
-            .distance(15000)
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
-        when(forAccessingActivities.saveForUser(userId, creationData)).thenReturn(activity);
+        when(forAccessingActivities.saveForUser(userId, creationData, averageSpeed)).thenReturn(activity);
+        when(speedCalculator.calculateSpeed(Distance.ofMeters(15000.0), Duration.ofSeconds(1800L)))
+            .thenReturn(averageSpeed);
 
-        Activity actualActivity = service.saveActivityForUser(userId, creationData);
+        ActivityDetails actualActivity = service.saveActivityForUser(userId, creationData);
 
         assertEquals(activity, actualActivity);
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
@@ -151,31 +154,30 @@ class ActivityServiceTest {
         ActivitySavedEvent activitySavedEvent = (ActivitySavedEvent) event;
         assertEquals(userId, activitySavedEvent.userId());
         assertEquals(activityId, activitySavedEvent.activityId());
-        verify(forAccessingActivities).saveForUser(userId, creationData);
+        verify(forAccessingActivities).saveForUser(userId, creationData, averageSpeed);
         verifyNoMoreInteractions(forAccessingActivities, gpxService);
     }
 
     @Test
     void updateActivityForUser_publishesActivityUpdatedEvent() {
         ActivityUpdateData updateData = new ActivityUpdateData(ActivityType.SWIMMING, "Swim", "Pool");
-        Activity updated = Activity
+        ActivityDetails updated = ActivityDetails
             .builder()
             .id(activityId)
             .ulid(activityUlid)
             .activityType(ActivityType.SWIMMING)
-            .duration(1200)
-            .calories(200)
+            .duration(Duration.ofSeconds(1200L))
+            .distance(Distance.ofMeters(1000.0))
             .createdAt(Instant.now())
             .updatedAt(Instant.now())
             .title("Swim")
             .description("Pool")
-            .distance(1000)
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
         when(forAccessingActivities.updateForUser(userId, activityUlid, updateData)).thenReturn(updated);
 
-        Activity result = service.updateActivityForUser(userId, activityUlid, updateData);
+        ActivityDetails result = service.updateActivityForUser(userId, activityUlid, updateData);
 
         assertEquals(updated, result);
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
@@ -204,37 +206,34 @@ class ActivityServiceTest {
             .builder()
             .name("track")
             .gpxTime(Optional.empty())
-            .totalLength(1000)
-            .duration(600)
-            .speed(10)
-            .pace(6)
-            .elevationGain(10)
-            .motionTime(500)
-            .pausingTime(100)
+            .distance(Distance.ofMeters(1000.0))
+            .duration(Duration.ofSeconds(600L))
+            .speed(Speed.ofMetersPerSecond(10.0))
+            .elevationGain(Distance.ofMeters(10.0))
+            .motionTime(Duration.ofSeconds(500L))
+            .pausingTime(Duration.ofSeconds(100L))
             .kilometerSpeeds(List.of())
-            .kilometerPaces(List.of())
             .gpsPositions(List.of())
             .build();
         when(gpxService.processGpxFile(any())).thenReturn(gpsTrackData);
 
-        Activity activity = Activity
+        ActivityDetails activity = ActivityDetails
             .builder()
             .id(activityId)
             .ulid(activityUlid)
             .activityType(ActivityType.RUNNING)
-            .duration(600)
-            .calories(100)
+            .duration(Duration.ofSeconds(600L))
+            .distance(Distance.ofMeters(1000.0))
             .createdAt(Instant.now())
             .updatedAt(Instant.now())
             .title("Run from GPX")
             .description("desc")
-            .distance(1000)
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
         when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData)).thenReturn(activity);
 
-        Activity actualActivity = service.uploadActivityForUser(userId, uploadData);
+        ActivityDetails actualActivity = service.uploadActivityForUser(userId, uploadData);
 
         assertEquals(activity, actualActivity);
         verify(multipartFile, times(1)).transferTo(any(Path.class));

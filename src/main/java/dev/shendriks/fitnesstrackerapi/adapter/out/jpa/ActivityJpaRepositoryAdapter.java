@@ -9,6 +9,7 @@ import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundExc
 import dev.shendriks.fitnesstrackerapi.application.exception.UserNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -35,22 +36,22 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     }
 
     @Override
-    public Optional<Activity> findByUserAndId(UserId userId, ActivityUlid activityUlid) {
+    public Optional<ActivityDetails> findByUserAndId(UserId userId, ActivityUlid activityUlid) {
         var entity = activityDbEntityRepository.findByUserIdAndUlid(userId.value(), activityUlid.value());
-        return entity.map(activityMapper::toActivity);
+        return entity.map(activityMapper::toActivityDetails);
     }
 
     @Override
-    public Activity saveForUser(UserId userId, ActivityCreationData activityCreationData) {
-        ActivityDbEntity entity = activityMapper.toActivityDbEntity(activityCreationData);
+    public ActivityDetails saveForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed) {
+        ActivityDbEntity entity = activityMapper.toActivityDbEntity(activityCreationData, averageSpeed);
         UserDbEntity user = userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new);
         entity.setUser(user);
         entity = activityDbEntityRepository.save(entity);
-        return activityMapper.toActivity(entity);
+        return activityMapper.toActivityDetails(entity);
     }
 
     @Override
-    public Activity updateForUser(UserId userId, ActivityUlid activityUlid, ActivityUpdateData activityUpdateData) {
+    public ActivityDetails updateForUser(UserId userId, ActivityUlid activityUlid, ActivityUpdateData activityUpdateData) {
         ActivityDbEntity entity = activityDbEntityRepository
             .findByUserIdAndUlid(userId.value(), activityUlid.value())
             .orElseThrow(ActivityNotFoundException::new);
@@ -58,7 +59,7 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
         entity.setTitle(activityUpdateData.title());
         entity.setDescription(activityUpdateData.description());
         entity = activityDbEntityRepository.save(entity);
-        return activityMapper.toActivity(entity);
+        return activityMapper.toActivityDetails(entity);
     }
 
     @Override
@@ -67,11 +68,11 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     }
 
     @Override
-    public Activity saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData) {
+    public ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData) {
         ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData);
         activityDbEntry.setUser(userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new));
         activityDbEntityRepository.save(activityDbEntry);
-        return activityMapper.toActivity(activityDbEntry);
+        return activityMapper.toActivityDetails(activityDbEntry);
     }
 
     @Override

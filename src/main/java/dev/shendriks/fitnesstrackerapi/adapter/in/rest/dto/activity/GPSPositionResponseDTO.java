@@ -5,6 +5,7 @@ import java.time.Instant;
 public record GPSPositionResponseDTO(
     Instant timestamp,
     Double latitude,
-    Double longitude
+    Double longitude,
+    Double altitude
 ) {
 }

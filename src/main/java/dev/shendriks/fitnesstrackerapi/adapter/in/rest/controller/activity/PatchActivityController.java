@@ -1,11 +1,11 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.activity;
 
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
-import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityResponseDTO;
+import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityDetailsResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityUpdateRequestDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper.ActivityDTOMapper;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.UpdateActivityUseCase;
-import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
+import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUlid;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityUpdateData;
@@ -43,7 +43,7 @@ public class PatchActivityController {
         @ApiResponse(
             responseCode = "200",
             description = "The updated activity",
-            content = @Content
+            content = @Content(schema = @Schema(implementation = ActivityDetailsResponseDTO.class))
         ),
         @ApiResponse(
             responseCode = "400",
@@ -54,7 +54,7 @@ public class PatchActivityController {
         @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
         @ApiResponse(responseCode = "429", description = "Rate limit exceeded", content = @Content)})
     @PatchMapping("/api/activities/{id}")
-    public ResponseEntity<ActivityResponseDTO> patchActivity(
+    public ResponseEntity<ActivityDetailsResponseDTO> patchActivity(
         @AuthenticationPrincipal(errorOnInvalidType = true) User user,
         @PathVariable
         @Parameter(
@@ -85,12 +85,12 @@ public class PatchActivityController {
 //        }
 //
         ActivityUpdateData activityUpdateData = activityMapper.toActivityUpdateData(request);
-        Activity activity = updateActivityUseCase.updateActivityForUser(
+        ActivityDetails activity = updateActivityUseCase.updateActivityForUser(
             user.id(),
             new ActivityUlid(id),
             activityUpdateData
         );
-        ActivityResponseDTO response = activityMapper.toActivityResponse(activity);
+        ActivityDetailsResponseDTO response = activityMapper.toActivityDetailsResponse(activity);
 
         return ResponseEntity.ok(response);
     }

@@ -8,6 +8,9 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,11 +54,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(100)
-            .calories(10)
+            .duration(Duration.ofSeconds(100L))
+            .distance(Distance.ofMeters(1234.0))
+            .averageSpeed(Speed.ofMetersPerSecond(100 / 1234.0))
             .title("Old Title")
             .description("Old Desc")
-            .distance(1234)
             .startDate(Instant.parse("2025-08-20T10:00:00Z"))
             .build());
 
@@ -102,11 +105,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(200)
-            .calories(20)
+            .duration(Duration.ofSeconds(200L))
+            .distance(Distance.ofMeters(2000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(200 / 2000.0))
             .title("Other Title")
             .description("Other Desc")
-            .distance(2000)
             .startDate(Instant.parse("2025-08-22T10:00:00Z"))
             .build());
 
@@ -163,11 +166,11 @@ class PatchActivityControllerTest {
         ActivityDbEntity activity = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.WALKING)
-            .duration(100)
-            .calories(10)
+            .duration(Duration.ofSeconds(100L))
+            .distance(Distance.ofMeters(1234.0))
+            .averageSpeed(Speed.ofMetersPerSecond(100 / 1234.0))
             .title("Old Title")
             .description("Old Desc")
-            .distance(1234)
             .startDate(Instant.parse("2025-08-20T10:00:00Z"))
             .build());
 

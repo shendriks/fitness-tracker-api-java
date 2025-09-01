@@ -50,7 +50,7 @@ class ChallengeParticipationJpaRepositoryAdapterIntegrationTest extends JpaRepos
             .endDate(Instant.now().plusSeconds(3600))
             .ulid(challengeUlid)
             .build());
-        
+
         boolean existsBefore = adapter.existsByChallengeAndUser(userId, new ChallengeUlid(challengeUlid));
         assertFalse(existsBefore, "Expected no participation before create");
 

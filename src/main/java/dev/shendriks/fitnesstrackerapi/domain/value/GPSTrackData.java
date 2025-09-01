@@ -10,15 +10,13 @@ import java.util.Optional;
 public record GPSTrackData(
     String name,
     Optional<Instant> gpxTime,
-    double totalLength,
-    long duration,
-    double speed,
-    double pace,
-    double elevationGain,
-    long motionTime,
-    long pausingTime,
-    List<Double> kilometerSpeeds,
-    List<Double> kilometerPaces,
+    Distance distance,
+    Duration duration,
+    Speed speed,
+    Distance elevationGain,
+    Duration motionTime,
+    Duration pausingTime,
+    List<Speed> kilometerSpeeds,
     List<GPSPositionData> gpsPositions
 ) {
 }

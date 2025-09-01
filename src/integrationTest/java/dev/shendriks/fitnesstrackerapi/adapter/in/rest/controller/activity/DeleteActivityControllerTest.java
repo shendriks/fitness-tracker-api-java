@@ -7,6 +7,9 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -50,11 +53,11 @@ class DeleteActivityControllerTest {
             .builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(1800)
-            .calories(500)
+            .duration(Duration.ofSeconds(1800L))
+            .distance(Distance.ofMeters(5000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1800 / 5000.0))
             .title("My Activity")
             .description("Test activity")
-            .distance(5000)
             .startDate(Instant.parse("2025-08-22T06:00:00Z"))
             .build());
 
@@ -96,11 +99,11 @@ class DeleteActivityControllerTest {
             .builder()
             .user(otherUser)
             .activityType(ActivityType.RUNNING)
-            .duration(1800)
-            .calories(500)
+            .duration(Duration.ofSeconds(1800L))
+            .distance(Distance.ofMeters(5000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1800 / 5000.0))
             .title("My Activity")
             .description("Test activity")
-            .distance(5000)
             .startDate(Instant.parse("2025-08-22T06:00:00Z"))
             .build());
 

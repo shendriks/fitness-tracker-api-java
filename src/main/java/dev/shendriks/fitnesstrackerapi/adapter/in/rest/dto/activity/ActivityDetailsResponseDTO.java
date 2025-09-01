@@ -8,14 +8,18 @@ import java.util.List;
 public record ActivityDetailsResponseDTO(
     String id,
     ActivityType activityType,
-    int duration,
-    int calories,
+    Long duration,
+    Double distance,
+    Double averageSpeed,
     Instant createdAt,
     Instant updatedAt,
     String title,
     String description,
-    int distance,
     Instant startDate,
-    List<GPSPositionResponseDTO> gpsPositions
+    List<GPSPositionResponseDTO> gpsPositions,
+    List<Double> kilometerSpeeds,
+    Double elevationGain,
+    Long motionTime,
+    Long pausingTime
 ) {
 }

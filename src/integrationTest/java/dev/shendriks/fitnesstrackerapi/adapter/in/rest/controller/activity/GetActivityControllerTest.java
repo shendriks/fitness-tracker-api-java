@@ -10,6 +10,9 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +60,11 @@ class GetActivityControllerTest {
         ActivityDbEntity activity = ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
-            .duration(1800)
-            .calories(500)
+            .duration(Duration.ofSeconds(1800L))
+            .distance(Distance.ofMeters(10000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(1800 / 10000.0))
             .title("Morning Run")
             .description("Nice run")
-            .distance(10_000)
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
             .build();
         GPSPositionDbEntity pos1 = GPSPositionDbEntity.builder()
@@ -94,7 +97,7 @@ class GetActivityControllerTest {
         assertEquals(activity.getUlid(), detail.get("id"));
         assertEquals("Morning Run", detail.get("title"));
         assertEquals(1800, detail.get("duration"));
-        assertEquals(10000, detail.get("distance"));
+        assertEquals(10000.0, (Double) detail.get("distance"), Constant.EPSILON);
 
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> gps = (List<Map<String, Object>>) detail.get("gpsPositions");
@@ -133,11 +136,11 @@ class GetActivityControllerTest {
         ActivityDbEntity othersActivity = activityRepository.save(ActivityDbEntity.builder()
             .user(otherUser)
             .activityType(ActivityType.CYCLING)
-            .duration(3600)
-            .calories(800)
+            .duration(Duration.ofSeconds(3600L))
+            .distance(Distance.ofMeters(25000.0))
+            .averageSpeed(Speed.ofMetersPerSecond(3600 / 25000.0))
             .title("Other User Ride")
             .description("Not yours")
-            .distance(25000)
             .startDate(Instant.parse("2025-08-22T18:30:00Z"))
             .build());
 

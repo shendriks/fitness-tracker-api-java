@@ -3,10 +3,8 @@ package dev.shendriks.fitnesstrackerapi.application.service;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.GpxMetricsCalculator;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.GpxWaypointProcessor;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.KilometerMetricsCalculator;
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
-import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
-import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.SpeedCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Metadata;
 import io.jenetics.jpx.Track;
@@ -28,6 +26,7 @@ public class GpxService {
     private final GpxWaypointProcessor waypointProcessor;
     private final GpxMetricsCalculator metricsCalculator;
     private final KilometerMetricsCalculator kilometerMetricsCalculator;
+    private final SpeedCalculator speedCalculator;
 
     private static Optional<String> getName(GPX gpx) {
         return gpx
@@ -49,16 +48,14 @@ public class GpxService {
         Optional<Instant> gpxTime = gpx.getMetadata().flatMap(Metadata::getTime).or(() -> wayPoints.getFirst().getTime());
         String name = getName(gpx).orElse("");
 
-        double totalLength = metricsCalculator.calculateTotalLength(wayPoints);
-        long duration = metricsCalculator.calculateDuration(wayPoints);
-        double speed = metricsCalculator.calculateSpeed(totalLength, duration);
-        double pace = metricsCalculator.calculatePace(speed);
-        double elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
+        Distance distance = metricsCalculator.calculateDistance(wayPoints);
+        Duration duration = metricsCalculator.calculateDuration(wayPoints);
+        Speed speed = speedCalculator.calculateSpeed(distance, duration);
+        Distance elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
         MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
 
         KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
-        List<Double> kilometerSpeeds = kilometerMetrics.speeds();
-        List<Double> kilometerPaces = kilometerMetrics.paces();
+        List<Speed> kilometerSpeeds = kilometerMetrics.speeds();
 
         List<GPSPositionData> gpsPositions = wayPoints
             .stream()
@@ -73,15 +70,13 @@ public class GpxService {
         return new GPSTrackData(
             name,
             gpxTime,
-            totalLength,
+            distance,
             duration,
             speed,
-            pace,
             elevationGain,
             motionAndPausingTime.motionTime(),
             motionAndPausingTime.pausingTime(),
             kilometerSpeeds,
-            kilometerPaces,
             gpsPositions
         );
     }

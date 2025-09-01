@@ -2,12 +2,11 @@ package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.application.exception.WayPointsNotSortedException;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
-import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +14,26 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class KilometerMetricsCalculator {
-    public static final int MINIMUM_SIGNIFICANT_DISTANCE = 100;
+    public static final int MINIMUM_SIGNIFICANT_DISTANCE_IN_METERS = 100;
     private final DistanceCalculator distanceCalculator;
+    private final SpeedCalculator speedCalculator;
 
-    private static boolean isSegmentSignificant(double kilometerSegmentDistance) {
-        return kilometerSegmentDistance > MINIMUM_SIGNIFICANT_DISTANCE;
+    private static boolean isSegmentSignificant(Distance kilometerSegmentDistance) {
+        return kilometerSegmentDistance.toMeters() > MINIMUM_SIGNIFICANT_DISTANCE_IN_METERS;
     }
 
     /**
      * Precondition: wayPoints are sorted by timestamp
      */
     public KilometerMetrics calculateKilometerMetrics(List<WayPoint> wayPoints) {
-        List<Double> kilometerSpeeds = new ArrayList<>();
-        List<Double> kilometerPaces = new ArrayList<>();
+        List<Speed> kilometerSpeeds = new ArrayList<>();
+        List<Pace> kilometerPaces = new ArrayList<>();
 
         if (wayPoints.size() < 2) {
             return new KilometerMetrics(kilometerSpeeds, kilometerPaces);
         }
 
-        double kilometerSegmentDistance = 0;
+        Distance kilometerSegmentDistance = Distance.zero();
         Instant kilometerSegmentStartTime = wayPoints.getFirst().getTime().orElseThrow();
         WayPoint lastPoint = wayPoints.getFirst();
 
@@ -48,19 +48,20 @@ public class KilometerMetricsCalculator {
                 throw new WayPointsNotSortedException();
             }
 
-            double distance = distanceCalculator.calculateDistance(lastPoint, currentPoint);
-            kilometerSegmentDistance += distance;
+            Distance distance = distanceCalculator.calculateDistance(lastPoint, currentPoint);
+            kilometerSegmentDistance.add(distance);
 
-            if (kilometerSegmentDistance >= 1000) {
+            if (kilometerSegmentDistance.toMeters() >= 1000.0) {
                 Instant kilometerSegmentEndTime = currentPoint.getTime().get();
-                long segmentDuration = Duration.between(kilometerSegmentStartTime, kilometerSegmentEndTime).getSeconds();
-                double segmentSpeed = segmentDuration > 0 ? kilometerSegmentDistance / segmentDuration : 0;
-                double segmentPace = segmentSpeed > 0 ? 1000 / segmentSpeed : 0;
+                Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
+                    .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
+                Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
+                Pace segmentPace = segmentSpeed.toPace();
 
                 kilometerSpeeds.add(segmentSpeed);
                 kilometerPaces.add(segmentPace);
 
-                kilometerSegmentDistance = 0;
+                kilometerSegmentDistance = Distance.zero();
                 kilometerSegmentStartTime = kilometerSegmentEndTime;
             }
 
@@ -69,9 +70,10 @@ public class KilometerMetricsCalculator {
 
         if (isSegmentSignificant(kilometerSegmentDistance)) {
             Instant kilometerSegmentEndTime = wayPoints.getLast().getTime().orElseThrow();
-            long segmentDuration = Duration.between(kilometerSegmentStartTime, kilometerSegmentEndTime).getSeconds();
-            double segmentSpeed = segmentDuration > 0 ? kilometerSegmentDistance / segmentDuration : 0;
-            double segmentPace = segmentSpeed > 0 ? 1000 / segmentSpeed : 0;
+            Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
+                .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
+            Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
+            Pace segmentPace = segmentSpeed.toPace();
 
             kilometerSpeeds.add(segmentSpeed);
             kilometerPaces.add(segmentPace);

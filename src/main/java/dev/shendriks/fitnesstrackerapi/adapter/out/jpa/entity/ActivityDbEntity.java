@@ -1,7 +1,13 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DistanceConverter;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DurationConverter;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.SpeedConverter;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,10 +37,15 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityType activityType;
+    @Convert(converter = DurationConverter.class)
     @Column(nullable = false)
-    private int duration;
+    private Duration duration;
+    @Convert(converter = DistanceConverter.class)
     @Column(nullable = false)
-    private int calories;
+    private Distance distance;
+    @Convert(converter = SpeedConverter.class)
+    @Column(nullable = false)
+    private Speed averageSpeed;
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;
@@ -42,7 +53,12 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     private Instant updatedAt;
     @Builder.Default
-    @OneToMany(mappedBy = "activity", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(
+        mappedBy = "activity",
+        orphanRemoval = true,
+        cascade = CascadeType.PERSIST,
+        fetch = FetchType.LAZY
+    )
     private List<GPSPositionDbEntity> gpsPositions = List.of();
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -53,7 +69,22 @@ public class ActivityDbEntity {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private int distance;
-    @Column(nullable = false)
     private Instant startDate;
+    @Convert(converter = DistanceConverter.class)
+    @Column
+    private Distance elevationGain;
+    @Convert(converter = DurationConverter.class)
+    @Column
+    private Duration motionTime;
+    @Convert(converter = DurationConverter.class)
+    @Column
+    private Duration pausingTime;
+    @Builder.Default
+    @OneToMany(
+        mappedBy = "activity",
+        orphanRemoval = true,
+        cascade = CascadeType.PERSIST,
+        fetch = FetchType.LAZY
+    )
+    private List<KilometerSpeedDbEntity> kilometerSpeeds = List.of();
 }
