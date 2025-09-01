@@ -6,10 +6,6 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: sa
-    #url: jdbc:mysql://mysql:3306/fitnessdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    #driverClassName: com.mysql.cj.jdbc.Driver
-    #username: root
-    #password: root
   sql:
     init:
       mode: always
@@ -24,15 +20,6 @@ spring:
   #    properties:
   #      hibernate:
   #        format_sql: true 
-#    h2:
-#      console:
-#        enabled: true
-#        settings:
-#          trace: false
-#          web-allow-others: false
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL8Dialect
   servlet:
     multipart:
       enabled: true
@@ -40,7 +27,6 @@ spring:
       max-request-size: 10MB 
 
 springdoc:
-#  writer-with-order-by-keys: true
   api-docs:
     path: /api-docs
   swagger-ui:

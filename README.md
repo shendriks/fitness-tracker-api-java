@@ -6,17 +6,41 @@
 
 An API for tracking fitness activities
 
-## Context Diagram 
-
-![Context Diagram](./docs/ContextDiagram.png)
-
 ## Setup
 
-tbd
+There are at least two ways to run the application:
 
-## Swagger UI
+### Docker
 
-Go to http://localhost:8080/swagger-ui/index.html
+You can run the application with Docker Compose:
+
+```bash
+docker compose up
+```
+
+### Gradle
+
+If you have Java >= 21 and Gradle >= 8.14 installed, you can run the application with:
+
+```
+./gradlew bootRun
+```
+
+or on Windows:
+
+```
+./gradlew.bat bootRun
+```
+
+### Swagger UI
+
+When running the application, Swagger UI will be available at http://localhost:8080/swagger-ui/index.html
+
+## Architecture
+
+### Context Diagram
+
+![Context Diagram](./docs/ContextDiagram.png)
 
 ## Further Documentation
 
