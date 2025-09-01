@@ -31,7 +31,7 @@ import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRe
         @Tag(name = OpenApiTagName.CHALLENGE_PARTICIPATIONS, description = "Challenges the user is participating in"),
         @Tag(name = OpenApiTagName.MILESTONES, description = "Users can reach milestones by uploading activities"),
         @Tag(name = OpenApiTagName.TROPHIES, description = "Trophies can be earned by reaching milestones or completing challenges"),
-        @Tag(name = OpenApiTagName.NOTIFICATIONS, description = "Notifications about events, such as activity uploaded, or trophy earned"),
+        @Tag(name = OpenApiTagName.NOTIFICATIONS, description = "Notifications about events, such as \"Activity Uploaded\" or \"Trophy Earned\""),
         @Tag(name = OpenApiTagName.PING, description = "Health check")
     })
 @SecuritySchemes(value = {
