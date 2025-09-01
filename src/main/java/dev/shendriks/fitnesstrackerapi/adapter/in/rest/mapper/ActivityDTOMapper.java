@@ -27,7 +27,6 @@ public abstract class ActivityDTOMapper {
     @Mapping(target = "elevationGain", expression = "java(activity.elevationGain() == null ? null : activity.elevationGain().toMeters())")
     @Mapping(target = "motionTime", expression = "java(activity.motionTime() == null ? null : activity.motionTime().toSeconds())")
     @Mapping(target = "pausingTime", expression = "java(activity.pausingTime() == null ? null : activity.pausingTime().toSeconds())")
-    @Mapping(target = "calories", ignore = true)
     public abstract ActivityDetailsResponseDTO toActivityDetailsResponse(ActivityDetails activity);
 
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")

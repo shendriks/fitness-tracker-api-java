@@ -10,8 +10,6 @@ public record ActivityCreationData(
     ActivityType activityType,
     Duration duration,
     Distance distance,
-    @Deprecated
-    int calories,
     String title,
     String description,
     Instant startDate

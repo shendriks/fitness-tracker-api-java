@@ -36,7 +36,6 @@ class ActivityDbEntityMapperTest {
             .activityType(ActivityType.CYCLING)
             .duration(Duration.ofSeconds(3600L))
             .distance(Distance.ofMeters(25750.0))
-            .calories(800)
             .createdAt(Instant.parse("2025-08-01T10:15:30Z"))
             .updatedAt(Instant.parse("2025-08-02T10:15:30Z"))
             .title("Morning Ride")
@@ -68,18 +67,11 @@ class ActivityDbEntityMapperTest {
         assertEquals(ActivityType.CYCLING, actualActivity.activityType());
         assertEquals(3600.0, actualActivity.duration().toSeconds(), Constant.EPSILON);
         assertEquals(25750.0, actualActivity.distance().toMeters(), Constant.EPSILON);
-        assertEquals(800, actualActivity.calories());
         assertEquals(Instant.parse("2025-08-01T10:15:30Z"), actualActivity.createdAt());
         assertEquals(Instant.parse("2025-08-02T10:15:30Z"), actualActivity.updatedAt());
         assertEquals("Morning Ride", actualActivity.title());
         assertEquals("Sunny morning ride", actualActivity.description());
         assertEquals(Instant.parse("2025-08-01T07:00:00Z"), actualActivity.startDate());
-//        assertNotNull(actualActivity.gpsPositions());
-//        assertEquals(2, actualActivity.gpsPositions().size());
-//        assertEquals(0.0, actualActivity.gpsPositions().get(0).latitude());
-//        assertEquals(1.0, actualActivity.gpsPositions().get(0).longitude());
-//        assertEquals(0.1, actualActivity.gpsPositions().get(1).latitude());
-//        assertEquals(1.1, actualActivity.gpsPositions().get(1).longitude());
     }
 
     @Test
@@ -92,7 +84,6 @@ class ActivityDbEntityMapperTest {
                 .activityType(ActivityType.WALKING)
                 .duration(Duration.ofSeconds(100L))
                 .distance(Distance.ofMeters(123.0))
-                .calories(10)
                 .title("Walk")
                 .description("desc")
                 .startDate(Instant.parse("2025-08-01T00:00:00Z"))
@@ -104,7 +95,6 @@ class ActivityDbEntityMapperTest {
                 .activityType(ActivityType.SWIMMING)
                 .duration(Duration.ofSeconds(200L))
                 .distance(Distance.ofMeters(456.0))
-                .calories(20)
                 .title("Swim")
                 .description("desc")
                 .startDate(Instant.parse("2025-08-02T00:00:00Z"))
@@ -122,7 +112,6 @@ class ActivityDbEntityMapperTest {
         assertEquals(Instant.parse("2025-08-01T00:00:00Z"), activities.getFirst().startDate());
         assertEquals(100.0, activities.getFirst().duration().toSeconds(), Constant.EPSILON);
         assertEquals(123.0, activities.getFirst().distance().toMeters(), Constant.EPSILON);
-        assertEquals(10, activities.getFirst().calories());
         assertEquals(ActivityType.WALKING, activities.getFirst().activityType());
 
         assertEquals(new ActivityId(2L), activities.get(1).id());
@@ -132,7 +121,6 @@ class ActivityDbEntityMapperTest {
         assertEquals(Instant.parse("2025-08-02T00:00:00Z"), activities.get(1).startDate());
         assertEquals(200.0, activities.get(1).duration().toSeconds(), Constant.EPSILON);
         assertEquals(456.0, activities.get(1).distance().toMeters(), Constant.EPSILON);
-        assertEquals(20, activities.get(1).calories());
         assertEquals(ActivityType.SWIMMING, activities.get(1).activityType());
     }
 
@@ -143,7 +131,6 @@ class ActivityDbEntityMapperTest {
             .activityType(ActivityType.RUNNING)
             .duration(Duration.ofSeconds(1234L))
             .distance(Distance.ofMeters(890.0))
-            .calories(567)
             .title("Test Title")
             .description("Test Description")
             .startDate(Instant.parse("2025-08-01T12:00:00Z"))
@@ -156,7 +143,6 @@ class ActivityDbEntityMapperTest {
         // mapped fields
         assertEquals(ActivityType.RUNNING, actualActivityDbEntity.getActivityType());
         assertEquals(1234, actualActivityDbEntity.getDuration().toSeconds());
-        assertEquals(567, actualActivityDbEntity.getCalories());
         assertEquals("Test Title", actualActivityDbEntity.getTitle());
         assertEquals("Test Description", actualActivityDbEntity.getDescription());
         assertEquals(890, actualActivityDbEntity.getDistance().toMeters());
@@ -206,7 +192,6 @@ class ActivityDbEntityMapperTest {
         assertEquals(Instant.parse("2025-08-01T09:30:00Z"), actualActivityDbEntity.getStartDate());
         assertEquals(5432.00, actualActivityDbEntity.getDuration().toSeconds(), Constant.EPSILON);
         assertEquals(12345.67, actualActivityDbEntity.getDistance().toMeters(), Constant.EPSILON);
-        assertEquals(0, actualActivityDbEntity.getCalories());
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertEquals(2, actualActivityDbEntity.getGpsPositions().size());
         for (GPSPositionDbEntity gpsPosition : actualActivityDbEntity.getGpsPositions()) {

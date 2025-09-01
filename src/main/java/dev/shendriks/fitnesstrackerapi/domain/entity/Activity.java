@@ -12,8 +12,6 @@ public record Activity(
     ActivityUlid ulid,
     ActivityType activityType,
     Duration duration,
-    @Deprecated
-    int calories,
     Distance distance,
     String title,
     String description,

@@ -126,7 +126,6 @@ class ActivityDTOMapperTest {
             .activityType("running")
             .duration(3600L)
             .distance(10000.0)
-            .calories(900)
             .title("Morning Run")
             .description("Nice run")
             .startDate(Instant.parse("2024-05-10T06:00:00Z"))
@@ -138,7 +137,6 @@ class ActivityDTOMapperTest {
         assertEquals(ActivityType.RUNNING, activityCreationData.activityType());
         assertEquals(3600.0, activityCreationData.duration().toSeconds(), Constant.EPSILON);
         assertEquals(10000.0, activityCreationData.distance().toMeters(), Constant.EPSILON);
-        assertEquals(900, activityCreationData.calories());
         assertEquals("Morning Run", activityCreationData.title());
         assertEquals("Nice run", activityCreationData.description());
         assertEquals(Instant.parse("2024-05-10T06:00:00Z"), activityCreationData.startDate());

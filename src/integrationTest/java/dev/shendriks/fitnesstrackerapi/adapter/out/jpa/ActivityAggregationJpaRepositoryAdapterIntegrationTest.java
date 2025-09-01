@@ -39,7 +39,6 @@ class ActivityAggregationJpaRepositoryAdapterIntegrationTest extends JpaRepositi
             .duration(Duration.ofSeconds(duration))
             .distance(Distance.ofMeters(distance))
             .averageSpeed(Speed.ofMetersPerSecond(distance / duration))
-            .calories(0)
             .title(title)
             .description(title + " desc")
             .startDate(startDate)

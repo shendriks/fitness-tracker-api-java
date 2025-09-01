@@ -60,7 +60,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "running",
                         "duration": 3600,
-                        "calories": 900,
                         "title": "Morning Run",
                         "description": "Nice run",
                         "distance": 10000,
@@ -89,7 +88,6 @@ class PostActivityControllerTest {
         assertEquals(ActivityType.RUNNING, activityDbEntity.getActivityType());
         assertEquals(3600, activityDbEntity.getDuration().toSeconds(), Constant.EPSILON);
         assertEquals(10000, activityDbEntity.getDistance().toMeters(), Constant.EPSILON);
-        assertEquals(900, activityDbEntity.getCalories());
         assertEquals("Morning Run", activityDbEntity.getTitle());
         assertEquals("Nice run", activityDbEntity.getDescription());
         assertEquals(Instant.parse("2025-08-21T06:00:00Z"), activityDbEntity.getStartDate());
@@ -103,7 +101,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "walking",
                         "duration": 100,
-                        "calories": 10,
                         "title": "Walk",
                         "description": "No token",
                         "distance": 500,
@@ -125,7 +122,6 @@ class PostActivityControllerTest {
                     {
                         "activityType": "NOT_A_TYPE",
                         "duration": 100,
-                        "calories": 10,
                         "title": "Title",
                         "description": "Desc",
                         "distance": 1000,

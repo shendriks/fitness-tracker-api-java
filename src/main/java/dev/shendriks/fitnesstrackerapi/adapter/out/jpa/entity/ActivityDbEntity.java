@@ -46,9 +46,6 @@ public class ActivityDbEntity {
     @Convert(converter = SpeedConverter.class)
     @Column(nullable = false)
     private Speed averageSpeed;
-    @Column(nullable = false)
-    @Deprecated
-    private int calories;
     @CreationTimestamp
     @Column(nullable = false)
     private Instant createdAt;

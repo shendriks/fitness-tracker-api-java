@@ -11,8 +11,6 @@ public record ActivityDetailsResponseDTO(
     Long duration,
     Double distance,
     Double averageSpeed,
-    @Deprecated
-    int calories,
     Instant createdAt,
     Instant updatedAt,
     String title,

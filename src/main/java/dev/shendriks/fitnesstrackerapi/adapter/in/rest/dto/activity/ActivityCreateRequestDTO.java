@@ -25,9 +25,6 @@ public record ActivityCreateRequestDTO(
     @Max(100000)
     @NotNull
     Double distance,
-    @Min(0)
-    @Deprecated
-    Integer calories,
     @NotBlank
     String title,
     String description,

@@ -62,7 +62,6 @@ public class PostActivityController {
                         {
                             "activityType": "running",
                             "duration": 60,
-                            "calories": 450,
                             "title": "Morning Run",
                             "description": "Some description.",
                             "distance": 2500,

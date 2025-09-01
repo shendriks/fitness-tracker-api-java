@@ -54,7 +54,6 @@ public abstract class ActivityDbEntityMapper {
         activity.setStartDate(gpsTrackData.gpxTime().orElse(Instant.now(clock)));
         activity.setDuration(gpsTrackData.duration());
         activity.setDistance(gpsTrackData.distance());
-        activity.setCalories(0);
         activity.setAverageSpeed(gpsTrackData.speed());
         activity.setElevationGain(gpsTrackData.elevationGain());
         activity.setMotionTime(gpsTrackData.motionTime());
