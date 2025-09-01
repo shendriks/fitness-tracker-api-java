@@ -1,29 +1,29 @@
 services:
-  mysql:
-    build:
-      context: .
-      dockerfile: docker/mysql/Dockerfile
-    container_name: fitness-tracker-mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=fitnessdb
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+#  mysql:
+#    build:
+#      context: .
+#      dockerfile: docker/mysql/Dockerfile
+#    container_name: fitness-tracker-mysql
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+#      - MYSQL_DATABASE=fitnessdb
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#    healthcheck:
+#      test: ["CMD-SHELL", "mysqladmin ping -h localhost -proot || exit 1"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
   app:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
     container_name: fitness-tracker-api
-    depends_on:
-      mysql:
-        condition: service_healthy
+#    depends_on:
+#      mysql:
+#        condition: service_healthy
     ports:
       - "8080:8080"
     volumes:
@@ -31,10 +31,10 @@ services:
       - gradle-cache:/root/.gradle
     environment:
       - SPRING_PROFILES_ACTIVE=default
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fitnessdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fitnessdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
     command: ["./gradlew", "bootRun", "-x", "test", "--continuous", "--no-daemon", "--watch-fs"]
 volumes:
   gradle-cache:
-  mysql-data:
+#  mysql-data:
