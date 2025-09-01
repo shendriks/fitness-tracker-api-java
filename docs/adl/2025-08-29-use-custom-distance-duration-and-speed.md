@@ -1,4 +1,4 @@
-# Use custom value types Distance and Duration
+# Use custom value types `Distance`, `Duration` and `Speed`
 
 ## Context and Problem Statement
 
@@ -32,7 +32,7 @@ and `Distance` or `Duration` for `MAX` results):
 Chosen option: "Introduce custom types and normalize all numeric aggregates returned by JPA to a primitive in custom 
 queries/projections, and then convert to domain types in the projection constructors", because:
 
-* Custom value objects (`Distance`, `Duration`) provide type safety and encode the unit semantics, preventing unit mix-ups
+* Custom value objects (`Distance`, `Duration`, `Speed`) provide type safety and encode the unit semantics, preventing unit mix-ups
 * Converters (`DistanceConverter`, `DurationConverter`) ensure minimal friction with JPA for entity persistence
 * For aggregation queries, forcing `SUM` and `MAX` to return `Double` or `Long` makes constructor signatures 
   consistent and avoids mixed-type constructors
@@ -40,16 +40,17 @@ queries/projections, and then convert to domain types in the projection construc
 ### Consequences
 
 * Good, because:
-  - The domain layer communicates explicit units through `Distance` and `Duration`, increasing readability and correctness
+  - The domain layer communicates explicit units through `Distance`, `Duration` and `Speed`, increasing readability and correctness
   - Fewer unit-related bugs: conversions are centralized
   - JPA projection classes (e.g. `ActivityAggregationDbProjection`, `ActivityTypeAggregationDbProjection`) have  
-    consistent constructor signatures (e.g., using `Double` or `Long` for numeric aggregates) 
+    consistent constructor signatures (e.g. using `Double` or `Long` for numeric aggregates) 
 * Bad, because:
   - There is a small loss of type information in the projection layer (temporarily using `Double` without unit information)
 
 ### Notes on Implementation
 
-* Entities: `ActivityDbEntity` persists `Distance` and `Duration` via `DistanceConverter` and `DurationConverter`
+* Entities: `ActivityDbEntity` persists `Distance`, `Duration` and `Speed` via `DistanceConverter`, `DurationConverter` 
+  and `SpeedConverter` respectively.
 * Aggregations: The repository `ActivityAggregationProjectionRepository` defines custom queries whose projections 
   (`ActivityAggregationDbProjection`, `ActivityTypeAggregationDbProjection`) expose aggregated numeric results as `Double`
   and `Long`. Even where `MAX` could be mapped back to `Distance` or `Duration`, we cast to `Double` or `Long` for 
