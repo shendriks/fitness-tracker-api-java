@@ -2,15 +2,10 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/app/Dockerfile
     container_name: fitness-tracker-api
     ports:
       - "8080:8080"
     volumes:
       - ./:/app
-      - gradle-cache:/root/.gradle
     environment:
       - SPRING_PROFILES_ACTIVE=default
-    command: ["./gradlew", "bootRun", "-x", "test", "--continuous", "--no-daemon", "--watch-fs"]
-volumes:
-  gradle-cache:
