@@ -8,7 +8,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingUsers;
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserUlid;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
-@Log
+@Slf4j
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     private final String jwtSecret;
     private final String jwtIssuer;
@@ -49,7 +49,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
             decodedJWT = verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            log.info("Invalid access token: " + exception.getMessage());
+            log.info("Invalid access token: {}", exception.getMessage());
             throw new BadCredentialsException("Invalid access token");
         }
 

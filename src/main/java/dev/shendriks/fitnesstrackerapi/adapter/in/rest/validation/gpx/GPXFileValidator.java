@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.validation.gpx;
 
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-@Log
 @Service
 public class GPXFileValidator {
     private static final int MAX_FILE_SIZE = 10 * 1024 * 1024;
