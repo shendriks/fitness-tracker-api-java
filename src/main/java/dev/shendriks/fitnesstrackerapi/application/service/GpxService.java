@@ -10,7 +10,6 @@ import io.jenetics.jpx.Metadata;
 import io.jenetics.jpx.Track;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Log
 @AllArgsConstructor
 public class GpxService {
     private final GpxWaypointProcessor waypointProcessor;

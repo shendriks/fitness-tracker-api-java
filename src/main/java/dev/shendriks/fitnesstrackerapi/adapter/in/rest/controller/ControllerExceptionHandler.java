@@ -4,6 +4,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
 import dev.shendriks.fitnesstrackerapi.application.exception.InvalidDataException;
 import dev.shendriks.fitnesstrackerapi.application.exception.ObjectNotFoundException;
 import dev.shendriks.fitnesstrackerapi.infrastructure.ratelimiting.RateLimitExceededException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidDataException.class)
@@ -46,6 +48,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     public ApiErrorResponseDTO handle(RateLimitExceededException e) {
         return new ApiErrorResponseDTO(e.getMessage());
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponseDTO handle(Throwable e) {
+        log.error("Unexpected error", e);
+        return new ApiErrorResponseDTO("Internal server error");
     }
 
     @Override

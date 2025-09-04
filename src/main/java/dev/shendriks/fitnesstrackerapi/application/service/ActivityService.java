@@ -11,7 +11,7 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Log
+@Slf4j
 public class ActivityService implements
     CountActivitiesUseCase,
     ListActivitiesUseCase,
@@ -85,7 +85,7 @@ public class ActivityService implements
                 Files.deleteIfExists(tempFile);
             }
         } catch (IOException e) {
-            log.severe("Failed to process uploaded gpxFile: " + e.getMessage());
+            log.error("Failed to process uploaded gpx file", e);
             throw new RuntimeException(e);
         }
     }

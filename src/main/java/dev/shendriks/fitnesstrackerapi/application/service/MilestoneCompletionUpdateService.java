@@ -11,13 +11,11 @@ import dev.shendriks.fitnesstrackerapi.domain.value.AchievementCompletionResult;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityAggregationMap;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Log
 @Service
 @AllArgsConstructor
 public class MilestoneCompletionUpdateService {

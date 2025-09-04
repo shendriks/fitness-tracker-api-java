@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.infrastructure.supportive;
 
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.Base64;
 import java.util.Optional;
 
-@Log
+@Slf4j
 @Component
 public class Base64FileEncoder {
     public Optional<String> encodeFile(String path) {
@@ -21,7 +21,7 @@ public class Base64FileEncoder {
             File resource = new ClassPathResource(path).getFile();
             return Optional.of(Base64.getEncoder().encodeToString(Files.readAllBytes(resource.toPath())));
         } catch (IOException e) {
-            log.warning("Failed to read image file: %s".formatted(e.getMessage()));
+            log.error("Failed to read image file", e);
             return Optional.empty();
         }
     }
