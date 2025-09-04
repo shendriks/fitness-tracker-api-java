@@ -13,6 +13,7 @@ import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.Instant;
@@ -64,7 +65,7 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void joinChallenge_withChallengeFound_createsParticipationAndUpdatesCompletionAndPublishesEvent() {
+    void joinChallenge_withChallengeFound_createsParticipationAndUpdatesCompletionAndPublishesEvent_inCorrectOrder() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(false);
 
         Challenge challenge = Challenge
@@ -98,11 +99,12 @@ class ChallengeJoinLeaveServiceTest {
 
         service.joinChallenge(userId, challengeUlid);
 
-        verify(forAccessingChallengeParticipations).joinChallenge(userId, challenge.getUlid());
-        verify(challengeCompletionUpdateService).updateChallengeCompletion(participation);
-
+        InOrder inOrder = inOrder(forAccessingChallengeParticipations, eventPublisher, challengeCompletionUpdateService);
+        inOrder.verify(forAccessingChallengeParticipations).joinChallenge(userId, challenge.getUlid());
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
-        verify(eventPublisher).publishEvent(eventCaptor.capture());
+        inOrder.verify(eventPublisher).publishEvent(eventCaptor.capture());
+        inOrder.verify(challengeCompletionUpdateService).updateChallengeCompletion(participation);
+
         Object event = eventCaptor.getValue();
         assertInstanceOf(ChallengeJoinedEvent.class, event);
         ChallengeJoinedEvent challengeJoinedEvent = (ChallengeJoinedEvent) event;
@@ -136,17 +138,18 @@ class ChallengeJoinLeaveServiceTest {
     }
 
     @Test
-    void leaveChallenge_withJoined_leavesAndDeletesTrophyAndPublishesEvent() {
+    void leaveChallenge_withJoined_leavesAndDeletesTrophyAndPublishesEvent_inCorrectOrder() {
         when(forAccessingChallengeParticipations.existsByChallengeAndUser(userId, challengeUlid)).thenReturn(true);
         when(forAccessingChallenges.existsByUlid(challengeUlid)).thenReturn(true);
 
         service.leaveChallenge(userId, challengeUlid);
 
-        verify(forAccessingChallengeParticipations).leaveChallenge(userId, challengeUlid);
-        verify(trophyManagementService).deleteTrophyIfExists(userId, challengeUlid);
-
+        InOrder inOrder = inOrder(forAccessingChallengeParticipations, eventPublisher, trophyManagementService);
+        inOrder.verify(forAccessingChallengeParticipations).leaveChallenge(userId, challengeUlid);
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
-        verify(eventPublisher).publishEvent(eventCaptor.capture());
+        inOrder.verify(eventPublisher).publishEvent(eventCaptor.capture());
+        inOrder.verify(trophyManagementService).deleteTrophyIfExists(userId, challengeUlid);
+
         Object event = eventCaptor.getValue();
         assertInstanceOf(ChallengeLeftEvent.class, event);
         ChallengeLeftEvent challengeLeftEvent = (ChallengeLeftEvent) event;

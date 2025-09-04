@@ -36,9 +36,8 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
         }
 
         ChallengeParticipation challengeParticipation = forAccessingChallengeParticipations.joinChallenge(userId, challengeUlid);
-        challengeCompletionUpdateService.updateChallengeCompletion(challengeParticipation);
-
         eventPublisher.publishEvent(new ChallengeJoinedEvent(userId, challengeUlid));
+        challengeCompletionUpdateService.updateChallengeCompletion(challengeParticipation);
     }
 
     @Override
@@ -52,8 +51,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
         }
 
         forAccessingChallengeParticipations.leaveChallenge(userId, challengeUlid);
-        trophyManagementService.deleteTrophyIfExists(userId, challengeUlid);
-
         eventPublisher.publishEvent(new ChallengeLeftEvent(userId, challengeUlid));
+        trophyManagementService.deleteTrophyIfExists(userId, challengeUlid);
     }
 }
