@@ -1,4 +1,4 @@
-# Store GPX Preview Images in the Database
+# Store GPS Track Preview Images in the Database
 
 ## Context and Problem Statement
 
