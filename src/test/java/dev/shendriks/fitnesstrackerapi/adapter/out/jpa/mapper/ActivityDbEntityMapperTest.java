@@ -182,8 +182,9 @@ class ActivityDbEntityMapperTest {
                 new GPSPositionData(Instant.parse("2025-08-01T09:45:00Z"), 0.1, 1.1, Optional.of(10.0))
             ))
             .build();
+        Base64ImageData imageData = new Base64ImageData("some-dummy-data");
 
-        ActivityDbEntity actualActivityDbEntity = mapper.toActivityDbEntity(activityUploadData, gpsTrackData);
+        ActivityDbEntity actualActivityDbEntity = mapper.toActivityDbEntity(activityUploadData, gpsTrackData, imageData);
 
         assertNotNull(actualActivityDbEntity);
         assertEquals(ActivityType.MOUNTAIN_BIKING, actualActivityDbEntity.getActivityType());
@@ -192,6 +193,7 @@ class ActivityDbEntityMapperTest {
         assertEquals(Instant.parse("2025-08-01T09:30:00Z"), actualActivityDbEntity.getStartDate());
         assertEquals(5432.00, actualActivityDbEntity.getDuration().toSeconds(), Constant.EPSILON);
         assertEquals(12345.67, actualActivityDbEntity.getDistance().toMeters(), Constant.EPSILON);
+        assertEquals(imageData, actualActivityDbEntity.getImagePreviewData());
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertEquals(2, actualActivityDbEntity.getGpsPositions().size());
         for (GPSPositionDbEntity gpsPosition : actualActivityDbEntity.getGpsPositions()) {
@@ -228,13 +230,15 @@ class ActivityDbEntityMapperTest {
             .kilometerSpeeds(List.of())
             .gpsPositions(List.of())
             .build();
+        Base64ImageData imageData = new Base64ImageData("some-dummy-data");
 
-        ActivityDbEntity actualActivityDbEntity = mapper.toActivityDbEntity(request, metrics);
+        ActivityDbEntity actualActivityDbEntity = mapper.toActivityDbEntity(request, metrics, imageData);
 
         assertNotNull(actualActivityDbEntity.getStartDate());
         assertEquals(Instant.parse("2021-09-10T12:00:00Z"), actualActivityDbEntity.getStartDate());
         assertNotNull(actualActivityDbEntity.getGpsPositions());
         assertTrue(actualActivityDbEntity.getGpsPositions().isEmpty());
+        assertEquals(imageData, actualActivityDbEntity.getImagePreviewData());
     }
 
     @Test
@@ -249,6 +253,6 @@ class ActivityDbEntityMapperTest {
 
     @Test
     void toActivityDbEntity_withNullInput_returnsNull() {
-        assertNull(mapper.toActivityDbEntity(null, (Speed) null));
+        assertNull(mapper.toActivityDbEntity(null, null));
     }
 }

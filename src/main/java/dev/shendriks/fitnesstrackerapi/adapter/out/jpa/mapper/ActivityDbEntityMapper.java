@@ -47,7 +47,7 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "imagePreviewData", ignore = true)
     public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData, Speed averageSpeed);
 
-    public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData) {
+    public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData, Base64ImageData imageData) {
         ActivityDbEntity activity = new ActivityDbEntity();
         activity.setActivityType(request.activityType());
         activity.setTitle(request.title());
@@ -84,6 +84,7 @@ public abstract class ActivityDbEntityMapper {
                 .peek((speedDbEntity) -> speedDbEntity.setActivity(activity))
                 .toList()
         );
+        activity.setImagePreviewData(imageData);
         return activity;
     }
 
