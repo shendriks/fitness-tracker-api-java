@@ -44,6 +44,7 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "elevationGain", ignore = true)
     @Mapping(target = "motionTime", ignore = true)
     @Mapping(target = "pausingTime", ignore = true)
+    @Mapping(target = "imagePreviewData", ignore = true)
     public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData, Speed averageSpeed);
 
     public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData) {

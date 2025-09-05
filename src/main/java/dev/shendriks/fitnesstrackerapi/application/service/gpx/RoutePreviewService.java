@@ -1,25 +1,27 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
-import org.apache.commons.lang3.RandomStringUtils;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.function.DoubleFunction;
 
+@Slf4j
 @Service
+@AllArgsConstructor
 public class RoutePreviewService {
-    private final String baseDir = "/var/app/routes/previews";
-
     /**
-     * Given GPS positions, create a preview image and save it to the file system. The preview creation uses
-     * equirectangular projection, see https://en.wikipedia.org/wiki/Equirectangular_projection
+     * Given GPS positions, create a preview image and save it to the file system. The preview is created using an
+     * equirectangular projection (see <a href="https://en.wikipedia.org/wiki/Equirectangular_projection">Equirectangular Projection</a>).
      */
     public String createAndSavePreview(List<GPSPositionData> positions, int width, int height) throws IOException {
         if (positions.size() < 2) {
@@ -64,7 +66,6 @@ public class RoutePreviewService {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
-
         graphics.setComposite(AlphaComposite.Clear);
         graphics.fillRect(0, 0, width, height);
         graphics.setComposite(AlphaComposite.SrcOver);
@@ -87,16 +88,8 @@ public class RoutePreviewService {
         graphics.draw(path);
         graphics.dispose();
 
-        File dir = new File(baseDir);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                throw new IOException("Failed to create directory " + baseDir);
-            }
-        }
-
-        String filePath = baseDir + "/" + RandomStringUtils.secure().nextAlphanumeric(32) + ".png";
-        ImageIO.write(image, "png", new File(filePath));
-
-        return filePath;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", stream);
+        return Base64.getEncoder().encodeToString(stream.toByteArray());
     }
 }

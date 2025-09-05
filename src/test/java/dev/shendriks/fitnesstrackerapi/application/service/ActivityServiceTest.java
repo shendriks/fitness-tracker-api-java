@@ -235,14 +235,19 @@ class ActivityServiceTest {
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
-        when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData)).thenReturn(activity);
+
+        String imageData = "some-dummy-data";
+        
+        when(routePreviewService.createAndSavePreview(gpsTrackData.gpsPositions(), 200, 150)).thenReturn(imageData);
+        when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData, imageData)).thenReturn(activity);
 
         ActivityDetails actualActivity = service.uploadActivityForUser(userId, uploadData);
 
         assertEquals(activity, actualActivity);
         verify(multipartFile, times(1)).transferTo(any(Path.class));
         verify(gpxService, times(1)).processGpxFile(any());
-        verify(forAccessingActivities, times(1)).saveForUser(userId, uploadData, gpsTrackData);
+        verify(routePreviewService, times(1)).createAndSavePreview(gpsTrackData.gpsPositions(), 200, 150);
+        verify(forAccessingActivities, times(1)).saveForUser(userId, uploadData, gpsTrackData, imageData);
 
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         verify(eventPublisher).publishEvent(eventCaptor.capture());

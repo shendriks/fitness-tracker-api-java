@@ -87,4 +87,6 @@ public class ActivityDbEntity {
         fetch = FetchType.LAZY
     )
     private List<KilometerSpeedDbEntity> kilometerSpeeds = List.of();
+    @Column(columnDefinition = "TEXT")
+    private String imagePreviewData;
 }

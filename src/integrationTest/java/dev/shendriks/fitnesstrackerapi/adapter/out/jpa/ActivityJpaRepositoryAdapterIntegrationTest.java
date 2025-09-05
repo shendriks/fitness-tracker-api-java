@@ -177,8 +177,9 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
                 new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, Optional.empty())
             ))
             .build();
-
-        ActivityDetails actualSavedActivity = adapter.saveForUser(userId, upload, gps);
+        
+        var imageData = "some-dummy-data";
+        ActivityDetails actualSavedActivity = adapter.saveForUser(userId, upload, gps, imageData);
 
         assertNotNull(actualSavedActivity.id());
         assertEquals(789L, actualSavedActivity.duration().toSeconds());
@@ -213,5 +214,6 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         assertEquals(0.001, actualActivityDbEntity.getGpsPositions().get(1).getLatitude());
         assertEquals(1.001, actualActivityDbEntity.getGpsPositions().get(1).getLongitude());
         assertNull(actualActivityDbEntity.getGpsPositions().get(1).getAltitude());
+        assertEquals(imageData, actualActivityDbEntity.getImagePreviewData());
     }
 }

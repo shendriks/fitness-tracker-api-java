@@ -81,9 +81,8 @@ public class ActivityService implements
             try {
                 activityUploadData.gpxFile().transferTo(tempFile);
                 GPSTrackData gpsTrackData = gpxService.processGpxFile(tempFile);
-                String path = routePreviewService.createAndSavePreview(gpsTrackData.gpsPositions(), 350, 260);
-                ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData);
-                log.error("Route preview saved to {}", path);
+                String imageData = routePreviewService.createAndSavePreview(gpsTrackData.gpsPositions(), 200, 150);
+                ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData, imageData);
                 eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
                 return activity;
             } finally {
