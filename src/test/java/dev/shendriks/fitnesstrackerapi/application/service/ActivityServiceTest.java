@@ -5,6 +5,8 @@ import dev.shendriks.fitnesstrackerapi.application.event.ActivitySavedEvent;
 import dev.shendriks.fitnesstrackerapi.application.event.ActivityUpdatedEvent;
 import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.GpxService;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.RoutePreviewService;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.SpeedCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
@@ -34,6 +36,7 @@ class ActivityServiceTest {
     private GpxService gpxService;
     private SpeedCalculator speedCalculator;
     private ActivityService service;
+    private RoutePreviewService routePreviewService;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +44,8 @@ class ActivityServiceTest {
         eventPublisher = mock(ApplicationEventPublisher.class);
         gpxService = mock(GpxService.class);
         speedCalculator = mock(SpeedCalculator.class);
-        service = new ActivityService(forAccessingActivities, eventPublisher, gpxService, speedCalculator);
+        routePreviewService = mock(RoutePreviewService.class);
+        service = new ActivityService(forAccessingActivities, eventPublisher, gpxService, speedCalculator, routePreviewService);
     }
 
     @Test
@@ -231,14 +235,19 @@ class ActivityServiceTest {
             .startDate(Instant.now())
             .gpsPositions(List.of())
             .build();
-        when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData)).thenReturn(activity);
+
+        ImageData imageData = new ImageData("some-dummy-data".getBytes());
+
+        when(routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150)).thenReturn(imageData);
+        when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData, imageData)).thenReturn(activity);
 
         ActivityDetails actualActivity = service.uploadActivityForUser(userId, uploadData);
 
         assertEquals(activity, actualActivity);
         verify(multipartFile, times(1)).transferTo(any(Path.class));
         verify(gpxService, times(1)).processGpxFile(any());
-        verify(forAccessingActivities, times(1)).saveForUser(userId, uploadData, gpsTrackData);
+        verify(routePreviewService, times(1)).createPreview(gpsTrackData.gpsPositions(), 200, 150);
+        verify(forAccessingActivities, times(1)).saveForUser(userId, uploadData, gpsTrackData, imageData);
 
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);
         verify(eventPublisher).publishEvent(eventCaptor.capture());

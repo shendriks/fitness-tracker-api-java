@@ -18,6 +18,7 @@ public record Activity(
     Instant startDate,
     Instant createdAt,
     Instant updatedAt,
-    Speed averageSpeed
+    Speed averageSpeed,
+    ImageData trackPreviewImage
 ) {
 }

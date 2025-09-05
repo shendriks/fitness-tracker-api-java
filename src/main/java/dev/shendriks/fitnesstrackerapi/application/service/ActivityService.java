@@ -6,6 +6,8 @@ import dev.shendriks.fitnesstrackerapi.application.event.ActivityUpdatedEvent;
 import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundException;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.*;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.GpxService;
+import dev.shendriks.fitnesstrackerapi.application.service.gpx.RoutePreviewService;
 import dev.shendriks.fitnesstrackerapi.application.service.gpx.SpeedCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
@@ -35,6 +37,7 @@ public class ActivityService implements
     private final ApplicationEventPublisher eventPublisher;
     private final GpxService gpxService;
     private final SpeedCalculator speedCalculator;
+    private final RoutePreviewService routePreviewService;
 
     @Override
     public long getActivityCountByUser(UserId userId) {
@@ -78,7 +81,8 @@ public class ActivityService implements
             try {
                 activityUploadData.gpxFile().transferTo(tempFile);
                 GPSTrackData gpsTrackData = gpxService.processGpxFile(tempFile);
-                ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData);
+                ImageData imageData = routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150);
+                ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData, imageData);
                 eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
                 return activity;
             } finally {

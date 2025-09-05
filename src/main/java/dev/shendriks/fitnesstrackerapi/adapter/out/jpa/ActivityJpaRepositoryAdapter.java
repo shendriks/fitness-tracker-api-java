@@ -68,8 +68,13 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     }
 
     @Override
-    public ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData) {
-        ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData);
+    public ActivityDetails saveForUser(
+        UserId userId,
+        ActivityUploadData activityUploadData,
+        GPSTrackData gpsTrackData,
+        ImageData imageData
+    ) {
+        ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData, imageData);
         activityDbEntry.setUser(userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new));
         activityDbEntityRepository.save(activityDbEntry);
         return activityMapper.toActivityDetails(activityDbEntry);

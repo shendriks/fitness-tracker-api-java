@@ -11,6 +11,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +57,7 @@ class GetActivitiesControllerTest {
         String userUlid = "USER0000000000000000000000";
         UserDbEntity user = userRepository.findByUlid(userUlid).orElseThrow();
 
-        ActivityDbEntity a1 = activityRepository.save(ActivityDbEntity.builder()
+        ActivityDbEntity activity1 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.RUNNING)
             .duration(Duration.ofSeconds(1800L))
@@ -64,8 +66,9 @@ class GetActivitiesControllerTest {
             .title("Morning Run")
             .description("Nice run")
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
+            .trackPreviewImage(new ImageData("some-dummy-data-1".getBytes()))
             .build());
-        ActivityDbEntity a2 = activityRepository.save(ActivityDbEntity.builder()
+        ActivityDbEntity activity2 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
             .activityType(ActivityType.CYCLING)
             .duration(Duration.ofSeconds(3600L))
@@ -74,6 +77,7 @@ class GetActivitiesControllerTest {
             .title("Evening Ride")
             .description("Chill ride")
             .startDate(Instant.parse("2025-08-22T18:30:00Z"))
+            .trackPreviewImage(new ImageData("some-dummy-data-2".getBytes()))
             .build());
 
         String token = accessTokenHelper.getAccessToken(userUlid);
@@ -90,11 +94,21 @@ class GetActivitiesControllerTest {
         List<Map<String, Object>> list = mapper.readValue(json, new TypeReference<>() {
         });
         assertEquals(2, list.size(), "Expected two activities for the user");
-        assertEquals(a1.getUlid(), list.get(1).get("id"));
-        assertEquals(a2.getUlid(), list.get(0).get("id"));
+        assertEquals(activity1.getUlid(), list.get(1).get("id"));
+        assertEquals(activity2.getUlid(), list.get(0).get("id"));
         String firstId = (String) list.get(0).get("id");
         String secondId = (String) list.get(1).get("id");
         assertTrue(firstId.compareTo(secondId) > 0, "Expected ULIDs to be ordered descending");
+        assertEquals("Morning Run", list.get(1).get("title"));
+        assertEquals("Evening Ride", list.get(0).get("title"));
+        assertEquals("Nice run", list.get(1).get("description"));
+        assertEquals("Chill ride", list.get(0).get("description"));
+        assertEquals("2025-08-21T06:00:00Z", list.get(1).get("startDate"));
+        assertEquals("2025-08-22T18:30:00Z", list.get(0).get("startDate"));
+        assertEquals(Base64.getEncoder().encodeToString("some-dummy-data-1".getBytes()), list.get(1).get("trackPreviewImage"));
+        assertEquals(Base64.getEncoder().encodeToString("some-dummy-data-2".getBytes()), list.get(0).get("trackPreviewImage"));
+        assertEquals(1800, list.get(1).get("duration"));
+        assertEquals(3600, list.get(0).get("duration"));
     }
 
     @Test
@@ -148,5 +162,8 @@ class GetActivitiesControllerTest {
         assertEquals(1, list.size(), "Expected only the authenticated user's activity to be returned");
         assertEquals(activity.getUlid(), list.getFirst().get("id"));
         assertEquals("Seeded User Activity", list.getFirst().get("title"));
+        assertEquals("Run", list.getFirst().get("description"));
+        assertEquals("2025-08-22T07:00:00Z", list.getFirst().get("startDate"));
+        assertEquals(1200, list.getFirst().get("duration"));
     }
 }

@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.Base64ImageDataConverter;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DistanceConverter;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DurationConverter;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.SpeedConverter;
@@ -7,6 +8,7 @@ import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
 import jakarta.persistence.*;
@@ -87,4 +89,8 @@ public class ActivityDbEntity {
         fetch = FetchType.LAZY
     )
     private List<KilometerSpeedDbEntity> kilometerSpeeds = List.of();
+    @Convert(converter = Base64ImageDataConverter.class)
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private ImageData trackPreviewImage;
 }
