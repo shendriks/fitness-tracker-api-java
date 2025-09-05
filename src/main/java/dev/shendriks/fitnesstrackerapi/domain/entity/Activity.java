@@ -19,6 +19,6 @@ public record Activity(
     Instant createdAt,
     Instant updatedAt,
     Speed averageSpeed,
-    String imagePreviewData
+    Base64ImageData imagePreviewData
 ) {
 }

@@ -9,6 +9,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
+import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
@@ -64,7 +65,7 @@ class GetActivitiesControllerTest {
             .title("Morning Run")
             .description("Nice run")
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
-            .imagePreviewData("some-dummy-data-1")
+            .imagePreviewData(new Base64ImageData("some-dummy-data-1"))
             .build());
         ActivityDbEntity activity2 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
@@ -75,7 +76,7 @@ class GetActivitiesControllerTest {
             .title("Evening Ride")
             .description("Chill ride")
             .startDate(Instant.parse("2025-08-22T18:30:00Z"))
-            .imagePreviewData("some-dummy-data-2")
+            .imagePreviewData(new Base64ImageData("some-dummy-data-2"))
             .build());
 
         String token = accessTokenHelper.getAccessToken(userUlid);

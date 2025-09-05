@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
+import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import org.junit.jupiter.api.Test;
 
@@ -50,12 +51,12 @@ class RoutePreviewServiceTest {
             pos(0.2, 1.2)
         );
 
-        String actualImageData = assertDoesNotThrow(
+        Base64ImageData actualImageData = assertDoesNotThrow(
             () -> service.createPreview(track, 300, 150),
             "Expected service.createPreview to not throw an exception"
         );
         assertNotNull(actualImageData, "Image data should not be null");
-        byte[] actualBytes = Base64.getDecoder().decode(actualImageData);
+        byte[] actualBytes = Base64.getDecoder().decode(actualImageData.value());
         assertPNGSignature(actualBytes);
         BufferedImage actualImage = assertDoesNotThrow(
             () -> ImageIO.read(new ByteArrayInputStream(actualBytes)),
@@ -75,11 +76,11 @@ class RoutePreviewServiceTest {
             pos(0.3, 1.3)
         );
 
-        String actualImageData1 = assertDoesNotThrow(
+        Base64ImageData actualImageData1 = assertDoesNotThrow(
             () -> service.createPreview(track, 400, 300),
             "Expected service.createPreview to not throw an exception"
         );
-        String actualImageData2 = assertDoesNotThrow(
+        Base64ImageData actualImageData2 = assertDoesNotThrow(
             () -> service.createPreview(track, 400, 300),
             "Expected service.createPreview to not throw an exception"
         );
@@ -99,17 +100,17 @@ class RoutePreviewServiceTest {
             pos(0.0, 1.2)
         );
 
-        String actualVerticalImageData = assertDoesNotThrow(
+        Base64ImageData actualVerticalImageData = assertDoesNotThrow(
             () -> service.createPreview(vertical, 200, 400),
             "Expected service.createPreview to not throw an exception"
         );
-        String actualHorizontalImageData = assertDoesNotThrow(
+        Base64ImageData actualHorizontalImageData = assertDoesNotThrow(
             () -> service.createPreview(horizontal, 400, 200),
             "Expected service.createPreview to not throw an exception"
         );
 
-        byte[] actualVerticalBytes = Base64.getDecoder().decode(actualVerticalImageData);
-        byte[] actualHorizontalBytes = Base64.getDecoder().decode(actualHorizontalImageData);
+        byte[] actualVerticalBytes = Base64.getDecoder().decode(actualVerticalImageData.value());
+        byte[] actualHorizontalBytes = Base64.getDecoder().decode(actualHorizontalImageData.value());
         assertNotNull(actualVerticalBytes, "Vertical preview image data should not be null");
         assertNotNull(actualHorizontalBytes, "Horizontal preview image data should not be null");
         assertPNGSignature(actualVerticalBytes);

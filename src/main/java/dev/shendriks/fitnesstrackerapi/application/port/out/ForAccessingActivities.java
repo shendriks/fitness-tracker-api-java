@@ -18,7 +18,7 @@ public interface ForAccessingActivities {
 
     ActivityDetails saveForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed);
 
-    ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData, String imageData);
+    ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData, Base64ImageData imageData);
 
     ActivityDetails updateForUser(UserId userId, ActivityUlid achievementUlid, ActivityUpdateData activityUpdateData);
 

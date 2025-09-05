@@ -69,10 +69,10 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
 
     @Override
     public ActivityDetails saveForUser(
-        UserId userId, 
-        ActivityUploadData activityUploadData, 
-        GPSTrackData gpsTrackData, 
-        String imageData
+        UserId userId,
+        ActivityUploadData activityUploadData,
+        GPSTrackData gpsTrackData,
+        Base64ImageData imageData
     ) {
         ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData);
         activityDbEntry.setImagePreviewData(imageData);

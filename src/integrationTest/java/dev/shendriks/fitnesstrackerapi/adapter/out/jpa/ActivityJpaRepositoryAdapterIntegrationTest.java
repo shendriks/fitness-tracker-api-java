@@ -177,8 +177,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
                 new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, Optional.empty())
             ))
             .build();
-        
-        var imageData = "some-dummy-data";
+
+        Base64ImageData imageData = new Base64ImageData("some-dummy-data");
         ActivityDetails actualSavedActivity = adapter.saveForUser(userId, upload, gps, imageData);
 
         assertNotNull(actualSavedActivity.id());

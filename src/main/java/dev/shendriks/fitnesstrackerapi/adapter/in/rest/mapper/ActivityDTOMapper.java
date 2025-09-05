@@ -15,6 +15,7 @@ public abstract class ActivityDTOMapper {
     @Mapping(target = "duration", expression = "java(activity.duration().toSeconds())")
     @Mapping(target = "distance", expression = "java(activity.distance().toMeters())")
     @Mapping(target = "averageSpeed", expression = "java(activity.averageSpeed().toMetersPerSecond())")
+    @Mapping(target = "imagePreviewData", expression = "java(activity.imagePreviewData() != null ? activity.imagePreviewData().value() : null)")
     public abstract ActivityResponseDTO toActivityResponse(Activity activity);
 
     @Mapping(target = "id", source = "ulid.value")

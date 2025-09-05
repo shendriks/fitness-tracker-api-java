@@ -236,7 +236,7 @@ class ActivityServiceTest {
             .gpsPositions(List.of())
             .build();
 
-        String imageData = "some-dummy-data";
+        Base64ImageData imageData = new Base64ImageData("some-dummy-data");
         
         when(routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150)).thenReturn(imageData);
         when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData, imageData)).thenReturn(activity);

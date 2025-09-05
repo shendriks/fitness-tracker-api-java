@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
+import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class RoutePreviewService {
      * Given GPS positions, create a preview image and save it to the file system. The preview is created using an
      * equirectangular projection (see <a href="https://en.wikipedia.org/wiki/Equirectangular_projection">Equirectangular Projection</a>).
      */
-    public String createPreview(List<GPSPositionData> positions, int width, int height) throws IOException {
+    public Base64ImageData createPreview(List<GPSPositionData> positions, int width, int height) throws IOException {
         if (positions.size() < 2) {
             throw new IllegalArgumentException("At least 2 coordinates required for preview");
         }
@@ -90,6 +91,6 @@ public class RoutePreviewService {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         ImageIO.write(image, "png", stream);
-        return Base64.getEncoder().encodeToString(stream.toByteArray());
+        return new Base64ImageData(Base64.getEncoder().encodeToString(stream.toByteArray()));
     }
 }
