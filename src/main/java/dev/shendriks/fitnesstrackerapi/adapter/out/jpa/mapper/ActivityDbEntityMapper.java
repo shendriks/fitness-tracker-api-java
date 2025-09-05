@@ -44,10 +44,10 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "elevationGain", ignore = true)
     @Mapping(target = "motionTime", ignore = true)
     @Mapping(target = "pausingTime", ignore = true)
-    @Mapping(target = "imagePreviewData", ignore = true)
+    @Mapping(target = "trackPreviewImage", ignore = true)
     public abstract ActivityDbEntity toActivityDbEntity(ActivityCreationData activityCreationData, Speed averageSpeed);
 
-    public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData, Base64ImageData imageData) {
+    public ActivityDbEntity toActivityDbEntity(ActivityUploadData request, GPSTrackData gpsTrackData, ImageData imageData) {
         ActivityDbEntity activity = new ActivityDbEntity();
         activity.setActivityType(request.activityType());
         activity.setTitle(request.title());
@@ -84,7 +84,7 @@ public abstract class ActivityDbEntityMapper {
                 .peek((speedDbEntity) -> speedDbEntity.setActivity(activity))
                 .toList()
         );
-        activity.setImagePreviewData(imageData);
+        activity.setTrackPreviewImage(imageData);
         return activity;
     }
 

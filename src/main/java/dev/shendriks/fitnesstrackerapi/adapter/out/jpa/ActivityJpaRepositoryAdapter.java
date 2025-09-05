@@ -72,7 +72,7 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
         UserId userId,
         ActivityUploadData activityUploadData,
         GPSTrackData gpsTrackData,
-        Base64ImageData imageData
+        ImageData imageData
     ) {
         ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData, imageData);
         activityDbEntry.setUser(userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new));

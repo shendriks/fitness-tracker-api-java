@@ -19,6 +19,6 @@ public record Activity(
     Instant createdAt,
     Instant updatedAt,
     Speed averageSpeed,
-    Base64ImageData imagePreviewData
+    ImageData trackPreviewImage
 ) {
 }

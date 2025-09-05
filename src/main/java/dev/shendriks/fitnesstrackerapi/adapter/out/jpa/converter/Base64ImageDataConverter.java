@@ -1,24 +1,24 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter;
 
-import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
+import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter
-public class Base64ImageDataConverter implements AttributeConverter<Base64ImageData, String> {
+public class Base64ImageDataConverter implements AttributeConverter<ImageData, byte[]> {
     @Override
-    public String convertToDatabaseColumn(Base64ImageData attribute) {
+    public byte[] convertToDatabaseColumn(ImageData attribute) {
         if (attribute == null) {
             return null;
         }
-        return attribute.value();
+        return attribute.bytes();
     }
 
     @Override
-    public Base64ImageData convertToEntityAttribute(String dbData) {
+    public ImageData convertToEntityAttribute(byte[] dbData) {
         if (dbData == null) {
             return null;
         }
-        return new Base64ImageData(dbData);
+        return new ImageData(dbData);
     }
 }

@@ -6,9 +6,9 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.DurationConvert
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.SpeedConverter;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityState;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
 import jakarta.persistence.*;
@@ -90,6 +90,7 @@ public class ActivityDbEntity {
     )
     private List<KilometerSpeedDbEntity> kilometerSpeeds = List.of();
     @Convert(converter = Base64ImageDataConverter.class)
-    @Column(columnDefinition = "TEXT")
-    private Base64ImageData imagePreviewData;
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private ImageData trackPreviewImage;
 }

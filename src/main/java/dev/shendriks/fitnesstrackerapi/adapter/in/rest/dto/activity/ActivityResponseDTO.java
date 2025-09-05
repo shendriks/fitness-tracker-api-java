@@ -15,6 +15,6 @@ public record ActivityResponseDTO(
     String title,
     String description,
     Instant startDate,
-    String imagePreviewData
+    String trackPreviewImage
 ) {
 }

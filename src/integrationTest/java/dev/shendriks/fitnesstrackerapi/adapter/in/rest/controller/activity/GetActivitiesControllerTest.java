@@ -9,9 +9,9 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.ActivityDbEnti
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.repository.UserRepository;
 import dev.shendriks.fitnesstrackerapi.domain.enums.AccountType;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.domain.value.Base64ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ class GetActivitiesControllerTest {
             .title("Morning Run")
             .description("Nice run")
             .startDate(Instant.parse("2025-08-21T06:00:00Z"))
-            .imagePreviewData(new Base64ImageData("some-dummy-data-1"))
+            .trackPreviewImage(new ImageData("some-dummy-data-1".getBytes()))
             .build());
         ActivityDbEntity activity2 = activityRepository.save(ActivityDbEntity.builder()
             .user(user)
@@ -76,7 +77,7 @@ class GetActivitiesControllerTest {
             .title("Evening Ride")
             .description("Chill ride")
             .startDate(Instant.parse("2025-08-22T18:30:00Z"))
-            .imagePreviewData(new Base64ImageData("some-dummy-data-2"))
+            .trackPreviewImage(new ImageData("some-dummy-data-2".getBytes()))
             .build());
 
         String token = accessTokenHelper.getAccessToken(userUlid);
@@ -104,8 +105,8 @@ class GetActivitiesControllerTest {
         assertEquals("Chill ride", list.get(0).get("description"));
         assertEquals("2025-08-21T06:00:00Z", list.get(1).get("startDate"));
         assertEquals("2025-08-22T18:30:00Z", list.get(0).get("startDate"));
-        assertEquals("some-dummy-data-1", list.get(1).get("imagePreviewData"));
-        assertEquals("some-dummy-data-2", list.get(0).get("imagePreviewData"));
+        assertEquals(Base64.getEncoder().encodeToString("some-dummy-data-1".getBytes()), list.get(1).get("trackPreviewImage"));
+        assertEquals(Base64.getEncoder().encodeToString("some-dummy-data-2".getBytes()), list.get(0).get("trackPreviewImage"));
         assertEquals(1800, list.get(1).get("duration"));
         assertEquals(3600, list.get(0).get("duration"));
     }

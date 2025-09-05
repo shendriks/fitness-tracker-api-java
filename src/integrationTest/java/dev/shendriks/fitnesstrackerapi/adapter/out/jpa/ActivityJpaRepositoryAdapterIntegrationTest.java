@@ -178,7 +178,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             ))
             .build();
 
-        Base64ImageData imageData = new Base64ImageData("some-dummy-data");
+        ImageData imageData = new ImageData("some-dummy-data".getBytes());
         ActivityDetails actualSavedActivity = adapter.saveForUser(userId, upload, gps, imageData);
 
         assertNotNull(actualSavedActivity.id());
@@ -214,6 +214,6 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
         assertEquals(0.001, actualActivityDbEntity.getGpsPositions().get(1).getLatitude());
         assertEquals(1.001, actualActivityDbEntity.getGpsPositions().get(1).getLongitude());
         assertNull(actualActivityDbEntity.getGpsPositions().get(1).getAltitude());
-        assertEquals(imageData, actualActivityDbEntity.getImagePreviewData());
+        assertEquals(imageData, actualActivityDbEntity.getTrackPreviewImage());
     }
 }

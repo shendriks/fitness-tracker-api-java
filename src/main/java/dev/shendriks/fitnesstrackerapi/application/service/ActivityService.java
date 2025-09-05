@@ -81,7 +81,7 @@ public class ActivityService implements
             try {
                 activityUploadData.gpxFile().transferTo(tempFile);
                 GPSTrackData gpsTrackData = gpxService.processGpxFile(tempFile);
-                Base64ImageData imageData = routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150);
+                ImageData imageData = routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150);
                 ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData, imageData);
                 eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
                 return activity;
