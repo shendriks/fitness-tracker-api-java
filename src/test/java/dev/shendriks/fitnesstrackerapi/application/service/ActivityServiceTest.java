@@ -238,7 +238,7 @@ class ActivityServiceTest {
 
         String imageData = "some-dummy-data";
         
-        when(routePreviewService.createAndSavePreview(gpsTrackData.gpsPositions(), 200, 150)).thenReturn(imageData);
+        when(routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150)).thenReturn(imageData);
         when(forAccessingActivities.saveForUser(userId, uploadData, gpsTrackData, imageData)).thenReturn(activity);
 
         ActivityDetails actualActivity = service.uploadActivityForUser(userId, uploadData);
@@ -246,7 +246,7 @@ class ActivityServiceTest {
         assertEquals(activity, actualActivity);
         verify(multipartFile, times(1)).transferTo(any(Path.class));
         verify(gpxService, times(1)).processGpxFile(any());
-        verify(routePreviewService, times(1)).createAndSavePreview(gpsTrackData.gpsPositions(), 200, 150);
+        verify(routePreviewService, times(1)).createPreview(gpsTrackData.gpsPositions(), 200, 150);
         verify(forAccessingActivities, times(1)).saveForUser(userId, uploadData, gpsTrackData, imageData);
 
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);

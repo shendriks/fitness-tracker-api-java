@@ -23,7 +23,7 @@ public class RoutePreviewService {
      * Given GPS positions, create a preview image and save it to the file system. The preview is created using an
      * equirectangular projection (see <a href="https://en.wikipedia.org/wiki/Equirectangular_projection">Equirectangular Projection</a>).
      */
-    public String createAndSavePreview(List<GPSPositionData> positions, int width, int height) throws IOException {
+    public String createPreview(List<GPSPositionData> positions, int width, int height) throws IOException {
         if (positions.size() < 2) {
             throw new IllegalArgumentException("At least 2 coordinates required for preview");
         }

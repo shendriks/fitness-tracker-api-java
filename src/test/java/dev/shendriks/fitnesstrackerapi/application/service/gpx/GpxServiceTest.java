@@ -1,6 +1,5 @@
-package dev.shendriks.fitnesstrackerapi.application.service;
+package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.application.service.gpx.*;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import io.jenetics.jpx.WayPoint;
