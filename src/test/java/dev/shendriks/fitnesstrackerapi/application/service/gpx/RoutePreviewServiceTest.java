@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -44,25 +43,31 @@ class RoutePreviewServiceTest {
     }
 
     @Test
-    void createPreview_returnsValidPngWithRequestedDimensions() throws IOException {
+    void createPreview_returnsValidPngWithRequestedDimensions() {
         List<GPSPositionData> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
             pos(0.2, 1.2)
         );
 
-        String actualImageData = service.createPreview(track, 300, 150);
+        String actualImageData = assertDoesNotThrow(
+            () -> service.createPreview(track, 300, 150),
+            "Expected service.createPreview to not throw an exception"
+        );
         assertNotNull(actualImageData, "Image data should not be null");
         byte[] actualBytes = Base64.getDecoder().decode(actualImageData);
         assertPNGSignature(actualBytes);
-        BufferedImage actualImage = ImageIO.read(new ByteArrayInputStream(actualBytes));
+        BufferedImage actualImage = assertDoesNotThrow(
+            () -> ImageIO.read(new ByteArrayInputStream(actualBytes)),
+            "Expected ImageIO.read to not throw an exception"
+        );
         assertNotNull(actualImage, "Image should not be null");
         assertEquals(300, actualImage.getWidth(), "Expected image width to be 300");
         assertEquals(150, actualImage.getHeight(), "Expected image height to be 150");
     }
 
     @Test
-    void createPreview_isDeterministicForSameInput() throws IOException {
+    void createPreview_isDeterministicForSameInput() {
         List<GPSPositionData> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
@@ -70,13 +75,19 @@ class RoutePreviewServiceTest {
             pos(0.3, 1.3)
         );
 
-        String actualImageData1 = service.createPreview(track, 400, 300);
-        String actualImageData2 = service.createPreview(track, 400, 300);
+        String actualImageData1 = assertDoesNotThrow(
+            () -> service.createPreview(track, 400, 300),
+            "Expected service.createPreview to not throw an exception"
+        );
+        String actualImageData2 = assertDoesNotThrow(
+            () -> service.createPreview(track, 400, 300),
+            "Expected service.createPreview to not throw an exception"
+        );
         assertEquals(actualImageData1, actualImageData2, "Expected preview image data to be the same for the same input");
     }
 
     @Test
-    void createPreview_handlesDifferentAspectRatios() throws IOException {
+    void createPreview_handlesDifferentAspectRatios() {
         List<GPSPositionData> vertical = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.0),
@@ -88,15 +99,31 @@ class RoutePreviewServiceTest {
             pos(0.0, 1.2)
         );
 
-        String actualVerticalImageData = service.createPreview(vertical, 200, 400);
-        String actualHorizontalImageData = service.createPreview(horizontal, 400, 200);
+        String actualVerticalImageData = assertDoesNotThrow(
+            () -> service.createPreview(vertical, 200, 400),
+            "Expected service.createPreview to not throw an exception"
+        );
+        String actualHorizontalImageData = assertDoesNotThrow(
+            () -> service.createPreview(horizontal, 400, 200),
+            "Expected service.createPreview to not throw an exception"
+        );
 
         byte[] actualVerticalBytes = Base64.getDecoder().decode(actualVerticalImageData);
         byte[] actualHorizontalBytes = Base64.getDecoder().decode(actualHorizontalImageData);
+        assertNotNull(actualVerticalBytes, "Vertical preview image data should not be null");
+        assertNotNull(actualHorizontalBytes, "Horizontal preview image data should not be null");
         assertPNGSignature(actualVerticalBytes);
         assertPNGSignature(actualHorizontalBytes);
-        BufferedImage actualVerticalImage = ImageIO.read(new ByteArrayInputStream(actualVerticalBytes));
-        BufferedImage actualHorizontalImage = ImageIO.read(new ByteArrayInputStream(actualHorizontalBytes));
+        BufferedImage actualVerticalImage = assertDoesNotThrow(
+            () -> ImageIO.read(new ByteArrayInputStream(actualVerticalBytes)),
+            "Expected ImageIO.read to not throw an exception"
+        );
+        BufferedImage actualHorizontalImage = assertDoesNotThrow(
+            () -> ImageIO.read(new ByteArrayInputStream(actualHorizontalBytes)),
+            "Expected ImageIO.read to not throw an exception"
+        );
+        assertNotNull(actualVerticalImage, "Vertical preview image should not be null");
+        assertNotNull(actualHorizontalImage, "Horizontal preview image should not be null");
         assertEquals(200, actualVerticalImage.getWidth());
         assertEquals(400, actualVerticalImage.getHeight());
         assertEquals(400, actualHorizontalImage.getWidth());
