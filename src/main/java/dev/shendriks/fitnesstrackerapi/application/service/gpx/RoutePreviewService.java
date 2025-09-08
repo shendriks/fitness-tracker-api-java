@@ -23,7 +23,7 @@ public class RoutePreviewService {
      * @param positions List of GPS positions containing latitude and longitude coordinates that define the track
      * @param width     The width of the output image in pixels
      * @param height    The height of the output image in pixels
-     * @return ImageData containing the PNG image bytes of the rendered track preview
+     * @return ImageData containing the PNG image bytes of the rendered track preview, or null if an error occurred
      */
     public ImageData createPreview(List<GPSPositionData> positions, int width, int height) {
         if (positions == null || positions.size() < 2) {
@@ -106,7 +106,7 @@ public class RoutePreviewService {
             ImageIO.write(image, "png", stream);
         } catch (IOException e) {
             log.error("Failed to write PNG image", e);
-            return new ImageData(new byte[0]);
+            return null;
         }
 
         return new ImageData(stream.toByteArray());
