@@ -2,7 +2,6 @@ package dev.shendriks.fitnesstrackerapi.application.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +12,25 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.DoubleFunction;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class RoutePreviewService {
     /**
-     * Given GPS positions, create a preview image and save it to the file system. The preview is created using an
-     * equirectangular projection (see <a href="https://en.wikipedia.org/wiki/Equirectangular_projection">Equirectangular Projection</a>).
+     * Creates a PNG image that previews the route described by the given GPS positions, using equirectangular
+     * projection.
+     *
+     * @param positions List of GPS positions containing latitude and longitude coordinates that define the track
+     * @param width     The width of the output image in pixels
+     * @param height    The height of the output image in pixels
+     * @return ImageData containing the PNG image bytes of the rendered track preview
      */
-    public ImageData createPreview(List<GPSPositionData> positions, int width, int height) throws IOException {
-        if (positions.size() < 2) {
-            throw new IllegalArgumentException("At least 2 coordinates required for preview");
+    public ImageData createPreview(List<GPSPositionData> positions, int width, int height) {
+        if (positions == null || positions.size() < 2) {
+            throw new IllegalArgumentException("At least two GPS positions are required to render a route preview");
+        }
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Width and height must be positive");
         }
 
         double minLat = positions.stream().mapToDouble(GPSPositionData::latitude).min().orElseThrow();
@@ -33,48 +38,56 @@ public class RoutePreviewService {
         double minLon = positions.stream().mapToDouble(GPSPositionData::longitude).min().orElseThrow();
         double maxLon = positions.stream().mapToDouble(GPSPositionData::longitude).max().orElseThrow();
 
-        double meanLatRad = Math.toRadians((minLat + maxLat) / 2.0);
+        /*
+         * Equirectangular projection
+         *
+         * - x = lon * cos(phi0), where phi0 is the track's mid-latitude
+         * - y = lat
+         *
+         *  Latitude correction accounts for the fact that degrees of longitude represent smaller physical distances as
+         *  you move away from the equator. Meridians converge toward the poles, so one degree of longitude spans:
+         *
+         *  - ~111.32 km at the equator (cos 0° = 1)
+         *  - ~55.8 km at 60° latitude (cos 60° = 0.5)
+         *
+         *  To reduce distortion when plotting a geographic track on a flat image, you scale the longitudinal coordinate
+         *  by cos(phi), where phi is a representative latitude.
+         */
+        double phi0 = (minLat + maxLat) / 2.0;
+        double cosPhi = Math.cos(Math.toRadians(phi0));
+        double minX = minLon * cosPhi;
+        double maxX = maxLon * cosPhi;
+        double minY = minLat;
+        double maxY = maxLat;
 
-        double latSpan = maxLat - minLat;
-        double lonSpan = (maxLon - minLon) * Math.cos(meanLatRad);
+        double trackWidth = Math.max(maxX - minX, Double.MIN_VALUE);
+        double trackHeight = Math.max(maxY - minY, Double.MIN_VALUE);
 
-        double targetRatio = (double) width / height;
-        double dataRatio = lonSpan / latSpan;
+        double padding = 10;
+        double drawableW = Math.max(1.0, width - 2 * padding);
+        double drawableH = Math.max(1.0, height - 2 * padding);
 
-        double scale;
-        double xOffset;
-        double yOffset;
-        int padding = 10;
+        double scaleX = drawableW / trackWidth;
+        double scaleY = drawableH / trackHeight;
+        double scale = Math.min(scaleX, scaleY);
 
-        if (dataRatio > targetRatio) {
-            xOffset = 0;
-            scale = (width - 2.0 * padding) / lonSpan;
-            double scaledHeight = latSpan * scale;
-            yOffset = (height - scaledHeight) / 2.0;
-        } else {
-            yOffset = 0;
-            scale = (height - 2.0 * padding) / latSpan;
-            double scaledWidth = lonSpan * scale;
-            xOffset = (width - scaledWidth) / 2.0;
-        }
-
-        DoubleFunction<Integer> projectX = (lon) ->
-            (int) (((lon - minLon) * Math.cos(meanLatRad)) * scale + xOffset + padding);
-
-        DoubleFunction<Integer> projectY = (lat) ->
-            (int) (((maxLat - lat)) * scale + yOffset + padding);
+        double scaledW = trackWidth * scale;
+        double scaledH = trackHeight * scale;
+        double offsetX = (width - scaledW) / 2.0 - minX * scale;
+        double offsetY = (height - scaledH) / 2.0 - minY * scale;
 
         Path2D path = new Path2D.Double();
-        boolean first = true;
+        boolean isFirst = true;
         for (GPSPositionData position : positions) {
-            int x = projectX.apply(position.longitude());
-            int y = projectY.apply(position.latitude());
-            if (first) {
-                path.moveTo(x, y);
-                first = false;
+            double x = position.longitude() * cosPhi * scale + offsetX;
+            double y = position.latitude() * scale + offsetY;
+            double yFlipped = height - y;
+            if (isFirst) {
+                path.moveTo(x, yFlipped);
+                isFirst = false;
                 continue;
             }
-            path.lineTo(x, y);
+            path.lineTo(x, yFlipped);
         }
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -84,12 +97,18 @@ public class RoutePreviewService {
         graphics.setComposite(AlphaComposite.SrcOver);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setColor(new Color(214, 9, 1));
-        graphics.setStroke(new BasicStroke(2f));
+        graphics.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         graphics.draw(path);
         graphics.dispose();
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", stream);
+        try {
+            ImageIO.write(image, "png", stream);
+        } catch (IOException e) {
+            log.error("Failed to write PNG image", e);
+            return new ImageData(new byte[0]);
+        }
+
         return new ImageData(stream.toByteArray());
     }
 }
