@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.application.service.gpx;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Track;

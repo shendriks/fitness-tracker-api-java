@@ -1,6 +1,5 @@
-package dev.shendriks.fitnesstrackerapi.application.service;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.application.service.gpx.GpxService;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;

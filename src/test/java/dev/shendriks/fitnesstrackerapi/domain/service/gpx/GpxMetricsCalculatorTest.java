@@ -1,6 +1,6 @@
-package dev.shendriks.fitnesstrackerapi.application.service.gpx;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
 import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
