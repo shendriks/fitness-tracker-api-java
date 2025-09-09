@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.application.service.gpx;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;

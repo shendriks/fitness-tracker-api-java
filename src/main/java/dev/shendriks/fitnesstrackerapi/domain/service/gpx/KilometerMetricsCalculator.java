@@ -1,7 +1,7 @@
-package dev.shendriks.fitnesstrackerapi.application.service.gpx;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.application.exception.WayPointsNotSortedException;
-import dev.shendriks.fitnesstrackerapi.application.service.gpx.distance.DistanceCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.exception.WayPointsNotSortedException;
+import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;

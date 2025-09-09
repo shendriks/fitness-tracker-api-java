@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.application.service.gpx.distance;
+package dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import io.jenetics.jpx.WayPoint;
