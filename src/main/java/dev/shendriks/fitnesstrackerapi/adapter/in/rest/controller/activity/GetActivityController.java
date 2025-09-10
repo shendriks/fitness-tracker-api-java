@@ -60,13 +60,8 @@ public class GetActivityController {
         )
         String id
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
-//
         ActivityDetails activity = forGettingAnActivity.getActivityByUser(user.id(), new ActivityUlid(id));
-        var activityResponse = activityMapper.toActivityDetailsResponse(activity);
+        ActivityDetailsResponseDTO activityResponse = activityMapper.toActivityDetailsResponse(activity);
         return ResponseEntity.ok(activityResponse);
     }
 }

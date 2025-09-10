@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid;
+package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.type;
 
 import org.hibernate.annotations.ValueGenerationType;
 
