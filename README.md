@@ -4,26 +4,28 @@
 [![Dependabot Updates](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/shendriks/fitness-tracker-api-java/actions/workflows/dependabot/dependabot-updates)
 ![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fshendriks%2F03eeb6afeb7203a9623921eeb46576b4%2Fraw%2Fcoverage.json)
 
-An API for tracking fitness activities build with Java and Spring Boot.
+An API for tracking fitness activities built with Java and Spring Boot.
 
 ## What this API does
 This service provides REST endpoints to manage and analyze fitness activities (like runs or rides). Features include:
-* Importing and processing activity files (GPX)
-* Persisting activities and metadata
-* Generating route previews and basic analytics
-* Exposing data over HTTP for a web UI or other clients
+* User sign-up and login
+* Importing and processing activity files (GPX) as well as manual activity entries
+* Persisting activities and metadata to a database
+* Generating route previews and basic analytics, like average speed/pace and kilometer splits 
 * Gamification of activity completion with milestones, challenges and trophies
+* Exposing data over HTTP for a web UI or other clients
 
-It is intended as a backend you can run to power a fitness‑tracking frontend. It's currently in development and not yet 
-ready for production use. The database used is H2, that is deleted on every restart.
+It is intended as a backend you can run to power a fitness‑tracking frontend. **It's currently in development and not yet 
+ready for production use.** The database used is H2, which is deleted on every restart.
 
 ## Related projects
-- A Nuxt Frontend: https://github.com/shendriks/fitness-tracker-ui-nuxt - use this as the UI that talks to this API.  
-- A meta repository: https://github.com/shendriks/fitness-tracker - use this to quickly spin up both the API and the frontend together for demo purposes with docker compose.
+* A Nuxt Frontend: https://github.com/shendriks/fitness-tracker-ui-nuxt - use this as the UI that talks to this API.  
+* A meta repository: https://github.com/shendriks/fitness-tracker - use this to quickly spin up both the API and the 
+  frontend together with docker compose.
 
 ## Run locally (withouth docker)
 ### Prerequisites
-- Java 21
+* Java 21
 
 Gradle wrapper is included, so you do not need a global Gradle installation.
 
@@ -43,12 +45,12 @@ The application will start on port 8080. Open Swagger UI at http://localhost:808
 ./gradlew.bat check
 ```
 
-## Run locally with docker compose
-to quickly spin up the API and the frontend together with docker compose, use this meta repo: https://github.com/shendriks/fitness-tracker
+## Run locally with Docker Compose
+To quickly spin up the API and the frontend together with docker compose, use this meta repo: https://github.com/shendriks/fitness-tracker
 
 ## Further Documentation
-- [Architecture Documentation](./docs/architecture.md)
-- [Architecture Decision Log](./docs/adl)
+* [Architecture Documentation](./docs/architecture.md)
+* [Architecture Decision Log](./docs/adl)
 
 ## Note
 ⚠️ This project is still in development and is not yet ready for production use. Use at your own risk.

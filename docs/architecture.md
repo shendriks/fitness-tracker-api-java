@@ -2,8 +2,8 @@
 ## Ports and Adapters
 This application uses the Ports and Adapters (a.k.a. Hexagonal) architecture. The core business logic (domain and 
 application) is isolated behind interfaces (ports). Technology-specific details (HTTP, databases, etc.) live in adapters 
-that "plug" into those ports. This keeps the domain independent of I/O concerns and makes the system easier to test and 
-evolve.
+that "plug" into those ports. This keeps the business logic independent of infrastructure concerns and makes the system 
+easier to test and evolve. Here's a quick diagram:
 
 ![Architecture Diagram](architecture.png)
 
@@ -16,15 +16,15 @@ evolve.
   * Defines events and event listeners
 * Ports
   * Incoming ports model what the application can do (use cases) from an external perspective, controllers call these
-  * Outgoing ports model what the application needs from the outside world (e.g. load/save activities),
-    adapters implement these to talk to infrastructure like databases
+  * Outgoing ports model what the application needs from the outside world (like loading/saving activities),
+    adapters implement these to talk to infrastructure like a database
 * Adapters
   * Inbound adapters call the application through incoming ports (e.g. REST controllers map Request DTOs to domain 
     objects, invoke application services, and map domain objects back to Response DTOs)
-  * Outbound adapters implement outgoing ports to talk to external systems (e.g. JPA repositories) and maps between 
-    domain objects and external representations (e.g. database entities)
+  * Outbound adapters implement outgoing ports to talk to external systems and map between domain objects and external 
+    representations (like JPA entities)
 * Infrastructure
-  * Cross-cutting technical concerns (e.g. config, security) and Spring wiring
+  * Cross-cutting technical concerns (e.g. config, security)
 
 ### Folder Structure
 
@@ -65,11 +65,10 @@ evolve.
      └-- supportive
 ```
 
-### Why this helps
+### What this helps with
 * Testability: one can unit-test the domain and application services by mocking ports, without a database or web server.
 * Replaceability: swap adapters without changing the core (e.g. replace JPA with another store, add CLI next to REST).
 * Maintainability: clear boundaries reduce coupling and make refactoring safer.
-
 
 ## Further Evolution
 Instead of having one hexagon, split into multiple hexagons, one per domain:
