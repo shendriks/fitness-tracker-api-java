@@ -1,4 +1,4 @@
-# Use setter injection in `ActivityDbEntityMapper` to enable simple unit testing
+# \[ADR-0002\] Use Setter Injection in `ActivityDbEntityMapper` to enable simple Unit Testing
 
 ## Context and Problem Statement
 
