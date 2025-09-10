@@ -79,11 +79,6 @@ public class PatchActivityController {
                     """)))
         @RequestBody @Valid ActivityUpdateRequestDTO request
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
-//
         ActivityUpdateData activityUpdateData = activityMapper.toActivityUpdateData(request);
         ActivityDetails activity = updateActivityUseCase.updateActivityForUser(
             user.id(),

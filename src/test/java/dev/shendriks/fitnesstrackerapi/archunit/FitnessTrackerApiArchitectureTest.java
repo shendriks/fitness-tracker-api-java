@@ -2,11 +2,10 @@ package dev.shendriks.fitnesstrackerapi.archunit;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.tngtech.archunit.library.freeze.FreezingArchRule;
+import com.tngtech.archunit.library.Architectures.OnionArchitecture;
 import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
-import static com.tngtech.archunit.library.freeze.FreezingArchRule.freeze;
 
 public class FitnessTrackerApiArchitectureTest {
     @Test
@@ -14,12 +13,17 @@ public class FitnessTrackerApiArchitectureTest {
 
         JavaClasses jc = new ClassFileImporter().importPackages("dev.shendriks.fitnesstrackerapi");
 
-        FreezingArchRule arch = freeze(onionArchitecture()
-            .domainModels("dev.shendriks.fitnesstrackerapi.domain..")
-//            .domainServices("com.myapp.domain.service..")
+        OnionArchitecture arch = onionArchitecture()
+            .domainModels(
+                "dev.shendriks.fitnesstrackerapi.domain.entity..",
+                "dev.shendriks.fitnesstrackerapi.domain.value.."
+            )
+            .domainServices("dev.shendriks.fitnesstrackerapi.domain.service..")
             .applicationServices("dev.shendriks.fitnesstrackerapi.application..")
             .adapter("persistence", "dev.shendriks.fitnesstrackerapi.adapter.out.jpa..")
-            .adapter("rest", "dev.shendriks.fitnesstrackerapi.adapter.in.rest.."));
+            .adapter("rest", "dev.shendriks.fitnesstrackerapi.adapter.in.rest..")
+            // not really an adapter, but rather crosscutting concerns, but we want to allow access to the domain
+            .adapter("infrastructure", "dev.shendriks.fitnesstrackerapi.infrastructure..");
 
         arch.check(jc);
     }

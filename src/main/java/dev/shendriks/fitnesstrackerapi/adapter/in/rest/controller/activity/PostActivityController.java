@@ -72,11 +72,6 @@ public class PostActivityController {
         @Valid
         ActivityCreateRequestDTO request
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
-//
         ActivityCreationData activityCreationData = activityMapper.toActivityCreationData(request);
         ActivityDetails activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
         ActivityDetailsResponseDTO activityResponse = activityMapper.toActivityDetailsResponse(activity);

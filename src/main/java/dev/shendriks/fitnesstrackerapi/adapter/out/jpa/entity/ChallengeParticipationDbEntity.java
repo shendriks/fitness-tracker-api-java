@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
-import dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid.Ulid;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.type.Ulid;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
