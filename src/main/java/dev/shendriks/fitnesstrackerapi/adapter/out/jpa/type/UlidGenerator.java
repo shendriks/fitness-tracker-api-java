@@ -1,4 +1,4 @@
-package dev.shendriks.fitnesstrackerapi.infrastructure.supportive.ulid;
+package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.type;
 
 import com.github.f4b6a3.ulid.UlidCreator;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
