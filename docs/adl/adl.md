@@ -1,6 +1,6 @@
 # Architecture Decision Log
 
-* [2025-08-09 Adopt Ports and Adapters](./2025-08-09-adopt-ports-and-adapters.md)
-* [2025-08-23 Setter Injection in DB Entity Mappers](./2025-08-23-setter-injection-activitydbentitymapper.md)
-* [2025-08-29 Wrapper Classes for Duration, Distance and Speed](./2025-08-29-use-custom-distance-duration-and-speed.md)
-* [2025-09-05 Track Preview Images](./2025-09-05-preview-image-storage.adl.md)
+* [\[ADR-0001\] Adopt Ports and Adapters](./ADR-0001-adopt-ports-and-adapters.md)
+* [\[ADR-0002\] Setter Injection in DB Entity Mappers](./ADR-0002-setter-injection-activitydbentitymapper.md)
+* [\[ADR-0003\] Wrapper Classes for Duration, Distance and Speed](./ADR-0003-use-custom-distance-duration-and-speed.md)
+* [\[ADR-0004\] Track Preview Images](./ADR-0004-preview-image-storage.adl.md)

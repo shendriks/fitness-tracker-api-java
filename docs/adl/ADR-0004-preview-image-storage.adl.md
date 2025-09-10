@@ -1,4 +1,4 @@
-# Store GPS Track Preview Images in the Database
+# \[ADR-0004\] Store GPS Track Preview Images in the Database
 
 ## Context and Problem Statement
 

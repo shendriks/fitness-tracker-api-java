@@ -1,4 +1,4 @@
-# Use custom value types `Distance`, `Duration` and `Speed`
+# \[ADR-0003\] Use custom value types `Distance`, `Duration` and `Speed`
 
 ## Context and Problem Statement
 
@@ -18,7 +18,7 @@ Different Java types are returned for these functions:
 This leads to awkward projection constructors with mixed argument types (e.g., `Double` or `Long` for `SUM` results 
 and `Distance` or `Duration` for `MAX` results):
 
-![Projection Constructor Parameter Types](./2025-08-29-projection-constructor-parameter-types.png)
+![Projection Constructor Parameter Types](./ADR-0003-projection-constructor-parameter-types.png)
 
 ## Considered Options
 
