@@ -70,6 +70,9 @@ easier to test and evolve. Here's a quick diagram:
 * Replaceability: swap adapters without changing the core (e.g. replace JPA with another store, add CLI next to REST).
 * Maintainability: clear boundaries reduce coupling and make refactoring safer.
 
+### Architecture Decision Log
+* [Architecture Decision Log](./adl/adl.md)
+
 ## Further Evolution
 Instead of having one hexagon, split into multiple hexagons, one per domain:
 * Activity

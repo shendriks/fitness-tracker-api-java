@@ -50,7 +50,7 @@ To quickly spin up the API and the frontend together with docker compose, use th
 
 ## Further Documentation
 * [Architecture Documentation](./docs/architecture.md)
-* [Architecture Decision Log](./docs/adl)
+* [Architecture Decision Log](./docs/adl/adl.md)
 
 ## Note
 ⚠️ This project is still in development and is not yet ready for production use. Use at your own risk.
