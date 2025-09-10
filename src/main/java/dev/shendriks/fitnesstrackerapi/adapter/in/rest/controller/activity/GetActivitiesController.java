@@ -50,11 +50,6 @@ public class GetActivitiesController {
         @AuthenticationPrincipal(errorOnInvalidType = true)
         User user
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
-//
         List<Activity> activities = getAllActivitiesUseCase.getAllActivitiesByUser(user.id());
         List<ActivityResponseDTO> activityResponses = activityMapper.toActivityResponses(activities);
         return ResponseEntity.ok(activityResponses);

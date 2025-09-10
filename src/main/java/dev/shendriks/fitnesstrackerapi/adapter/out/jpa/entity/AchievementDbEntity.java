@@ -1,8 +1,8 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.type.Ulid;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityMetric;
 import dev.shendriks.fitnesstrackerapi.domain.enums.ActivityType;
-import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.type.Ulid;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

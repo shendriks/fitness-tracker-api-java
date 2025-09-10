@@ -44,10 +44,6 @@ public class GetActivityCountController {
     public ResponseEntity<ActivityCountResponseDTO> getActivityCount(
         @AuthenticationPrincipal(errorOnInvalidType = true) User user
     ) {
-//        if (!rateLimiterService.isRequestAllowed(user)) {
-//            log.info("Rate limit exceeded for user " + user.getId() + " (" + user.getEmail() + ")");
-//            throw new RateLimitExceededException();
-//        }
         long activityCount = forGettingActivityCountByUser.getActivityCountByUser(user.id());
         ActivityCountResponseDTO activityCountResponse = new ActivityCountResponseDTO(activityCount);
         return ResponseEntity.ok(activityCountResponse);

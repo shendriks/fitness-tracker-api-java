@@ -3,7 +3,6 @@ package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
 import dev.shendriks.fitnesstrackerapi.application.exception.InvalidDataException;
 import dev.shendriks.fitnesstrackerapi.application.exception.ObjectNotFoundException;
-import dev.shendriks.fitnesstrackerapi.infrastructure.ratelimiting.RateLimitExceededException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,12 +40,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiErrorResponseDTO handle(AuthenticationException e) {
-        return new ApiErrorResponseDTO(e.getMessage());
-    }
-
-    @ExceptionHandler(RateLimitExceededException.class)
-    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
-    public ApiErrorResponseDTO handle(RateLimitExceededException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 
