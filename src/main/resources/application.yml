@@ -10,8 +10,8 @@ spring:
     init:
       mode: always
       data-locations: 
-          - optional:classpath:data.sql
           - optional:classpath:fixtures.sql
+          - optional:classpath:data.sql
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -33,6 +33,7 @@ server:
     path: /error
     whitelabel:
       enabled: false
+  forward-headers-strategy: framework
 
 springdoc:
   api-docs:
