@@ -8,7 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -77,13 +78,7 @@ public class SecurityConfig {
         String[] approvalPaths = {
             "/api/ping",
             "/api/users/signup",
-            "/h2-console",
-            "/actuator/shutdown",
             "/error",
-            "/api-docs",
-            "/api-docs/*",
-            "/swagger-ui",
-            "/swagger-ui/*",
         };
 
         http
@@ -102,11 +97,11 @@ public class SecurityConfig {
     @Order(3)
     public SecurityFilterChain basicAuthSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
-            "/api/access-token"
+            "/api/access-token",
         };
         http
             .securityMatcher(approvalsPaths)
-            .httpBasic(Customizer.withDefaults())
+            .httpBasic(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authenticationManager(authenticationManager())
             .authorizeHttpRequests(matcherRegistry -> matcherRegistry
@@ -115,6 +110,32 @@ public class SecurityConfig {
             )
             .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        return http.build();
+    }
+
+    @Bean
+    @Order(4)
+    public SecurityFilterChain swaggerUiSecuredFilterChain(HttpSecurity http) throws Exception {
+        String[] approvalsPaths = {
+            "/login",
+            "/default-ui.css",
+            "/api-docs",
+            "/api-docs/*",
+            "/swagger-ui",
+            "/swagger-ui/*",
+        };
+        http
+            .securityMatcher(approvalsPaths)
+            .csrf(AbstractHttpConfigurer::disable)
+            .authenticationManager(authenticationManager())
+            .authorizeHttpRequests(matcherRegistry -> matcherRegistry
+                .requestMatchers(HttpMethod.GET, "/api-docs").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/api-docs/*").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/swagger-ui").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/swagger-ui/*").hasRole("USER")
+                .anyRequest().denyAll()
+            )
+            .formLogin(formLogin -> formLogin.defaultSuccessUrl("/swagger-ui/index.html"));
         return http.build();
     }
 
