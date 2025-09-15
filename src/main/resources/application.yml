@@ -51,3 +51,12 @@ jwt:
   secret: MySuperS3cr37JWTSecret
   expiration: 86400
   issuer: dev.shendriks.fitnesstrackerapi
+
+togglz:
+  features:
+    USER_SIGN_UP:
+      enabled: true
+  endpoint:
+    enabled: false
+  console:
+    enabled: false

@@ -42,6 +42,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.5.5'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation 'org.mapstruct:mapstruct:1.6.3'
+    implementation 'org.togglz:togglz-spring-boot-starter:4.4.0'
     implementation 'com.github.f4b6a3:ulid-creator:5.2.3'
     implementation 'com.auth0:java-jwt:4.5.0'
     implementation 'io.github.jamsesso:json-logic-java:1.1.0'

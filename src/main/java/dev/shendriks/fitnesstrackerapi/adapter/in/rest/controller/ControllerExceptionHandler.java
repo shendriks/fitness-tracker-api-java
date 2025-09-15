@@ -4,6 +4,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
 import dev.shendriks.fitnesstrackerapi.application.exception.InvalidDataException;
 import dev.shendriks.fitnesstrackerapi.application.exception.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -40,6 +41,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiErrorResponseDTO handle(AuthenticationException e) {
+        return new ApiErrorResponseDTO(e.getMessage());
+    }
+    
+    @ExceptionHandler(NotImplementedException.class)
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public ApiErrorResponseDTO handle(NotImplementedException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 

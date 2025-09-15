@@ -16,20 +16,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.togglz.core.Feature;
+import org.togglz.core.manager.FeatureManager;
+import org.togglz.core.util.NamedFeature;
 
 import java.net.URI;
 
 @RestController
 @Tag(name = OpenApiTagName.USERS)
-@AllArgsConstructor
+//@AllArgsConstructor
 public class SignUpUserController {
     private final SignUpUseCase signUpUseCase;
     private final UserDTOMapper mapper;
+    private final FeatureManager featureManager;
+    public static final Feature USER_SIGN_UP = new NamedFeature("USER_SIGN_UP");
+
+    public SignUpUserController(SignUpUseCase signUpUseCase, UserDTOMapper mapper, FeatureManager featureManager) {
+        this.signUpUseCase = signUpUseCase;
+        this.mapper = mapper;
+        this.featureManager = featureManager;
+    }
 
     @Operation(summary = "Register a user")
     @ApiResponses(value = {
@@ -70,6 +81,10 @@ public class SignUpUserController {
         )
         UserSignupRequestDTO request
     ) {
+        if (!featureManager.isActive(USER_SIGN_UP)) {
+           throw new NotImplementedException("Sign up is not active");
+        }
+        
         UserSignupData userSignupData = mapper.toUserSignUpData(request);
         User user = signUpUseCase.signUp(userSignupData);
         URI location = URI.create("/api/users/" + user.ulid().value());
