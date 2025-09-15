@@ -55,7 +55,7 @@ jwt:
 togglz:
   features:
     USER_SIGN_UP:
-      enabled: true
+      enabled: false
   endpoint:
     enabled: false
   console:
