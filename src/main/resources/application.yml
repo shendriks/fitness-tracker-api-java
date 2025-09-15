@@ -55,8 +55,19 @@ jwt:
 togglz:
   features:
     USER_SIGN_UP:
-      enabled: false
+      enabled: true
   endpoint:
     enabled: false
   console:
     enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: demo
+
+togglz:
+  features:
+    USER_SIGN_UP:
+      enabled: false
