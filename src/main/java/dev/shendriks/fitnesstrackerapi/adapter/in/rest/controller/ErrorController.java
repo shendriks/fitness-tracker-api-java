@@ -1,6 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller;
 
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@Hidden
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
     @RequestMapping("/error")
     public ResponseEntity<ApiErrorResponseDTO> handleError(HttpServletRequest request) {
