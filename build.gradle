@@ -62,13 +62,6 @@ jacoco {
     toolVersion = '0.8.13'
 }
 
-//compileJava {
-//    options.compilerArgs += [
-////            '-Amapstruct.verbose=true',
-//        '-Amapstruct.disableBuilders=true'
-//    ]
-//}
-
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
