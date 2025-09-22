@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.infrastructure.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -115,6 +116,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(4)
+    @Profile("demo")
     public SecurityFilterChain swaggerUiSecuredFilterChain(HttpSecurity http) throws Exception {
         String[] approvalsPaths = {
             "/login",
@@ -136,6 +138,29 @@ public class SecurityConfig {
                 .anyRequest().denyAll()
             )
             .formLogin(formLogin -> formLogin.defaultSuccessUrl("/swagger-ui/index.html"));
+        return http.build();
+    }
+
+    @Bean
+    @Order(4)
+    @Profile("!demo")
+    public SecurityFilterChain swaggerUiUnsecuredFilterChain(HttpSecurity http) throws Exception {
+        String[] approvalPaths = {
+            "/api-docs",
+            "/api-docs/*",
+            "/swagger-ui",
+            "/swagger-ui/*",
+        };
+
+        http
+            .securityMatcher(approvalPaths)
+            .csrf(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(matcherRegistry -> matcherRegistry
+                .anyRequest().permitAll()
+            )
+            .sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         return http.build();
     }
 
