@@ -34,6 +34,11 @@ server:
     whitelabel:
       enabled: false
   forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
 
 springdoc:
   api-docs:
