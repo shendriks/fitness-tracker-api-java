@@ -41,12 +41,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withChallengeJoinedEvent_savesNotificationWithChallengeName() {
+    void handleChallengeJoinedEvent_withChallengeJoinedEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeUlid challengeUlid = new ChallengeUlid("TESTULID000000000000000001");
         when(forAccessingChallenges.findNameByUlid(challengeUlid)).thenReturn(Optional.of("Spring Marathon"));
 
-        listener.handle(new ChallengeJoinedEvent(userId, challengeUlid));
+        listener.handleChallengeJoinedEvent(new ChallengeJoinedEvent(userId, challengeUlid));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -59,12 +59,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withChallengeLeftEvent_savesNotificationWithChallengeName() {
+    void handleChallengeLeftEvent_withChallengeLeftEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeUlid challengeUlid = new ChallengeUlid("TESTULID000000000000000002");
         when(forAccessingChallenges.findNameByUlid(challengeUlid)).thenReturn(Optional.of("Cycling 500k"));
 
-        listener.handle(new ChallengeLeftEvent(userId, challengeUlid));
+        listener.handleChallengeLeftEvent(new ChallengeLeftEvent(userId, challengeUlid));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -77,12 +77,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withChallengeCompletedEvent_savesNotificationWithChallengeName() {
+    void handleChallengeCompletedEvent_withChallengeCompletedEvent_savesNotificationWithChallengeName() {
         UserId userId = new UserId(42L);
         ChallengeId challengeId = new ChallengeId(23L);
         when(forAccessingChallenges.findNameById(challengeId)).thenReturn(Optional.of("Trail Run"));
 
-        listener.handle(new ChallengeCompletedEvent(userId, challengeId));
+        listener.handleChallengeCompletedEvent(new ChallengeCompletedEvent(userId, challengeId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -95,12 +95,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withMilestoneCompletedEvent_savesNotificationWithMilestoneName() {
+    void handleMilestoneCompletedEvent_withMilestoneCompletedEvent_savesNotificationWithMilestoneName() {
         UserId userId = new UserId(42L);
         MilestoneId milestoneId = new MilestoneId(23L);
         when(forAccessingMilestones.findNameById(milestoneId)).thenReturn(Optional.of("Halfway There"));
 
-        listener.handle(new MilestoneCompletedEvent(userId, milestoneId));
+        listener.handleMilestoneCompletedEvent(new MilestoneCompletedEvent(userId, milestoneId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -113,12 +113,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withActivitySavedEvent_savesNotificationWithActivityTitle() {
+    void handleActivitySavedEvent_withActivitySavedEvent_savesNotificationWithActivityTitle() {
         UserId userId = new UserId(42L);
         ActivityId activityId = new ActivityId(13L);
         when(forAccessingActivities.findTitleById(activityId)).thenReturn(Optional.of("Morning Ride"));
 
-        listener.handle(new ActivitySavedEvent(userId, activityId));
+        listener.handleActivitySavedEvent(new ActivitySavedEvent(userId, activityId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -131,12 +131,12 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withActivityUpdatedEvent_savesNotificationWithActivityTitle() {
+    void handleActivityUpdatedEvent_withActivityUpdatedEvent_savesNotificationWithActivityTitle() {
         UserId userId = new UserId(42L);
         ActivityId activityId = new ActivityId(13L);
         when(forAccessingActivities.findTitleById(activityId)).thenReturn(Optional.of("Evening Run"));
 
-        listener.handle(new ActivityUpdatedEvent(userId, activityId));
+        listener.handleActivityUpdatedEvent(new ActivityUpdatedEvent(userId, activityId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -149,11 +149,11 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withActivityDeletedEvent_savesNotificationWithoutLookup() {
+    void handleActivityDeletedEvent_withActivityDeletedEvent_savesNotificationWithoutLookup() {
         UserId userId = new UserId(42L);
         ActivityUlid activityUlid = new ActivityUlid("TESTULID000000000000000003");
 
-        listener.handle(new ActivityDeletedEvent(userId, activityUlid));
+        listener.handleActivityDeletedEvent(new ActivityDeletedEvent(userId, activityUlid));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -165,11 +165,11 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withTrophyUnlockedEvent_savesNotification() {
+    void handleTrophyUnlockedEvent_withTrophyUnlockedEvent_savesNotification() {
         UserId userId = new UserId(42L);
         TrophyId trophyId = new TrophyId(37L);
 
-        listener.handle(new TrophyUnlockedEvent(userId, trophyId));
+        listener.handleTrophyUnlockedEvent(new TrophyUnlockedEvent(userId, trophyId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
@@ -181,10 +181,10 @@ class NotificationCreatorListenerTest {
     }
 
     @Test
-    void handle_withTrophyLostEvent_savesNotification() {
+    void handleTrophyLostEvent_withTrophyLostEvent_savesNotification() {
         UserId userId = new UserId(42L);
 
-        listener.handle(new TrophyLostEvent(userId));
+        listener.handleTrophyLostEvent(new TrophyLostEvent(userId));
 
         ArgumentCaptor<NotificationCreationData> captor = ArgumentCaptor.forClass(NotificationCreationData.class);
         verify(forAccessingNotifications).save(captor.capture());
