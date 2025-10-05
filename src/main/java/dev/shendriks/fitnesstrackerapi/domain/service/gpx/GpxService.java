@@ -51,13 +51,13 @@ public class GpxService {
         KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
         List<Speed> kilometerSpeeds = kilometerMetrics.speeds();
 
-        List<GPSPositionData> gpsPositions = wayPoints
+        List<GPSPosition> gpsPositions = wayPoints
             .stream()
-            .map((wp) -> new GPSPositionData(
+            .map((wp) -> new GPSPosition(
                 wp.getTime().orElse(Instant.MIN),
                 wp.getLatitude().doubleValue(),
                 wp.getLongitude().doubleValue(),
-                wp.getElevation().flatMap(length -> Optional.of(length.doubleValue()))
+                wp.getElevation().flatMap(elevation -> Optional.of(elevation.doubleValue())).orElse(null)
             ))
             .toList();
 

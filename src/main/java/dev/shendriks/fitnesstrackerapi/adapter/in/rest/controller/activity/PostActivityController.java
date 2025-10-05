@@ -4,7 +4,7 @@ import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.ApiErrorResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityCreateRequestDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityDetailsResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper.ActivityDTOMapper;
-import dev.shendriks.fitnesstrackerapi.application.port.in.activity.CreateActivityUseCase;
+import dev.shendriks.fitnesstrackerapi.application.port.in.activity.CreateManualActivityUseCase;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.entity.User;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityCreationData;
@@ -32,7 +32,7 @@ import static dev.shendriks.fitnesstrackerapi.infrastructure.security.SecurityRe
 @SecurityRequirement(name = BEARER_TOKEN)
 @AllArgsConstructor
 public class PostActivityController {
-    private final CreateActivityUseCase forCreatingAnActivity;
+    private final CreateManualActivityUseCase forCreatingAnActivity;
     private final ActivityDTOMapper activityMapper;
 
     @Operation(summary = "Manually create a new activity")
@@ -73,7 +73,7 @@ public class PostActivityController {
         ActivityCreateRequestDTO request
     ) {
         ActivityCreationData activityCreationData = activityMapper.toActivityCreationData(request);
-        ActivityDetails activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
+        ActivityDetails activity = forCreatingAnActivity.saveManualActivityForUser(user.id(), activityCreationData);
         ActivityDetailsResponseDTO activityResponse = activityMapper.toActivityDetailsResponse(activity);
 
         return ResponseEntity.ok(activityResponse);

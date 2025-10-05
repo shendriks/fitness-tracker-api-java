@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
+import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSTrackData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import org.junit.jupiter.api.Test;
@@ -82,14 +82,14 @@ class GpxServiceIntegrationTest {
         assertEquals(metaTime, actualGPSTrackData.gpxTime().get());
 
         // Waypoints are both kept (they have time)
-        List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
+        List<GPSPosition> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());
         assertEquals(Instant.parse("2025-08-23T10:00:05Z"), positions.get(0).timestamp());
         assertEquals(Instant.parse("2025-08-23T10:01:45Z"), positions.get(1).timestamp());
-        assertTrue(positions.get(0).altitude().isPresent());
-        assertEquals(50.0, positions.get(0).altitude().get());
-        assertTrue(positions.get(1).altitude().isPresent());
-        assertEquals(60.0, positions.get(1).altitude().get());
+        assertNotNull(positions.get(0).altitude());
+        assertEquals(50.0, positions.get(0).altitude());
+        assertNotNull(positions.get(1).altitude());
+        assertEquals(60.0, positions.get(1).altitude());
 
         // Basic metric sanity checks with tolerances
         assertTrue(
@@ -130,12 +130,12 @@ class GpxServiceIntegrationTest {
         assertEquals(Instant.parse("2025-08-23T19:00:00Z"), actualGPSTrackData.gpxTime().get());
 
         // Positions
-        List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
+        List<GPSPosition> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());
         assertEquals(Instant.parse("2025-08-23T19:00:00Z"), positions.get(0).timestamp());
         assertEquals(Instant.parse("2025-08-23T19:05:00Z"), positions.get(1).timestamp());
-        assertTrue(positions.get(0).altitude().isEmpty(), "Expected no altitude for first position");
-        assertTrue(positions.get(1).altitude().isEmpty(), "Expected no altitude for second position");
+        assertNull(positions.get(0).altitude(), "Expected no altitude for first position");
+        assertNull(positions.get(1).altitude(), "Expected no altitude for second position");
 
         // Sanity metrics: small distance, 300 seconds duration
         assertTrue(actualGPSTrackData.distance().toMeters() > 0, "Expected distance > 0m");

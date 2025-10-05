@@ -1,23 +1,27 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
+import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
-import static java.time.Instant.EPOCH;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoutePreviewServiceTest {
-    private final RoutePreviewService service = new RoutePreviewService();
+class TrackPreviewServiceTest {
+    private final TrackPreviewService service = new TrackPreviewService();
 
-    private static GPSPositionData pos(double lat, double lon) {
-        return new GPSPositionData(EPOCH, lat, lon, Optional.empty());
+    /**
+     * @param lat Latitude in degrees.
+     * @param lon Longitude in degrees.
+     * @return GPSPosition with the given latitude and longitude. Altitude is always null.
+     */
+    private static GPSPosition pos(double lat, double lon) {
+        return new GPSPosition(Instant.EPOCH, lat, lon, null);
     }
 
     /**
@@ -37,21 +41,21 @@ class RoutePreviewServiceTest {
     }
 
     @Test
-    void createPreview_throwsWhenLessThanTwoPositions() {
-        assertThrows(IllegalArgumentException.class, () -> service.createPreview(List.of(), 200, 100));
-        assertThrows(IllegalArgumentException.class, () -> service.createPreview(List.of(pos(0.0, 0.1)), 200, 100));
+    void createTrackPreview_throwsWhenLessThanTwoPositions() {
+        assertThrows(IllegalArgumentException.class, () -> service.createTrackPreview(List.of(), 200, 100));
+        assertThrows(IllegalArgumentException.class, () -> service.createTrackPreview(List.of(pos(0.0, 0.1)), 200, 100));
     }
 
     @Test
-    void createPreview_returnsValidPngWithRequestedDimensions() {
-        List<GPSPositionData> track = List.of(
+    void createTrackPreview_returnsValidPngWithRequestedDimensions() {
+        List<GPSPosition> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
             pos(0.2, 1.2)
         );
 
         ImageData actualImageData = assertDoesNotThrow(
-            () -> service.createPreview(track, 300, 150),
+            () -> service.createTrackPreview(track, 300, 150),
             "Expected service.createPreview to not throw an exception"
         );
         assertNotNull(actualImageData, "Image data should not be null");
@@ -67,8 +71,8 @@ class RoutePreviewServiceTest {
     }
 
     @Test
-    void createPreview_isDeterministicForSameInput() {
-        List<GPSPositionData> track = List.of(
+    void createTrackPreview_isDeterministicForSameInput() {
+        List<GPSPosition> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
             pos(0.2, 1.2),
@@ -76,35 +80,35 @@ class RoutePreviewServiceTest {
         );
 
         ImageData actualImageData1 = assertDoesNotThrow(
-            () -> service.createPreview(track, 400, 300),
+            () -> service.createTrackPreview(track, 400, 300),
             "Expected service.createPreview to not throw an exception"
         );
         ImageData actualImageData2 = assertDoesNotThrow(
-            () -> service.createPreview(track, 400, 300),
+            () -> service.createTrackPreview(track, 400, 300),
             "Expected service.createPreview to not throw an exception"
         );
         assertEquals(actualImageData1, actualImageData2, "Expected preview image data to be the same for the same input");
     }
 
     @Test
-    void createPreview_handlesDifferentAspectRatios() {
-        List<GPSPositionData> vertical = List.of(
+    void createTrackPreview_handlesDifferentAspectRatios() {
+        List<GPSPosition> vertical = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.0),
             pos(0.2, 1.0)
         );
-        List<GPSPositionData> horizontal = List.of(
+        List<GPSPosition> horizontal = List.of(
             pos(0.0, 1.0),
             pos(0.0, 1.1),
             pos(0.0, 1.2)
         );
 
         ImageData actualVerticalImageData = assertDoesNotThrow(
-            () -> service.createPreview(vertical, 200, 400),
+            () -> service.createTrackPreview(vertical, 200, 400),
             "Expected service.createPreview to not throw an exception"
         );
         ImageData actualHorizontalImageData = assertDoesNotThrow(
-            () -> service.createPreview(horizontal, 400, 200),
+            () -> service.createTrackPreview(horizontal, 400, 200),
             "Expected service.createPreview to not throw an exception"
         );
 

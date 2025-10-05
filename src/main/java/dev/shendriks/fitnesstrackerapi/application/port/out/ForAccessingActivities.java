@@ -16,9 +16,9 @@ public interface ForAccessingActivities {
 
     Optional<ActivityDetails> findByUserAndId(UserId userId, ActivityUlid activityUlid);
 
-    ActivityDetails saveForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed);
+    ActivityDetails saveManualActivityForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed);
 
-    ActivityDetails saveForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData, ImageData imageData);
+    ActivityDetails saveUploadedActivityForUser(UserId userId, ActivityUploadData activityUploadData, GPSTrackData gpsTrackData, ImageData trackPreview);
 
     ActivityDetails updateForUser(UserId userId, ActivityUlid achievementUlid, ActivityUpdateData activityUpdateData);
 

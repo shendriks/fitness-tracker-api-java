@@ -63,12 +63,12 @@ public abstract class ActivityDbEntityMapper {
             gpsTrackData
                 .gpsPositions()
                 .stream()
-                .map(gpsPositionData -> GPSPositionDbEntity
+                .map(GPSPosition -> GPSPositionDbEntity
                     .builder()
-                    .latitude(gpsPositionData.latitude())
-                    .longitude(gpsPositionData.longitude())
-                    .timestamp(gpsPositionData.timestamp())
-                    .altitude(gpsPositionData.altitude().orElse(null))
+                    .latitude(GPSPosition.latitude())
+                    .longitude(GPSPosition.longitude())
+                    .timestamp(GPSPosition.timestamp())
+                    .altitude(GPSPosition.altitude())
                     .build())
                 .peek((position) -> position.setActivity(activity))
                 .toList()

@@ -58,8 +58,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .startDate(Instant.parse("2025-08-21T18:30:00Z"))
             .build();
 
-        ActivityDetails actualActivity1 = adapter.saveForUser(userId, activityCreationData1, Speed.ofMetersPerSecond(1800 / 10000.0));
-        ActivityDetails actualActivity2 = adapter.saveForUser(userId, activityCreationData2, Speed.ofMetersPerSecond(3600 / 25000.0));
+        ActivityDetails actualActivity1 = adapter.saveManualActivityForUser(userId, activityCreationData1, Speed.ofMetersPerSecond(1800 / 10000.0));
+        ActivityDetails actualActivity2 = adapter.saveManualActivityForUser(userId, activityCreationData2, Speed.ofMetersPerSecond(3600 / 25000.0));
 
         assertNotNull(actualActivity1.ulid());
         assertNotNull(actualActivity2.ulid());
@@ -96,7 +96,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .startDate(Instant.parse("2025-08-22T09:00:00Z"))
             .build();
 
-        ActivityDetails actualActivity = adapter.saveForUser(userId, create, Speed.ofMetersPerSecond(900 / 1200.0));
+        ActivityDetails actualActivity = adapter.saveManualActivityForUser(userId, create, Speed.ofMetersPerSecond(900 / 1200.0));
 
         assertInstanceOf(ActivityId.class, actualActivity.id());
         assertInstanceOf(ActivityUlid.class, actualActivity.ulid());
@@ -151,7 +151,7 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
     }
 
     @Test
-    void saveForUser_withUploadDataAndGPSTrack_persistsMetricsAndGpsThenDelete() {
+    void saveUploadedActivityForUser_withUploadDataAndGPSTrack_persistsMetricsAndGpsThenDelete() {
         UserId userId = createAndPersistUser();
 
         ActivityUploadData upload = ActivityUploadData
@@ -173,13 +173,13 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .gpsPositions(List.of(
-                new GPSPositionData(Instant.parse("2025-08-23T10:00:05Z"), 0.0, 1.0, Optional.of(10.0)),
-                new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, Optional.empty())
+                new GPSPosition(Instant.parse("2025-08-23T10:00:05Z"), 0.0, 1.0, 10.0),
+                new GPSPosition(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, null)
             ))
             .build();
 
         ImageData imageData = new ImageData("some-dummy-data".getBytes());
-        ActivityDetails actualSavedActivity = adapter.saveForUser(userId, upload, gps, imageData);
+        ActivityDetails actualSavedActivity = adapter.saveUploadedActivityForUser(userId, upload, gps, imageData);
 
         assertNotNull(actualSavedActivity.id());
         assertEquals(789L, actualSavedActivity.duration().toSeconds());

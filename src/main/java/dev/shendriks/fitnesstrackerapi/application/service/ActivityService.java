@@ -9,8 +9,8 @@ import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActiviti
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.GpxService;
-import dev.shendriks.fitnesstrackerapi.domain.service.gpx.RoutePreviewService;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.SpeedCalculator;
+import dev.shendriks.fitnesstrackerapi.domain.service.gpx.TrackPreviewService;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +29,18 @@ public class ActivityService implements
     CountActivitiesUseCase,
     ListActivitiesUseCase,
     ShowActivityDetailsUseCase,
-    CreateActivityUseCase,
+    CreateManualActivityUseCase,
     UpdateActivityUseCase,
     UploadActivityUseCase,
     DeleteActivityUseCase {
+    public static final int TRACK_PREVIEW_IMAGE_WIDTH = 200;
+    public static final int TRACK_PREVIEW_IMAGE_HEIGHT = 150;
+
     private final ForAccessingActivities forAccessingActivities;
     private final ApplicationEventPublisher eventPublisher;
     private final GpxService gpxService;
     private final SpeedCalculator speedCalculator;
-    private final RoutePreviewService routePreviewService;
+    private final TrackPreviewService trackPreviewService;
 
     @Override
     public long getActivityCountByUser(UserId userId) {
@@ -57,12 +60,12 @@ public class ActivityService implements
     }
 
     @Override
-    public ActivityDetails saveActivityForUser(UserId userId, ActivityCreationData activityCreationData) {
+    public ActivityDetails saveManualActivityForUser(UserId userId, ActivityCreationData activityCreationData) {
         Speed averageSpeed = speedCalculator.calculateSpeed(
             activityCreationData.distance(),
             activityCreationData.duration()
         );
-        ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityCreationData, averageSpeed);
+        ActivityDetails activity = forAccessingActivities.saveManualActivityForUser(userId, activityCreationData, averageSpeed);
         eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
         return activity;
     }
@@ -81,8 +84,17 @@ public class ActivityService implements
             try {
                 activityUploadData.gpxFile().transferTo(tempFile);
                 GPSTrackData gpsTrackData = gpxService.processGpxFile(tempFile);
-                ImageData imageData = routePreviewService.createPreview(gpsTrackData.gpsPositions(), 200, 150);
-                ActivityDetails activity = forAccessingActivities.saveForUser(userId, activityUploadData, gpsTrackData, imageData);
+                ImageData trackPreview = trackPreviewService.createTrackPreview(
+                    gpsTrackData.gpsPositions(),
+                    TRACK_PREVIEW_IMAGE_WIDTH,
+                    TRACK_PREVIEW_IMAGE_HEIGHT
+                );
+                ActivityDetails activity = forAccessingActivities.saveUploadedActivityForUser(
+                    userId,
+                    activityUploadData,
+                    gpsTrackData,
+                    trackPreview
+                );
                 eventPublisher.publishEvent(new ActivitySavedEvent(userId, activity.id()));
                 return activity;
             } finally {

@@ -178,8 +178,8 @@ class ActivityDbEntityMapperTest {
             .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .gpsPositions(List.of(
-                new GPSPositionData(Instant.parse("2025-08-01T09:30:00Z"), 0.0, 1.0, Optional.empty()),
-                new GPSPositionData(Instant.parse("2025-08-01T09:45:00Z"), 0.1, 1.1, Optional.of(10.0))
+                new GPSPosition(Instant.parse("2025-08-01T09:30:00Z"), 0.0, 1.0, null),
+                new GPSPosition(Instant.parse("2025-08-01T09:45:00Z"), 0.1, 1.1, 10.0)
             ))
             .build();
         ImageData imageData = new ImageData("some-dummy-data".getBytes());

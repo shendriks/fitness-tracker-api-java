@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Synchronized;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +25,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ChallengeJoinedEvent event) {
+    public void handleChallengeJoinedEvent(ChallengeJoinedEvent event) {
         String challengeName = forAccessingChallenges.findNameByUlid(event.challengeUlid()).orElseThrow();
 
         NotificationCreationData notification = NotificationCreationData
@@ -42,8 +40,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ChallengeLeftEvent event) {
+    public void handleChallengeLeftEvent(ChallengeLeftEvent event) {
         String challengeName = forAccessingChallenges.findNameByUlid(event.challengeUlid()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
@@ -55,8 +52,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ChallengeCompletedEvent event) {
+    public void handleChallengeCompletedEvent(ChallengeCompletedEvent event) {
         String challengeName = forAccessingChallenges.findNameById(event.challengeId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
@@ -69,8 +65,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(MilestoneCompletedEvent event) {
+    public void handleMilestoneCompletedEvent(MilestoneCompletedEvent event) {
         String milestoneName = forAccessingMilestones.findNameById(event.milestoneId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
@@ -83,8 +78,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ActivitySavedEvent event) {
+    public void handleActivitySavedEvent(ActivitySavedEvent event) {
         String activityTitle = forAccessingActivities.findTitleById(event.activityId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
@@ -97,8 +91,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ActivityUpdatedEvent event) {
+    public void handleActivityUpdatedEvent(ActivityUpdatedEvent event) {
         String activityTitle = forAccessingActivities.findTitleById(event.activityId()).orElseThrow();
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
@@ -111,8 +104,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(ActivityDeletedEvent event) {
+    public void handleActivityDeletedEvent(ActivityDeletedEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
             "Bummer!",
@@ -124,8 +116,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(TrophyUnlockedEvent event) {
+    public void handleTrophyUnlockedEvent(TrophyUnlockedEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
             "Superb!",
@@ -137,8 +128,7 @@ public class NotificationCreatorListener {
     @EventListener
     @Synchronized
     @Async
-    @Order(0)
-    public void handle(TrophyLostEvent event) {
+    public void handleTrophyLostEvent(TrophyLostEvent event) {
         NotificationCreationData notification = new NotificationCreationData(
             event.userId(),
             "D'oh!",
