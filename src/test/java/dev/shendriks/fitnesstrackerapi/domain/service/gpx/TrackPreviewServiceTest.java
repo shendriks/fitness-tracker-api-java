@@ -7,16 +7,21 @@ import org.junit.jupiter.api.Test;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.time.Instant;
 import java.util.List;
 
-import static java.time.Instant.EPOCH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrackPreviewServiceTest {
     private final TrackPreviewService service = new TrackPreviewService();
 
+    /**
+     * @param lat Latitude in degrees.
+     * @param lon Longitude in degrees.
+     * @return GPSPosition with the given latitude and longitude. Altitude is always null.
+     */
     private static GPSPosition pos(double lat, double lon) {
-        return new GPSPosition(EPOCH, lat, lon, null);
+        return new GPSPosition(Instant.EPOCH, lat, lon, null);
     }
 
     /**
