@@ -17,6 +17,6 @@ public record GPSTrackData(
     Duration motionTime,
     Duration pausingTime,
     List<Speed> kilometerSpeeds,
-    List<GPSPositionData> gpsPositions
+    List<GPSPosition> gpsPositions
 ) {
 }

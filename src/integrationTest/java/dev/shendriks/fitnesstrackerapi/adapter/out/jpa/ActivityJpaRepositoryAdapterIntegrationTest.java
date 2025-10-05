@@ -173,8 +173,8 @@ class ActivityJpaRepositoryAdapterIntegrationTest extends JpaRepositioryAdapterI
             .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .gpsPositions(List.of(
-                new GPSPositionData(Instant.parse("2025-08-23T10:00:05Z"), 0.0, 1.0, Optional.of(10.0)),
-                new GPSPositionData(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, Optional.empty())
+                new GPSPosition(Instant.parse("2025-08-23T10:00:05Z"), 0.0, 1.0, 10.0),
+                new GPSPosition(Instant.parse("2025-08-23T10:05:05Z"), 0.001, 1.001, null)
             ))
             .build();
 

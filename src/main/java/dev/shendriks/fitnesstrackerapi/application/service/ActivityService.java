@@ -35,7 +35,7 @@ public class ActivityService implements
     DeleteActivityUseCase {
     public static final int TRACK_PREVIEW_IMAGE_WIDTH = 200;
     public static final int TRACK_PREVIEW_IMAGE_HEIGHT = 150;
-    
+
     private final ForAccessingActivities forAccessingActivities;
     private final ApplicationEventPublisher eventPublisher;
     private final GpxService gpxService;

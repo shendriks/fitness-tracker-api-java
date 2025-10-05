@@ -43,7 +43,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public ApiErrorResponseDTO handle(AuthenticationException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
-    
+
     @ExceptionHandler(NotImplementedException.class)
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public ApiErrorResponseDTO handle(NotImplementedException e) {

@@ -33,7 +33,7 @@ import java.net.URI;
 @AllArgsConstructor
 public class SignUpUserController {
     public static final Feature USER_SIGN_UP = new NamedFeature("USER_SIGN_UP");
-    
+
     private final SignUpUseCase signUpUseCase;
     private final UserDTOMapper mapper;
     private final FeatureManager featureManager;

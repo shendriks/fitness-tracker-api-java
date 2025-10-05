@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
+import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,11 @@ public class TrackPreviewService {
      * projection.
      *
      * @param positions List of GPS positions containing latitude and longitude coordinates that define the track
-     * @param width The width of the output image in pixels
-     * @param height The height of the output image in pixels
+     * @param width     The width of the output image in pixels
+     * @param height    The height of the output image in pixels
      * @return ImageData containing the PNG image bytes of the rendered track preview, or null if an error occurred
      */
-    public ImageData createTrackPreview(List<GPSPositionData> positions, int width, int height) {
+    public ImageData createTrackPreview(List<GPSPosition> positions, int width, int height) {
         if (positions == null || positions.size() < 2) {
             throw new IllegalArgumentException("At least two GPS positions are required to render a route preview");
         }
@@ -33,10 +33,10 @@ public class TrackPreviewService {
             throw new IllegalArgumentException("Width and height must be positive");
         }
 
-        double minLat = positions.stream().mapToDouble(GPSPositionData::latitude).min().orElseThrow();
-        double maxLat = positions.stream().mapToDouble(GPSPositionData::latitude).max().orElseThrow();
-        double minLon = positions.stream().mapToDouble(GPSPositionData::longitude).min().orElseThrow();
-        double maxLon = positions.stream().mapToDouble(GPSPositionData::longitude).max().orElseThrow();
+        double minLat = positions.stream().mapToDouble(GPSPosition::latitude).min().orElseThrow();
+        double maxLat = positions.stream().mapToDouble(GPSPosition::latitude).max().orElseThrow();
+        double minLon = positions.stream().mapToDouble(GPSPosition::longitude).min().orElseThrow();
+        double maxLon = positions.stream().mapToDouble(GPSPosition::longitude).max().orElseThrow();
 
         /*
          * Equirectangular projection
@@ -78,7 +78,7 @@ public class TrackPreviewService {
 
         Path2D path = new Path2D.Double();
         boolean isFirst = true;
-        for (GPSPositionData position : positions) {
+        for (GPSPosition position : positions) {
             double x = position.longitude() * cosPhi * scale + offsetX;
             double y = position.latitude() * scale + offsetY;
             double yFlipped = height - y;

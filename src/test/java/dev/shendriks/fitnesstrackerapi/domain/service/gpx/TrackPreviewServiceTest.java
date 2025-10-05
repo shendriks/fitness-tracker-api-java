@@ -1,6 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.domain.value.GPSPositionData;
+import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.List;
-import java.util.Optional;
 
 import static java.time.Instant.EPOCH;
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TrackPreviewServiceTest {
     private final TrackPreviewService service = new TrackPreviewService();
 
-    private static GPSPositionData pos(double lat, double lon) {
-        return new GPSPositionData(EPOCH, lat, lon, Optional.empty());
+    private static GPSPosition pos(double lat, double lon) {
+        return new GPSPosition(EPOCH, lat, lon, null);
     }
 
     /**
@@ -44,7 +43,7 @@ class TrackPreviewServiceTest {
 
     @Test
     void createTrackPreview_returnsValidPngWithRequestedDimensions() {
-        List<GPSPositionData> track = List.of(
+        List<GPSPosition> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
             pos(0.2, 1.2)
@@ -68,7 +67,7 @@ class TrackPreviewServiceTest {
 
     @Test
     void createTrackPreview_isDeterministicForSameInput() {
-        List<GPSPositionData> track = List.of(
+        List<GPSPosition> track = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.1),
             pos(0.2, 1.2),
@@ -88,12 +87,12 @@ class TrackPreviewServiceTest {
 
     @Test
     void createTrackPreview_handlesDifferentAspectRatios() {
-        List<GPSPositionData> vertical = List.of(
+        List<GPSPosition> vertical = List.of(
             pos(0.0, 1.0),
             pos(0.1, 1.0),
             pos(0.2, 1.0)
         );
-        List<GPSPositionData> horizontal = List.of(
+        List<GPSPosition> horizontal = List.of(
             pos(0.0, 1.0),
             pos(0.0, 1.1),
             pos(0.0, 1.2)

@@ -109,20 +109,20 @@ class GpxServiceTest {
         assertEquals(10.0, actualGPSTrackData.kilometerSpeeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
         assertEquals(9.5, actualGPSTrackData.kilometerSpeeds().getLast().toMetersPerSecond(), Constant.EPSILON);
 
-        List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
+        List<GPSPosition> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());
-        GPSPositionData position1 = positions.getFirst();
+        GPSPosition position1 = positions.getFirst();
         assertEquals(Instant.parse("2025-08-22T10:00:10Z"), position1.timestamp());
         assertEquals(50.0, position1.latitude());
         assertEquals(5.0, position1.longitude());
-        assertTrue(position1.altitude().isPresent());
-        assertEquals(100.5, position1.altitude().get());
+        assertNotNull(position1.altitude());
+        assertEquals(100.5, position1.altitude());
 
-        GPSPositionData position2 = positions.get(1);
+        GPSPosition position2 = positions.get(1);
         assertEquals(Instant.parse("2025-08-22T10:05:10Z"), position2.timestamp());
         assertEquals(50.001, position2.latitude());
         assertEquals(5.002, position2.longitude());
-        assertTrue(position2.altitude().isEmpty());
+        assertNull(position2.altitude());
     }
 
     @Test
@@ -176,18 +176,18 @@ class GpxServiceTest {
         assertEquals(1, actualGPSTrackData.kilometerSpeeds().size(), "Expected one kilometer speed");
         assertEquals(1.6, actualGPSTrackData.kilometerSpeeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
 
-        List<GPSPositionData> positions = actualGPSTrackData.gpsPositions();
+        List<GPSPosition> positions = actualGPSTrackData.gpsPositions();
         assertEquals(2, positions.size());
-        GPSPositionData position1 = positions.getFirst();
+        GPSPosition position1 = positions.getFirst();
         assertEquals(firstTime, position1.timestamp());
         assertEquals(0.0, position1.latitude());
         assertEquals(0.0, position1.longitude());
-        assertTrue(position1.altitude().isEmpty(), "No elevation set for wp1 in this test");
+        assertNull(position1.altitude(), "No elevation set for wp1 in this test");
 
-        GPSPositionData position2 = positions.get(1);
+        GPSPosition position2 = positions.get(1);
         assertEquals(Instant.MIN, position2.timestamp());
         assertEquals(0.1, position2.latitude());
         assertEquals(0.2, position2.longitude());
-        assertTrue(position2.altitude().isEmpty());
+        assertNull(position2.altitude());
     }
 }
