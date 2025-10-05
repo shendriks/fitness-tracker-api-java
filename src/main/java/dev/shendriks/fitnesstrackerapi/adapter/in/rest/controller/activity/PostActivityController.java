@@ -73,7 +73,7 @@ public class PostActivityController {
         ActivityCreateRequestDTO request
     ) {
         ActivityCreationData activityCreationData = activityMapper.toActivityCreationData(request);
-        ActivityDetails activity = forCreatingAnActivity.saveActivityForUser(user.id(), activityCreationData);
+        ActivityDetails activity = forCreatingAnActivity.saveManualActivityForUser(user.id(), activityCreationData);
         ActivityDetailsResponseDTO activityResponse = activityMapper.toActivityDetailsResponse(activity);
 
         return ResponseEntity.ok(activityResponse);

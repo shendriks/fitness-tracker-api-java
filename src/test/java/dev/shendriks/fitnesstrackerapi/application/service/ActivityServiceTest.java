@@ -118,7 +118,7 @@ class ActivityServiceTest {
     }
 
     @Test
-    void saveActivityForUser_publishesActivitySavedEvent() {
+    void saveManualActivityForUser_publishesManualActivitySavedEvent() {
         ActivityCreationData creationData = ActivityCreationData
             .builder()
             .activityType(ActivityType.CYCLING)
@@ -148,7 +148,7 @@ class ActivityServiceTest {
         when(speedCalculator.calculateSpeed(Distance.ofMeters(15000.0), Duration.ofSeconds(1800L)))
             .thenReturn(averageSpeed);
 
-        ActivityDetails actualActivity = service.saveActivityForUser(userId, creationData);
+        ActivityDetails actualActivity = service.saveManualActivityForUser(userId, creationData);
 
         assertEquals(activity, actualActivity);
         ArgumentCaptor<Object> eventCaptor = ArgumentCaptor.forClass(Object.class);

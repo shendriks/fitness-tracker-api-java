@@ -47,6 +47,7 @@ public class ActivityService implements
 
     /**
      * Returns the number of activities belonging to the given user.
+     * 
      * @param userId the owner of the activities
      */
     @Override
@@ -55,7 +56,8 @@ public class ActivityService implements
     }
 
     /**
-     * Lists all activities for the given user ordered by repository defaults.
+     * Lists all activities for the given user.
+     * 
      * @param userId the owner of the activities
      * @return list of activities without full GPS details
      */
@@ -66,6 +68,7 @@ public class ActivityService implements
 
     /**
      * Returns the full details for a user's activity or throws if not found.
+     * 
      * @param userId the owner of the activity
      * @param activityId the activity ULID
      * @return activity with GPS details
@@ -79,14 +82,15 @@ public class ActivityService implements
     }
 
     /**
-     * Persists a new activity for the user based on provided summary data.
+     * Persists a new manual activity entry for the user based on provided summary data.
      * Calculates average speed and emits an ActivitySavedEvent.
+     * 
      * @param userId owner of the new activity
      * @param activityCreationData summary metrics and metadata
      * @return the persisted activity with details
      */
     @Override
-    public ActivityDetails saveActivityForUser(UserId userId, ActivityCreationData activityCreationData) {
+    public ActivityDetails saveManualActivityForUser(UserId userId, ActivityCreationData activityCreationData) {
         Speed averageSpeed = speedCalculator.calculateSpeed(
             activityCreationData.distance(),
             activityCreationData.duration()
@@ -98,6 +102,7 @@ public class ActivityService implements
 
     /**
      * Updates an existing activity for the user and emits an ActivityUpdatedEvent.
+     * 
      * @param userId owner of the activity
      * @param activityUlid identifier of the activity to update
      * @param activityUpdateData fields to update
@@ -111,8 +116,9 @@ public class ActivityService implements
     }
 
     /**
-     * Processes an uploaded GPX file, generates preview image, and saves a new activity.
+     * Processes an uploaded GPX file, generates a preview image of the GPX track and saves a new activity.
      * Always cleans up temporary files and emits an ActivitySavedEvent.
+     * 
      * @param userId owner of the new activity
      * @param activityUploadData upload payload containing file and metadata
      * @return the persisted activity with derived metrics and preview image
@@ -140,6 +146,7 @@ public class ActivityService implements
 
     /**
      * Deletes a user's activity and emits an ActivityDeletedEvent.
+     * 
      * @param userId owner of the activity
      * @param activityUlid identifier of the activity to delete
      */

@@ -34,6 +34,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
     /**
      * Adds the user to the specified challenge, publishing a ChallengeJoinedEvent and updating completion.
      * No-op if the user is already a participant.
+     * 
      * @param userId the user to join
      * @param challengeUlid the challenge identifier
      * @throws ChallengeNotFoundException if the challenge does not exist
@@ -56,6 +57,7 @@ public class ChallengeJoinLeaveService implements LeaveChallengeUseCase, JoinCha
     /**
      * Removes the user from the specified challenge, publishing a ChallengeLeftEvent
      * and deleting any associated trophy if necessary. No-op if the user is not a participant.
+     * 
      * @param userId the user to remove
      * @param challengeUlid the challenge identifier
      * @throws ChallengeNotFoundException if the challenge does not exist

@@ -13,12 +13,25 @@ import org.springframework.stereotype.Repository;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Adapter that aggregates activity statistics for a user via JPA projections.
+ *
+ * <p>Provides total and per-activity-type aggregations over all time or within a time range.</p>
+ */
 @Repository
 @AllArgsConstructor
 public class ActivityAggregationJpaRepositoryAdapter implements ForAggregatingActivities {
     private final ActivityAggregationProjectionRepository repository;
     private final ActivityAggregationMapper mapper;
 
+    /**
+     * Aggregates activity metrics for a user within the provided time range.
+     *
+     * @param userId the user to aggregate for
+     * @param from start of the time window (inclusive)
+     * @param to end of the time window (exclusive)
+     * @return a map with total and per-type aggregations
+     */
     @Override
     public ActivityAggregationMap aggregateForUserInTimeRange(UserId userId, Instant from, Instant to) {
         ActivityAggregationDbProjection totalProjection = repository.aggregateForUserInTimeRange(userId.value(), from, to);
@@ -26,6 +39,12 @@ public class ActivityAggregationJpaRepositoryAdapter implements ForAggregatingAc
         return mapper.toActivityAggregationMap(totalProjection, byTypeProjections);
     }
 
+    /**
+     * Aggregates activity metrics for a user over all available data.
+     *
+     * @param userId the user to aggregate for
+     * @return a map with total and per-type aggregations
+     */
     @Override
     public ActivityAggregationMap aggregateForUser(UserId userId) {
         ActivityAggregationDbProjection totalProjection = repository.aggregateForUser(userId.value());
