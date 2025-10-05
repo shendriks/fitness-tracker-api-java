@@ -31,12 +31,12 @@ public class MilestoneCompletionUpdateService {
     private final TrophyManagementService trophyManagementService;
 
     /**
-         * Recalculates completion for all milestones for the given user and updates
-         * trophies and emits events when milestones become complete or incomplete.
-         *
-         * @param userId the user identifier
-         */
-        public void updateAllMilestoneCompletionsForUser(UserId userId) {
+     * Recalculates completion for all milestones for the given user and updates
+     * trophies and emits events when milestones become complete or incomplete.
+     *
+     * @param userId the user identifier
+     */
+    public void updateAllMilestoneCompletionsForUser(UserId userId) {
         List<Milestone> milestones = forAccessingMilestones.findAllWithCompletedByUser(userId);
         ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUser(userId);
 

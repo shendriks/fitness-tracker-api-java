@@ -33,12 +33,12 @@ public class ChallengeCompletionUpdateService {
     private final TrophyManagementService trophyManagementService;
 
     /**
-         * Recalculates completion for all current challenges the user participates in
-         * and updates their progress accordingly.
-         *
-         * @param userId the user identifier
-         */
-        public void updateAllChallengeCompletionsForUser(UserId userId) {
+     * Recalculates completion for all current challenges the user participates in
+     * and updates their progress accordingly.
+     *
+     * @param userId the user identifier
+     */
+    public void updateAllChallengeCompletionsForUser(UserId userId) {
         List<ChallengeParticipation> challengeParticipations = forAccessingChallengeParticipations.findCurrentByUser(userId);
 
         for (ChallengeParticipation challengeParticipation : challengeParticipations) {
@@ -47,13 +47,13 @@ public class ChallengeCompletionUpdateService {
     }
 
     /**
-         * Recalculates completion for a single participation and updates state.
-         * Emits ChallengeCompletedEvent or ChallengeBecameIncompleteEvent accordingly
-         * and manages trophies.
-         *
-         * @param challengeParticipation the participation to update
-         */
-        public void updateChallengeCompletion(ChallengeParticipation challengeParticipation) {
+     * Recalculates completion for a single participation and updates state.
+     * Emits ChallengeCompletedEvent or ChallengeBecameIncompleteEvent accordingly
+     * and manages trophies.
+     *
+     * @param challengeParticipation the participation to update
+     */
+    public void updateChallengeCompletion(ChallengeParticipation challengeParticipation) {
         Challenge challenge = challengeParticipation.challenge();
         UserId userId = challengeParticipation.userId();
 

@@ -14,6 +14,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+/**
+ * Application event listener that creates user-facing notifications for various domain events
+ * (activities, challenges, milestones, and trophies).
+ */
 @Component
 @AllArgsConstructor
 @Transactional
@@ -23,6 +27,11 @@ public class NotificationCreatorListener {
     private final ForAccessingMilestones forAccessingMilestones;
     private final ForAccessingActivities forAccessingActivities;
 
+    /**
+     * Creates a notification when a user joins a challenge.
+     *
+     * @param event the ChallengeJoinedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -39,6 +48,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user leaves a challenge.
+     *
+     * @param event the ChallengeLeftEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -52,6 +66,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user completes a challenge.
+     *
+     * @param event the ChallengeCompletedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -66,6 +85,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user completes a milestone.
+     *
+     * @param event the MilestoneCompletedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -80,6 +104,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user saves a new activity.
+     *
+     * @param event the ActivitySavedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -94,6 +123,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user updates an activity.
+     *
+     * @param event the ActivityUpdatedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -108,6 +142,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user deletes an activity.
+     *
+     * @param event the ActivityDeletedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -121,6 +160,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user unlocks a trophy.
+     *
+     * @param event the TrophyUnlockedEvent
+     */
     @EventListener
     @Synchronized
     @Async
@@ -134,6 +178,11 @@ public class NotificationCreatorListener {
         forAccessingNotifications.save(notification);
     }
 
+    /**
+     * Creates a notification when a user loses a previously unlocked trophy.
+     *
+     * @param event the TrophyLostEvent
+     */
     @EventListener
     @Synchronized
     @Async

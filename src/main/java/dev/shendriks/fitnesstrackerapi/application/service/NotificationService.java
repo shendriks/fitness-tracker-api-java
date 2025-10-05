@@ -20,24 +20,24 @@ public class NotificationService implements ListAllNotificationsUseCase, ListNew
     private final ForAccessingNotifications forAccessingNotifications;
 
     /**
-         * Lists all notifications for the user ordered by newest first.
-         *
-         * @param userId the user identifier
-         * @return list of notifications
-         */
-        public List<Notification> findAllByUser(UserId userId) {
+     * Lists all notifications for the user ordered by newest first.
+     *
+     * @param userId the user identifier
+     * @return list of notifications
+     */
+    public List<Notification> findAllByUser(UserId userId) {
         return forAccessingNotifications.findAllByUser(userId);
     }
 
     /**
-         * Lists notifications for the user that have an ULID greater than the given one.
-         * Useful for polling incremental updates.
-         *
-         * @param userId the user identifier
-         * @param ulid the lower ULID bound (exclusive)
-         * @return list of notifications newer than the provided ULID
-         */
-        public List<Notification> findAllByUserSince(UserId userId, NotificationUlid ulid) {
+     * Lists notifications for the user that have an ULID greater than the given one.
+     * Useful for polling incremental updates.
+     *
+     * @param userId the user identifier
+     * @param ulid the lower ULID bound (exclusive)
+     * @return list of notifications newer than the provided ULID
+     */
+    public List<Notification> findAllByUserSince(UserId userId, NotificationUlid ulid) {
         return forAccessingNotifications.findByUserSinceUlid(userId, ulid);
     }
 }

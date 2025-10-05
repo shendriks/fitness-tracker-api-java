@@ -12,6 +12,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+/**
+ * Application event listener that reacts to activity lifecycle events to refresh
+ * milestone and challenge completion for the affected user.
+ */
 @Component
 @AllArgsConstructor
 @Transactional
@@ -19,6 +23,11 @@ public class ActivityListener {
     private final ChallengeCompletionUpdateService challengeCompletionUpdateService;
     private final MilestoneCompletionUpdateService milestoneCompletionUpdateService;
 
+    /**
+     * Handles ActivitySavedEvent by recalculating milestone and challenge completions for the user.
+     *
+     * @param event the activity saved event containing the user context
+     */
     @EventListener
     @Synchronized
     @Async
@@ -27,6 +36,11 @@ public class ActivityListener {
         challengeCompletionUpdateService.updateAllChallengeCompletionsForUser(event.userId());
     }
 
+    /**
+     * Handles ActivityUpdatedEvent by recalculating milestone and challenge completions for the user.
+     *
+     * @param event the activity updated event containing the user context
+     */
     @EventListener
     @Synchronized
     @Async
@@ -35,6 +49,11 @@ public class ActivityListener {
         challengeCompletionUpdateService.updateAllChallengeCompletionsForUser(event.userId());
     }
 
+    /**
+     * Handles ActivityDeletedEvent by recalculating milestone and challenge completions for the user.
+     *
+     * @param event the activity deleted event containing the user context
+     */
     @EventListener
     @Synchronized
     @Async
