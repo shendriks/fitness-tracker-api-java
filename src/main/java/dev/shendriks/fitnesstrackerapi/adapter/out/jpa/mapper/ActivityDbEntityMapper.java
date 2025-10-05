@@ -6,7 +6,6 @@ import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.KilometerSpeedDbEn
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
-import lombok.Setter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,8 +22,12 @@ import java.util.List;
     imports = {Distance.class, Duration.class}
 )
 public abstract class ActivityDbEntityMapper {
-    @Setter(onMethod_ = {@Autowired})
     private Clock clock;
+
+    @Autowired
+    public void setClock(Clock clock) {
+        this.clock = clock;
+    }
 
     public abstract ActivityDetails toActivityDetails(ActivityDbEntity activityDbEntity);
 
