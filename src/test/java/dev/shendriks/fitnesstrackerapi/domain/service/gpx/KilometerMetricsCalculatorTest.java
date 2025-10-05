@@ -4,7 +4,6 @@ import dev.shendriks.fitnesstrackerapi.domain.exception.WayPointsNotSortedExcept
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
-import dev.shendriks.fitnesstrackerapi.domain.value.KilometerMetrics;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import dev.shendriks.fitnesstrackerapi.infrastructure.Constant;
 import io.jenetics.jpx.WayPoint;
@@ -34,22 +33,20 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_withTooFewPoints_returnsEmptyLists() {
-        KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(List.of());
+    void calculateKilometerSpeeds_withTooFewPoints_returnsEmptyLists() {
+        List<Speed> actualSpeeds = calculator.calculateKilometerSpeeds(List.of());
 
-        assertTrue(actualMetrics.speeds().isEmpty());
-        assertTrue(actualMetrics.paces().isEmpty());
+        assertTrue(actualSpeeds.isEmpty());
 
-        actualMetrics = calculator.calculateKilometerMetrics(List.of(
+        actualSpeeds = calculator.calculateKilometerSpeeds(List.of(
             WayPoint.builder().lat(0).lon(0).time(Instant.parse("2025-08-22T10:00:00Z")).build()
         ));
 
-        assertTrue(actualMetrics.speeds().isEmpty());
-        assertTrue(actualMetrics.paces().isEmpty());
+        assertTrue(actualSpeeds.isEmpty());
     }
 
     @Test
-    void calculateKilometerMetrics_createsFullKmSegmentAndSignificantPartial() {
+    void calculateKilometerSpeeds_createsFullKmSegmentAndSignificantPartial() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(10);
         Instant t2 = t0.plusSeconds(40); // first segment end
@@ -72,22 +69,17 @@ class KilometerMetricsCalculatorTest {
         when(speedCalculator.calculateSpeed(Distance.ofMeters(150.0), Duration.ofSeconds(30L)))
             .thenReturn(Speed.ofMetersPerSecond(150.0 / 30.0));
 
-        KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
+        List<Speed> actualMetrics = calculator.calculateKilometerSpeeds(wayPoints);
 
-        assertEquals(2, actualMetrics.speeds().size(), "Expected two speed entries");
-        assertEquals(2, actualMetrics.paces().size(), "Expected two pace entries");
+        assertEquals(2, actualMetrics.size(), "Expected two speed entries");
 
         // Segment 1: distance 1100m over 40s
         double expectedSpeed1 = 1100.0 / 40.0;
-        double expectedPace1 = 1000.0 / expectedSpeed1;
-        assertEquals(expectedSpeed1, actualMetrics.speeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(expectedPace1, actualMetrics.paces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
+        assertEquals(expectedSpeed1, actualMetrics.getFirst().toMetersPerSecond(), Constant.EPSILON);
 
         // Segment 2 (partial): distance 150m over 30s
         double expectedSpeed2 = 150.0 / 30.0;
-        double expectedPace2 = 1000.0 / expectedSpeed2;
-        assertEquals(expectedSpeed2, actualMetrics.speeds().get(1).toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(expectedPace2, actualMetrics.paces().get(1).toSecondsPerKilometer(), Constant.EPSILON);
+        assertEquals(expectedSpeed2, actualMetrics.get(1).toMetersPerSecond(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
             .calculateSpeed(Distance.ofMeters(1100.0), Duration.ofSeconds(40L));
@@ -97,7 +89,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_skipsPointsWithoutTimeAndUsesLastTimedPointForDistance() {
+    void calculateKilometerSpeeds_skipsPointsWithoutTimeAndUsesLastTimedPointForDistance() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t2 = t0.plusSeconds(60);
         WayPoint wayPoint0 = WayPoint.builder().lat(0.0).lon(0.0).time(t0).build();
@@ -109,15 +101,12 @@ class KilometerMetricsCalculatorTest {
         when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60L)))
             .thenReturn(Speed.ofMetersPerSecond(1000.0 / 60.0));
 
-        KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
+        List<Speed> actualMetrics = calculator.calculateKilometerSpeeds(wayPoints);
 
-        assertEquals(1, actualMetrics.speeds().size(), "Expected one speed entry");
-        assertEquals(1, actualMetrics.paces().size(), "Expected one pace entry");
+        assertEquals(1, actualMetrics.size(), "Expected one speed entry");
 
         double expectedSpeed = 1000.0 / 60.0;
-        double expectedPace = 1000.0 / expectedSpeed;
-        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(expectedPace, actualMetrics.paces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
+        assertEquals(expectedSpeed, actualMetrics.getFirst().toMetersPerSecond(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
             .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(60L));
@@ -125,7 +114,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_withExactlyOneKmBoundary_addsOneSegment() {
+    void calculateKilometerSpeeds_withExactlyOneKmBoundary_addsOneSegment() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.plusSeconds(20);
         Instant t2 = t0.plusSeconds(50);
@@ -139,15 +128,12 @@ class KilometerMetricsCalculatorTest {
         when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50L)))
             .thenReturn(Speed.ofMetersPerSecond(1000.0 / 50.0));
 
-        KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
+        List<Speed> actualMetrics = calculator.calculateKilometerSpeeds(wayPoints);
 
-        assertEquals(1, actualMetrics.speeds().size(), "Expected one speed entry");
-        assertEquals(1, actualMetrics.paces().size(), "Expected one pace entry");
+        assertEquals(1, actualMetrics.size(), "Expected one speed entry");
 
         double expectedSpeed = 1000.0 / 50.0;
-        double expectedPace = 1000.0 / expectedSpeed;
-        assertEquals(expectedSpeed, actualMetrics.speeds().getFirst().toMetersPerSecond(), Constant.EPSILON);
-        assertEquals(expectedPace, actualMetrics.paces().getFirst().toSecondsPerKilometer(), Constant.EPSILON);
+        assertEquals(expectedSpeed, actualMetrics.getFirst().toMetersPerSecond(), Constant.EPSILON);
 
         verify(speedCalculator, times(1))
             .calculateSpeed(Distance.ofMeters(1000.0), Duration.ofSeconds(50L));
@@ -155,7 +141,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_withZeroDuration_resultsInZeroSpeedAndPace() {
+    void calculateKilometerSpeeds_withZeroDuration_resultsInZeroSpeedAndPace() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         WayPoint wayPoint0 = WayPoint.builder().lat(0.0).lon(0.0).time(t0).build();
         WayPoint wayPoint1 = WayPoint.builder().lat(0.0).lon(0.001).time(t0).build();
@@ -165,12 +151,10 @@ class KilometerMetricsCalculatorTest {
         when(speedCalculator.calculateSpeed(Distance.ofMeters(1000.0), Duration.zero()))
             .thenReturn(Speed.zero());
 
-        KilometerMetrics actualMetrics = calculator.calculateKilometerMetrics(wayPoints);
+        List<Speed> actualMetrics = calculator.calculateKilometerSpeeds(wayPoints);
 
-        assertEquals(1, actualMetrics.speeds().size(), "Expected one speed entry");
-        assertEquals(1, actualMetrics.paces().size(), "Expected one pace entry");
-        assertEquals(0.0, actualMetrics.speeds().getFirst().toMetersPerSecond(), "Expected zero speed");
-        assertEquals(0.0, actualMetrics.paces().getFirst().toSecondsPerKilometer(), "Expected zero pace");
+        assertEquals(1, actualMetrics.size(), "Expected one speed entry");
+        assertEquals(0.0, actualMetrics.getFirst().toMetersPerSecond(), "Expected zero speed");
 
         verify(speedCalculator, times(1))
             .calculateSpeed(Distance.ofMeters(1000.0), Duration.zero());
@@ -178,7 +162,7 @@ class KilometerMetricsCalculatorTest {
     }
 
     @Test
-    void calculateKilometerMetrics_withWayPointsNotSortedByTime_throwsWayPointsNotSortedException() {
+    void calculateKilometerSpeeds_withWayPointsNotSortedByTime_throwsWayPointsNotSortedException() {
         Instant t0 = Instant.parse("2025-08-22T10:00:00Z");
         Instant t1 = t0.minusSeconds(1);
 
@@ -186,6 +170,6 @@ class KilometerMetricsCalculatorTest {
         WayPoint wayPoint1 = WayPoint.builder().lat(0.0).lon(0.001).time(t1).build();
         List<WayPoint> wayPoints = List.of(wayPoint0, wayPoint1);
 
-        assertThrows(WayPointsNotSortedException.class, () -> calculator.calculateKilometerMetrics(wayPoints));
+        assertThrows(WayPointsNotSortedException.class, () -> calculator.calculateKilometerSpeeds(wayPoints));
     }
 }

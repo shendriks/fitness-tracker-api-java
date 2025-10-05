@@ -1,5 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity;
 
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.converter.SpeedConverter;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +24,11 @@ public class GPSPositionDbEntity {
     private Double latitude;
     @Column(nullable = false)
     private Double longitude;
-    @Column()
+    @Column
     private Double altitude;
+    @Column
+    @Convert(converter = SpeedConverter.class)
+    private Speed speed;
     @ManyToOne
     @JoinColumn(name = "activity_id", nullable = false)
     private ActivityDbEntity activity;

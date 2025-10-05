@@ -18,7 +18,6 @@ public record ActivityDetailsResponseDTO(
     Instant startDate,
     List<GPSPositionResponseDTO> gpsPositions,
     List<Double> kilometerSpeeds,
-    List<SpeedAtTimeResponseDTO> speeds,
     Double elevationGain,
     Long motionTime,
     Long pausingTime

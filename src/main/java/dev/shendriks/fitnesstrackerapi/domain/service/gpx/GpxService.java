@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
+import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.Metadata;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ public class GpxService {
     private final GpxMetricsCalculator metricsCalculator;
     private final KilometerMetricsCalculator kilometerMetricsCalculator;
     private final SpeedCalculator speedCalculator;
+    private final DistanceCalculator distanceCalculator;
 
     private static Optional<String> getName(GPX gpx) {
         return gpx
@@ -41,39 +44,66 @@ public class GpxService {
         List<WayPoint> wayPoints = waypointProcessor.getAllWayPointsOrderedByTime(gpx);
         Optional<Instant> gpxTime = gpx.getMetadata().flatMap(Metadata::getTime).or(() -> wayPoints.getFirst().getTime());
         String name = getName(gpx).orElse("");
-
-        Distance distance = metricsCalculator.calculateDistance(wayPoints);
-        Duration duration = metricsCalculator.calculateDuration(wayPoints);
-        Speed speed = speedCalculator.calculateSpeed(distance, duration);
-        Distance elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
         MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
-        List<SpeedAtTime> speeds = metricsCalculator.calculateSpeeds(wayPoints);
+        List<Speed> kilometerSpeeds = kilometerMetricsCalculator.calculateKilometerSpeeds(wayPoints);
 
-        KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
-        List<Speed> kilometerSpeeds = kilometerMetrics.speeds();
+        Distance overallDistance = Distance.zero();
+        Duration overallDuration = Duration.zero();
+        Distance elevationGain = Distance.zero();
+        List<GPSPosition> gpsPositions = new ArrayList<>();
 
-        List<GPSPosition> gpsPositions = wayPoints
-            .stream()
-            .map((wp) -> new GPSPosition(
-                wp.getTime().orElse(Instant.MIN),
-                wp.getLatitude().doubleValue(),
-                wp.getLongitude().doubleValue(),
-                wp.getElevation().flatMap(elevation -> Optional.of(elevation.doubleValue())).orElse(null)
-            ))
-            .toList();
+        WayPoint previousPoint = null;
+        for (WayPoint wayPoint : wayPoints) {
+            Speed speed = Speed.zero();
+            if (previousPoint != null) {
+                Distance distance = distanceCalculator.calculateDistance(previousPoint, wayPoint);
+                Duration duration = calculateDuration(previousPoint, wayPoint);
+                speed = speedCalculator.calculateSpeed(distance, duration);
+                overallDistance.add(distance);
+                overallDuration.add(duration);
+                if (wayPoint.getElevation().isPresent() && previousPoint.getElevation().isPresent()) {
+                    double diff = wayPoint.getElevation().get().doubleValue() - previousPoint.getElevation().get().doubleValue();
+                    if (diff > 0) {
+                        elevationGain.addMeters(diff);
+                    }
+                }
+            }
+
+            gpsPositions.add(new GPSPosition(
+                wayPoint.getTime().orElse(Instant.MIN),
+                wayPoint.getLatitude().doubleValue(),
+                wayPoint.getLongitude().doubleValue(),
+                wayPoint.getElevation().flatMap(elevation -> Optional.of(elevation.doubleValue())).orElse(null),
+                speed
+            ));
+
+            previousPoint = wayPoint;
+        }
+        
+        Speed averageSpeed = speedCalculator.calculateSpeed(overallDistance, overallDuration);
 
         return new GPSTrackData(
             name,
             gpxTime,
-            distance,
-            duration,
-            speed,
+            overallDistance,
+            overallDuration,
+            averageSpeed,
             elevationGain,
             motionAndPausingTime.motionTime(),
             motionAndPausingTime.pausingTime(),
             kilometerSpeeds,
-            speeds,
             gpsPositions
         );
+    }
+
+    private Duration calculateDuration(WayPoint point1, WayPoint point2) {
+        Instant t0 = point1.getTime().orElse(null);
+        Instant t1 = point2.getTime().orElse(null);
+
+        if (t0 == null || t1 == null) {
+            return Duration.zero();
+        }
+
+        return Duration.ofJavaDuration(java.time.Duration.between(t0, t1));
     }
 }

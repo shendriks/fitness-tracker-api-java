@@ -89,14 +89,6 @@ public class ActivityDbEntity {
         fetch = FetchType.LAZY
     )
     private List<KilometerSpeedDbEntity> kilometerSpeeds = List.of();
-    @Builder.Default
-    @OneToMany(
-        mappedBy = "activity",
-        orphanRemoval = true,
-        cascade = CascadeType.PERSIST,
-        fetch = FetchType.LAZY
-    )
-    private List<SpeedAtTimeDbEntity> speeds = List.of();
     @Convert(converter = Base64ImageDataConverter.class)
     @Lob
     @Column(columnDefinition = "BLOB")

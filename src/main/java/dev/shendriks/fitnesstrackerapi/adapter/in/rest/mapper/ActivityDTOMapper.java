@@ -42,6 +42,6 @@ public abstract class ActivityDTOMapper {
     public abstract ActivityUploadData toActivityUploadData(ActivityUploadRequestDTO request);
 
     public Double mapSpeed(Speed speed) {
-        return speed.toMetersPerSecond();
+        return speed != null ? speed.toMetersPerSecond() : null;
     }
 }

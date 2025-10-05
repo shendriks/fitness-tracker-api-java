@@ -22,7 +22,6 @@ public record ActivityDetails(
     Instant startDate,
     List<GPSPosition> gpsPositions,
     List<Speed> kilometerSpeeds,
-    List<SpeedAtTime> speeds,
     Distance elevationGain,
     Duration motionTime,
     Duration pausingTime

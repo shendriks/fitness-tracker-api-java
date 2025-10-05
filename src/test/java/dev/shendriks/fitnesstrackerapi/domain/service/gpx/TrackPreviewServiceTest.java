@@ -2,6 +2,7 @@ package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.GPSPosition;
 import dev.shendriks.fitnesstrackerapi.domain.value.ImageData;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
@@ -21,7 +22,7 @@ class TrackPreviewServiceTest {
      * @return GPSPosition with the given latitude and longitude. Altitude is always null.
      */
     private static GPSPosition pos(double lat, double lon) {
-        return new GPSPosition(Instant.EPOCH, lat, lon, null);
+        return new GPSPosition(Instant.EPOCH, lat, lon, null, Speed.zero());
     }
 
     /**

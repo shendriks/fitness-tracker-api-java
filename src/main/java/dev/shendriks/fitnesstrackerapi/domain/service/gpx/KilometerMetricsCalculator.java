@@ -2,7 +2,10 @@ package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.exception.WayPointsNotSortedException;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
-import dev.shendriks.fitnesstrackerapi.domain.value.*;
+import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
+import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
+import dev.shendriks.fitnesstrackerapi.domain.value.Pace;
+import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,12 +28,11 @@ public class KilometerMetricsCalculator {
     /**
      * Precondition: wayPoints are sorted by timestamp
      */
-    public KilometerMetrics calculateKilometerMetrics(List<WayPoint> wayPoints) {
+    public List<Speed> calculateKilometerSpeeds(List<WayPoint> wayPoints) {
         List<Speed> kilometerSpeeds = new ArrayList<>();
-        List<Pace> kilometerPaces = new ArrayList<>();
 
         if (wayPoints.size() < 2) {
-            return new KilometerMetrics(kilometerSpeeds, kilometerPaces);
+            return new ArrayList<>();
         }
 
         Distance kilometerSegmentDistance = Distance.zero();
@@ -56,10 +58,8 @@ public class KilometerMetricsCalculator {
                 Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
                     .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
                 Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
-                Pace segmentPace = segmentSpeed.toPace();
 
                 kilometerSpeeds.add(segmentSpeed);
-                kilometerPaces.add(segmentPace);
 
                 kilometerSegmentDistance = Distance.zero();
                 kilometerSegmentStartTime = kilometerSegmentEndTime;
@@ -76,9 +76,8 @@ public class KilometerMetricsCalculator {
             Pace segmentPace = segmentSpeed.toPace();
 
             kilometerSpeeds.add(segmentSpeed);
-            kilometerPaces.add(segmentPace);
         }
 
-        return new KilometerMetrics(kilometerSpeeds, kilometerPaces);
+        return kilometerSpeeds;
     }
 }
