@@ -7,6 +7,11 @@ import lombok.Builder;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Domain aggregate representing a recorded activity including full GPS details.
+ *
+ * <p>Extends Activity by including GPS positions, kilometer speeds, elevation gain, and motion/pausing time.</p>
+ */
 @Builder
 public record ActivityDetails(
     ActivityId id,

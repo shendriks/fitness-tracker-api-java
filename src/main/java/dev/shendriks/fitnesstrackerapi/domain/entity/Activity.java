@@ -6,6 +6,11 @@ import lombok.Builder;
 
 import java.time.Instant;
 
+/**
+ * Domain aggregate representing a recorded activity without the full GPS track.
+ *
+ * <p>Contains summary metrics and metadata such as title, description, and timestamps.</p>
+ */
 @Builder
 public record Activity(
     ActivityId id,

@@ -13,6 +13,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Renders a simple PNG preview image of a GPS track using an equirectangular projection.
+ *
+ * <p>Scales and centers the path to the desired canvas size and returns raw image bytes
+ * wrapped in ImageData.</p>
+ */
 @Slf4j
 @Service
 public class RoutePreviewService {

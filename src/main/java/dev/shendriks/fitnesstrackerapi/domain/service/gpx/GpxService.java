@@ -14,6 +14,12 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Domain service for parsing GPX input and deriving track metrics and positions.
+ *
+ * <p>Reads GPX files using jenetics/jpx and computes distances, durations,
+ * speeds, elevation gain, split metrics, and motion/pausing times.</p>
+ */
 @Service
 @AllArgsConstructor
 public class GpxService {
@@ -32,6 +38,12 @@ public class GpxService {
                 .flatMap(Track::getName));
     }
 
+    /**
+     * Parses the given GPX file and returns derived metrics and data points.
+     * @param file path to a GPX 1.1 file
+     * @return aggregated track data including positions and split metrics
+     * @throws IOException if the file cannot be read or parsed
+     */
     public GPSTrackData processGpxFile(Path file) throws IOException {
         GPX gpx = GPX.read(file);
         return calculateMetrics(gpx);

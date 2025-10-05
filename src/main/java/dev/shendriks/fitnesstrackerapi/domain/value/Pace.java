@@ -2,6 +2,9 @@ package dev.shendriks.fitnesstrackerapi.domain.value;
 
 import lombok.EqualsAndHashCode;
 
+/**
+ * Value object representing running pace measured in seconds per kilometer.
+ */
 @EqualsAndHashCode
 public class Pace {
     private final Double paceInSecondsPerKilometer;
