@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Application service that evaluates milestone completion for a user and emits events.
+ *
+ * <p>Aggregates activity data, computes completion per milestone, and manages trophies.</p>
+ */
 @Service
 @AllArgsConstructor
 public class MilestoneCompletionUpdateService {
@@ -25,7 +30,13 @@ public class MilestoneCompletionUpdateService {
     private final AchievementCompletionCalculator achievementCompletionCalculator;
     private final TrophyManagementService trophyManagementService;
 
-    public void updateAllMilestoneCompletionsForUser(UserId userId) {
+    /**
+         * Recalculates completion for all milestones for the given user and updates
+         * trophies and emits events when milestones become complete or incomplete.
+         *
+         * @param userId the user identifier
+         */
+        public void updateAllMilestoneCompletionsForUser(UserId userId) {
         List<Milestone> milestones = forAccessingMilestones.findAllWithCompletedByUser(userId);
         ActivityAggregationMap activityAggregationMap = forAggregatingActivities.aggregateForUser(userId);
 

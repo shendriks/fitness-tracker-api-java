@@ -9,11 +9,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Application service for listing a user's current challenge participations.
+ */
 @Service
 @AllArgsConstructor
 public class ChallengeParticipationService implements ListChallengeParticipationsUseCase {
     private final ForAccessingChallengeParticipations forAccessingChallengeParticipations;
 
+    /**
+     * Returns current challenge participations for the user.
+     *
+     * @param userId the user identifier
+     * @return list of participations
+     */
     @Override
     public List<ChallengeParticipation> getAllChallengeParticipations(UserId userId) {
         return forAccessingChallengeParticipations.findCurrentByUser(userId);

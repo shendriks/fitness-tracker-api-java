@@ -19,6 +19,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+/**
+ * Application service for user registration and profile updates.
+ *
+ * <p>Handles validation (email uniqueness, password checks), delegates persistence
+ * to ForAccessingUsers, and publishes user-related events.</p>
+ */
 @Service
 @AllArgsConstructor
 public class UserService implements SignUpUseCase, UpdateUserUseCase {
@@ -26,6 +32,13 @@ public class UserService implements SignUpUseCase, UpdateUserUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Registers a new user account and publishes a UserSignedUpEvent.
+     *
+     * @param userSignupData the signup payload
+     * @return the created user
+     * @throws EmailAlreadyRegisteredException if the email is already in use
+     */
     @Override
     public User signUp(UserSignupData userSignupData) {
         if (forAccessingUsers.existsByEmail(userSignupData.email())) {
@@ -37,6 +50,17 @@ public class UserService implements SignUpUseCase, UpdateUserUseCase {
         return user;
     }
 
+    /**
+     * Updates a user's profile after validating current password and email uniqueness.
+     * Publishes a UserUpdatedEvent on success.
+     *
+     * @param userId the user identifier
+     * @param userUpdateData the changes to apply
+     * @return the updated user
+     * @throws UserNotFoundException if user does not exist
+     * @throws CurrentPasswordDoesntMatchException if the supplied current password is wrong
+     * @throws EmailAlreadyRegisteredException if the new email is already taken
+     */
     @Override
     public User updateUser(UserId userId, UserUpdateData userUpdateData) {
         User user = forAccessingUsers.findById(userId).orElseThrow(UserNotFoundException::new);

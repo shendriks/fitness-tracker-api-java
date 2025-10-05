@@ -11,13 +11,23 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+/**
+ * Application service coordinating trophy creation and deletion based on achievement state.
+ */
 @Service
 @AllArgsConstructor
 public class TrophyManagementService {
     private final ApplicationEventPublisher eventPublisher;
     private final ForAccessingTrophies forAccessingTrophies;
 
-    public void createTrophyIfNotExists(UserId userId, AchievementId achievementId) {
+    /**
+         * Creates a trophy for the user and achievement if it does not already exist.
+         * Publishes a TrophyUnlockedEvent when created.
+         *
+         * @param userId the user identifier
+         * @param achievementId the achievement identifier
+         */
+        public void createTrophyIfNotExists(UserId userId, AchievementId achievementId) {
         if (forAccessingTrophies.existsByUserAndAchievement(userId, achievementId)) {
             return;
         }
@@ -25,12 +35,26 @@ public class TrophyManagementService {
         eventPublisher.publishEvent(new TrophyUnlockedEvent(userId, trophy.id()));
     }
 
-    public void deleteTrophyIfExists(UserId userId, AchievementId achievementId) {
+    /**
+         * Deletes the trophy for the given user and achievement if it exists.
+         * Publishes a TrophyLostEvent when removed.
+         *
+         * @param userId the user identifier
+         * @param achievementId the achievement identifier
+         */
+        public void deleteTrophyIfExists(UserId userId, AchievementId achievementId) {
         forAccessingTrophies.deleteIfNotExistsByUserAndAchievement(userId, achievementId);
         eventPublisher.publishEvent(new TrophyLostEvent(userId));
     }
 
-    public void deleteTrophyIfExists(UserId userId, AchievementUlid achievementUlid) {
+    /**
+         * Deletes the trophy for the given user and achievement ULID if it exists.
+         * Publishes a TrophyLostEvent when removed.
+         *
+         * @param userId the user identifier
+         * @param achievementUlid the achievement ULID
+         */
+        public void deleteTrophyIfExists(UserId userId, AchievementUlid achievementUlid) {
         forAccessingTrophies.deleteIfNotExistsByUserAndAchievement(userId, achievementUlid);
         eventPublisher.publishEvent(new TrophyLostEvent(userId));
     }
