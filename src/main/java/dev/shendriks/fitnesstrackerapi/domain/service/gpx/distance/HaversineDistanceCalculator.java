@@ -2,13 +2,19 @@ package dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance;
 
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import io.jenetics.jpx.WayPoint;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class HaversineDistanceCalculator implements DistanceCalculator {
     public static final int EARTH_RADIUS_IN_METERS = 6371000;
 
     @Override
+    @Cacheable("distances")
     public Distance calculateDistance(WayPoint p1, WayPoint p2) {
         return calculateDistance(
             p1.getLatitude().doubleValue(),
@@ -26,5 +32,11 @@ public class HaversineDistanceCalculator implements DistanceCalculator {
             * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Distance.ofMeters(EARTH_RADIUS_IN_METERS * c);
+    }
+
+    @CacheEvict(value = "distances", allEntries = true)
+    @Scheduled(fixedRate = 15 * 60 * 1000)
+    public void emptyDistancesCache() {
+        log.info("emptying distances cache");
     }
 }

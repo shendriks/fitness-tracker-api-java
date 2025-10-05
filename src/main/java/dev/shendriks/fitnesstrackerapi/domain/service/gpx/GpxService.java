@@ -47,6 +47,7 @@ public class GpxService {
         Speed speed = speedCalculator.calculateSpeed(distance, duration);
         Distance elevationGain = metricsCalculator.calculateElevationGain(wayPoints);
         MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
+        List<SpeedAtTime> speeds = metricsCalculator.calculateSpeeds(wayPoints);
 
         KilometerMetrics kilometerMetrics = kilometerMetricsCalculator.calculateKilometerMetrics(wayPoints);
         List<Speed> kilometerSpeeds = kilometerMetrics.speeds();
@@ -71,6 +72,7 @@ public class GpxService {
             motionAndPausingTime.motionTime(),
             motionAndPausingTime.pausingTime(),
             kilometerSpeeds,
+            speeds,
             gpsPositions
         );
     }

@@ -1,15 +1,13 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
-import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
-import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
-import dev.shendriks.fitnesstrackerapi.domain.value.MotionAndPausingTime;
-import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
+import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,14 +22,13 @@ public class GpxMetricsCalculator {
             return Distance.zero();
         }
 
-        Distance distance = Distance.zero();
+        Distance overallDistance = Distance.zero();
         for (var i = 1; i < points.size(); i++) {
-            distance.add(distanceCalculator.calculateDistance(
-                points.get(i - 1),
-                points.get(i)));
+            Distance distance = distanceCalculator.calculateDistance(points.get(i - 1), points.get(i));
+            overallDistance.add(distance);
         }
 
-        return distance;
+        return overallDistance;
     }
 
     public Duration calculateDuration(List<WayPoint> points) {
@@ -96,5 +93,26 @@ public class GpxMetricsCalculator {
             .motionTime(totalMotionTime)
             .pausingTime(totalPausingTime)
             .build();
+    }
+    
+    public List<SpeedAtTime> calculateSpeeds(List<WayPoint> points) {
+        List<WayPoint> pointsWithTime = points.stream().filter(p -> p.getTime().isPresent()).toList();
+        List<SpeedAtTime> speeds = new ArrayList<>();
+        
+        for (int i = 0; i < pointsWithTime.size() - 1; i++) {
+            WayPoint wayPoint1 = pointsWithTime.get(i);
+            WayPoint wayPoint2 = pointsWithTime.get(i + 1);
+
+            Instant time1 = wayPoint1.getTime().orElseThrow();
+            Instant time2 = wayPoint2.getTime().orElseThrow();
+
+            Duration timeBetweenPoints = Duration.ofJavaDuration(java.time.Duration.between(time1, time2));
+            Distance distance = distanceCalculator.calculateDistance(wayPoint1, wayPoint2);
+            Speed speed = speedCalculator.calculateSpeed(distance, timeBetweenPoints);
+
+            speeds.add(new SpeedAtTime(time2, speed));
+        }
+        
+        return speeds;
     }
 }

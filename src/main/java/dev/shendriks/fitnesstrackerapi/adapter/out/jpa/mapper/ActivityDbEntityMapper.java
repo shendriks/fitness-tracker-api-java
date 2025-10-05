@@ -3,6 +3,7 @@ package dev.shendriks.fitnesstrackerapi.adapter.out.jpa.mapper;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.ActivityDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.GPSPositionDbEntity;
 import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.KilometerSpeedDbEntity;
+import dev.shendriks.fitnesstrackerapi.adapter.out.jpa.entity.SpeedAtTimeDbEntity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
@@ -41,6 +42,7 @@ public abstract class ActivityDbEntityMapper {
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "averageSpeed", source = "averageSpeed")
     @Mapping(target = "kilometerSpeeds", ignore = true)
+    @Mapping(target = "speeds", ignore = true)
     @Mapping(target = "elevationGain", ignore = true)
     @Mapping(target = "motionTime", ignore = true)
     @Mapping(target = "pausingTime", ignore = true)
@@ -82,6 +84,18 @@ public abstract class ActivityDbEntityMapper {
                     .speed(speed)
                     .build())
                 .peek((speedDbEntity) -> speedDbEntity.setActivity(activity))
+                .toList()
+        );
+        activity.setSpeeds(
+            gpsTrackData
+                .speeds()
+                .stream()
+                .map(speedAtTime -> SpeedAtTimeDbEntity
+                    .builder()
+                    .speed(speedAtTime.speed())
+                    .timestamp(speedAtTime.timestamp())
+                    .build())
+                .peek((speedAtTimeDbEntity) -> speedAtTimeDbEntity.setActivity(activity))
                 .toList()
         );
         activity.setTrackPreviewImage(imageData);
