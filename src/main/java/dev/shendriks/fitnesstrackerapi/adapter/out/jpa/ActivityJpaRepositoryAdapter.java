@@ -42,7 +42,7 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     }
 
     @Override
-    public ActivityDetails saveForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed) {
+    public ActivityDetails saveManualActivityForUser(UserId userId, ActivityCreationData activityCreationData, Speed averageSpeed) {
         ActivityDbEntity entity = activityMapper.toActivityDbEntity(activityCreationData, averageSpeed);
         UserDbEntity user = userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new);
         entity.setUser(user);
@@ -68,13 +68,13 @@ public class ActivityJpaRepositoryAdapter implements ForAccessingActivities {
     }
 
     @Override
-    public ActivityDetails saveForUser(
+    public ActivityDetails saveUploadedActivityForUser(
         UserId userId,
         ActivityUploadData activityUploadData,
         GPSTrackData gpsTrackData,
-        ImageData imageData
+        ImageData trackPreview
     ) {
-        ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData, imageData);
+        ActivityDbEntity activityDbEntry = activityMapper.toActivityDbEntity(activityUploadData, gpsTrackData, trackPreview);
         activityDbEntry.setUser(userRepository.findById(userId.value()).orElseThrow(UserNotFoundException::new));
         activityDbEntityRepository.save(activityDbEntry);
         return activityMapper.toActivityDetails(activityDbEntry);

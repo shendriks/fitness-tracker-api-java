@@ -15,17 +15,17 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class RoutePreviewService {
+public class TrackPreviewService {
     /**
-     * Creates a PNG image that previews the route described by the given GPS positions, using equirectangular
+     * Creates a PNG image that previews the track described by the given GPS positions, using equirectangular
      * projection.
      *
      * @param positions List of GPS positions containing latitude and longitude coordinates that define the track
-     * @param width     The width of the output image in pixels
-     * @param height    The height of the output image in pixels
+     * @param width The width of the output image in pixels
+     * @param height The height of the output image in pixels
      * @return ImageData containing the PNG image bytes of the rendered track preview, or null if an error occurred
      */
-    public ImageData createPreview(List<GPSPositionData> positions, int width, int height) {
+    public ImageData createTrackPreview(List<GPSPositionData> positions, int width, int height) {
         if (positions == null || positions.size() < 2) {
             throw new IllegalArgumentException("At least two GPS positions are required to render a route preview");
         }

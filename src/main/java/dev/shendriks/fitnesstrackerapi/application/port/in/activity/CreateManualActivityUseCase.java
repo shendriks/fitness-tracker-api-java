@@ -4,6 +4,6 @@ import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.value.ActivityCreationData;
 import dev.shendriks.fitnesstrackerapi.domain.value.UserId;
 
-public interface CreateActivityUseCase {
-    ActivityDetails saveActivityForUser(UserId userId, ActivityCreationData activityCreationData);
+public interface CreateManualActivityUseCase {
+    ActivityDetails saveManualActivityForUser(UserId userId, ActivityCreationData activityCreationData);
 }
