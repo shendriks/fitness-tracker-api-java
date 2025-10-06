@@ -34,11 +34,4 @@ straightforward.
 * Bad, because recomputing speed with new algorithms requires updating positions or a migration rather than swapping a
   series
 
-### Notes on Implementation
-
-* GPSPosition already contains a speed attribute; import/mapping writes speed into the same row as the position
-* Mapper: ActivityDbEntityMapper maps GPSPosition.speed() to GPSPositionDbEntity.speed
-* For derived metrics, aggregate calculations (e.g., average speed, kilometer splits) can still be computed from the
-  persisted values
-
 Decision date: 2025-10-05
