@@ -55,7 +55,7 @@ public class GetCurrentUserControllerTest {
             .andExpect(status().isUnauthorized())
             .andExpect(content().json("""
                 {
-                  "message": "Invalid access token",
+                  "message": "An error occurred",
                   "errors": ["Invalid access token"]
                 }
                 """

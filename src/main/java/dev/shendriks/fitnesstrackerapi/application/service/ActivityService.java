@@ -4,6 +4,7 @@ import dev.shendriks.fitnesstrackerapi.application.event.ActivityDeletedEvent;
 import dev.shendriks.fitnesstrackerapi.application.event.ActivitySavedEvent;
 import dev.shendriks.fitnesstrackerapi.application.event.ActivityUpdatedEvent;
 import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundException;
+import dev.shendriks.fitnesstrackerapi.application.exception.InvalidGPXFileException;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.*;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
@@ -17,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.io.InvalidObjectException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -100,7 +101,10 @@ public class ActivityService implements
             } finally {
                 Files.deleteIfExists(tempFile);
             }
-        } catch (IOException e) {
+        } catch (InvalidObjectException e) {
+            log.info("Error parsing GPX file", e);
+            throw new InvalidGPXFileException();
+        } catch (Throwable e) {
             log.error("Failed to process uploaded gpx file", e);
             throw new RuntimeException(e);
         }

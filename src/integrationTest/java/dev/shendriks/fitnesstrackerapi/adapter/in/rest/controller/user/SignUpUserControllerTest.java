@@ -81,7 +81,7 @@ public class SignUpUserControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().json("""
                 {
-                    "message": "Email already registered",
+                    "message": "An error occurred",
                     "errors": ["Email already registered"]
                 }
                 """));

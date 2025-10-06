@@ -1,27 +1,15 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto;
 
-import lombok.Getter;
-
 import java.util.Collections;
 import java.util.List;
 
-@Getter
-public class ApiErrorResponseDTO {
-    private final String message;
-    private final List<String> errors;
-
-    public ApiErrorResponseDTO(String message, List<String> errors) {
-        this.message = message;
-        this.errors = errors;
-    }
+public record ApiErrorResponseDTO(String message, List<String> errors) {
 
     public ApiErrorResponseDTO(String message) {
-        this.message = "An error occurred";
-        errors = Collections.singletonList(message);
+        this("An error occurred", Collections.singletonList(message));
     }
 
     public ApiErrorResponseDTO(String message, String error) {
-        this.message = message;
-        errors = Collections.singletonList(error);
+        this(message, Collections.singletonList(error));
     }
 }

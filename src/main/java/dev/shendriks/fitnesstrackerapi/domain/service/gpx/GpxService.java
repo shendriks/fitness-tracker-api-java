@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
-import dev.shendriks.fitnesstrackerapi.application.exception.InvalidGPXFileException;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.GPX;
@@ -39,13 +38,8 @@ public class GpxService {
     }
 
     public GPSTrackData processGpxFile(Path file) throws IOException {
-        try {
-            GPX gpx = GPX.read(file);
-            return calculateMetrics(gpx);
-        } catch (Throwable e) {
-            log.info("Error parsing GPX file", e);
-            throw new InvalidGPXFileException();
-        }
+        GPX gpx = GPX.read(file);
+        return calculateMetrics(gpx);
     }
 
     private GPSTrackData calculateMetrics(GPX gpx) {
