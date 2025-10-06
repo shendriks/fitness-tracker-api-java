@@ -85,18 +85,6 @@ public abstract class ActivityDbEntityMapper {
                 .peek((speedDbEntity) -> speedDbEntity.setActivity(activity))
                 .toList()
         );
-//        activity.setSpeeds(
-//            gpsTrackData
-//                .speeds()
-//                .stream()
-//                .map(speedAtTime -> SpeedAtTimeDbEntity
-//                    .builder()
-//                    .speed(speedAtTime.speed())
-//                    .timestamp(speedAtTime.timestamp())
-//                    .build())
-//                .peek((speedAtTimeDbEntity) -> speedAtTimeDbEntity.setActivity(activity))
-//                .toList()
-//        );
         activity.setTrackPreviewImage(imageData);
         return activity;
     }

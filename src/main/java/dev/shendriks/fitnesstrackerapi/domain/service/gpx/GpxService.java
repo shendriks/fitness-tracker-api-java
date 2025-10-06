@@ -79,7 +79,7 @@ public class GpxService {
 
             previousPoint = wayPoint;
         }
-        
+
         Speed averageSpeed = speedCalculator.calculateSpeed(overallDistance, overallDuration);
 
         return new GPSTrackData(
