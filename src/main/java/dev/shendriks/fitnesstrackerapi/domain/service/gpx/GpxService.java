@@ -1,5 +1,6 @@
 package dev.shendriks.fitnesstrackerapi.domain.service.gpx;
 
+import dev.shendriks.fitnesstrackerapi.application.exception.InvalidGPXFileException;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.*;
 import io.jenetics.jpx.GPX;
@@ -7,6 +8,7 @@ import io.jenetics.jpx.Metadata;
 import io.jenetics.jpx.Track;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class GpxService {
@@ -36,8 +39,13 @@ public class GpxService {
     }
 
     public GPSTrackData processGpxFile(Path file) throws IOException {
-        GPX gpx = GPX.read(file);
-        return calculateMetrics(gpx);
+        try {
+            GPX gpx = GPX.read(file);
+            return calculateMetrics(gpx);
+        } catch (Throwable e) {
+            log.info("Error parsing GPX file", e);
+            throw new InvalidGPXFileException();
+        }
     }
 
     private GPSTrackData calculateMetrics(GPX gpx) {

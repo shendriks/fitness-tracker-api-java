@@ -26,35 +26,35 @@ import java.util.List;
 @Slf4j
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(InvalidDataException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponseDTO handle(InvalidDataException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(ObjectNotFoundException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponseDTO handle(ObjectNotFoundException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ApiErrorResponseDTO handle(AuthenticationException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(NotImplementedException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public ApiErrorResponseDTO handle(NotImplementedException e) {
         return new ApiErrorResponseDTO(e.getMessage());
     }
 
-    @ExceptionHandler(Throwable.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiErrorResponseDTO handle(Throwable e) {
         log.error("Unexpected error", e);
-        return new ApiErrorResponseDTO("Internal server error");
+        return new ApiErrorResponseDTO("Internal server error. Please try again later or contact support if the problem persists.");
     }
 
     @Override

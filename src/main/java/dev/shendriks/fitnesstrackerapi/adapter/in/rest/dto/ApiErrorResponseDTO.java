@@ -16,7 +16,7 @@ public class ApiErrorResponseDTO {
     }
 
     public ApiErrorResponseDTO(String message) {
-        this.message = message;
+        this.message = "An error occurred";
         errors = Collections.singletonList(message);
     }
 
