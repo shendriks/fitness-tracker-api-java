@@ -114,12 +114,14 @@ class GpxServiceTest {
         assertEquals(5.0, position1.longitude());
         assertNotNull(position1.altitude());
         assertEquals(100.5, position1.altitude());
+        assertNull(position1.speed());
 
         GPSPosition position2 = positions.get(1);
         assertEquals(Instant.parse("2025-08-22T10:05:10Z"), position2.timestamp());
         assertEquals(50.001, position2.latitude());
         assertEquals(5.002, position2.longitude());
         assertEquals(123.6, position2.altitude());
+        assertEquals(4.1152, position2.speed().toMetersPerSecond(), Constant.EPSILON);
     }
 
     @Test
@@ -174,11 +176,14 @@ class GpxServiceTest {
         assertEquals(0.0, position1.latitude());
         assertEquals(0.0, position1.longitude());
         assertNull(position1.altitude(), "No elevation set for wp1 in this test");
+        assertNull(position1.speed());
 
         GPSPosition position2 = positions.get(1);
         assertEquals(Instant.MIN, position2.timestamp());
         assertEquals(0.1, position2.latitude());
         assertEquals(0.2, position2.longitude());
         assertNull(position2.altitude());
+        assertNotNull(position2.speed());
+        assertEquals(1.6667, position2.speed().toMetersPerSecond(), Constant.EPSILON);
     }
 }
