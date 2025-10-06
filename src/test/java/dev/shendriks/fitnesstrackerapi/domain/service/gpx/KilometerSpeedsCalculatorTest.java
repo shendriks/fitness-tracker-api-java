@@ -20,16 +20,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class KilometerMetricsCalculatorTest {
+class KilometerSpeedsCalculatorTest {
     @Mock
     DistanceCalculator distanceCalculator;
     @Mock
     SpeedCalculator speedCalculator;
-    private KilometerMetricsCalculator calculator;
+    private KilometerSpeedsCalculator calculator;
 
     @BeforeEach
     void setUp() {
-        calculator = new KilometerMetricsCalculator(distanceCalculator, speedCalculator);
+        calculator = new KilometerSpeedsCalculator(distanceCalculator, speedCalculator);
     }
 
     @Test

@@ -21,7 +21,7 @@ import java.util.Optional;
 public class GpxService {
     private final GpxWaypointProcessor waypointProcessor;
     private final GpxMetricsCalculator metricsCalculator;
-    private final KilometerMetricsCalculator kilometerMetricsCalculator;
+    private final KilometerSpeedsCalculator kilometerSpeedsCalculator;
     private final SpeedCalculator speedCalculator;
     private final DistanceCalculator distanceCalculator;
 
@@ -45,7 +45,7 @@ public class GpxService {
         Optional<Instant> gpxTime = gpx.getMetadata().flatMap(Metadata::getTime).or(() -> wayPoints.getFirst().getTime());
         String name = getName(gpx).orElse("");
         MotionAndPausingTime motionAndPausingTime = metricsCalculator.calculateMotionAndPausingTime(wayPoints);
-        List<Speed> kilometerSpeeds = kilometerMetricsCalculator.calculateKilometerSpeeds(wayPoints);
+        List<Speed> kilometerSpeeds = kilometerSpeedsCalculator.calculateKilometerSpeeds(wayPoints);
 
         Distance overallDistance = Distance.zero();
         Duration overallDuration = Duration.zero();

@@ -4,7 +4,6 @@ import dev.shendriks.fitnesstrackerapi.domain.exception.WayPointsNotSortedExcept
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.distance.DistanceCalculator;
 import dev.shendriks.fitnesstrackerapi.domain.value.Distance;
 import dev.shendriks.fitnesstrackerapi.domain.value.Duration;
-import dev.shendriks.fitnesstrackerapi.domain.value.Pace;
 import dev.shendriks.fitnesstrackerapi.domain.value.Speed;
 import io.jenetics.jpx.WayPoint;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class KilometerMetricsCalculator {
+public class KilometerSpeedsCalculator {
     public static final int MINIMUM_SIGNIFICANT_DISTANCE_IN_METERS = 100;
     private final DistanceCalculator distanceCalculator;
     private final SpeedCalculator speedCalculator;
@@ -73,7 +72,6 @@ public class KilometerMetricsCalculator {
             Duration segmentDuration = Duration.ofJavaDuration(java.time.Duration
                 .between(kilometerSegmentStartTime, kilometerSegmentEndTime));
             Speed segmentSpeed = speedCalculator.calculateSpeed(kilometerSegmentDistance, segmentDuration);
-            Pace segmentPace = segmentSpeed.toPace();
 
             kilometerSpeeds.add(segmentSpeed);
         }
