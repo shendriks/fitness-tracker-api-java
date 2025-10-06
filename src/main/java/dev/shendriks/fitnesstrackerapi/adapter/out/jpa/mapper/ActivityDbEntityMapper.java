@@ -69,6 +69,7 @@ public abstract class ActivityDbEntityMapper {
                     .longitude(GPSPosition.longitude())
                     .timestamp(GPSPosition.timestamp())
                     .altitude(GPSPosition.altitude())
+                    .speed(GPSPosition.speed())
                     .build())
                 .peek((position) -> position.setActivity(activity))
                 .toList()

@@ -6,6 +6,7 @@ public record GPSPositionResponseDTO(
     Instant timestamp,
     Double latitude,
     Double longitude,
-    Double altitude
+    Double altitude,
+    Double speed
 ) {
 }

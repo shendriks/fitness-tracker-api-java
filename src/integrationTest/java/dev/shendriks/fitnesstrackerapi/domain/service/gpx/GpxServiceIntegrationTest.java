@@ -88,8 +88,10 @@ class GpxServiceIntegrationTest {
         assertEquals(Instant.parse("2025-08-23T10:01:45Z"), positions.get(1).timestamp());
         assertNotNull(positions.get(0).altitude());
         assertEquals(50.0, positions.get(0).altitude());
+        assertNull(positions.get(0).speed());
         assertNotNull(positions.get(1).altitude());
         assertEquals(60.0, positions.get(1).altitude());
+        assertEquals(10.007543398010288, positions.get(1).speed().toMetersPerSecond(), Constant.EPSILON);
 
         // Basic metric sanity checks with tolerances
         assertTrue(

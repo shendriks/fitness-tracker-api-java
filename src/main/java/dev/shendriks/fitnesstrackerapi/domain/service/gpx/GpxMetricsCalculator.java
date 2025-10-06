@@ -19,54 +19,6 @@ public class GpxMetricsCalculator {
     private final DistanceCalculator distanceCalculator;
     private final SpeedCalculator speedCalculator;
 
-    public Distance calculateDistance(List<WayPoint> points) {
-        if (points == null || points.size() < 2) {
-            return Distance.zero();
-        }
-
-        Distance distance = Distance.zero();
-        for (var i = 1; i < points.size(); i++) {
-            distance.add(distanceCalculator.calculateDistance(
-                points.get(i - 1),
-                points.get(i)));
-        }
-
-        return distance;
-    }
-
-    public Duration calculateDuration(List<WayPoint> points) {
-        Instant firstTime = points.getFirst().getTime().orElse(null);
-        Instant lastTime = points.getLast().getTime().orElse(null);
-
-        if (firstTime == null || lastTime == null) {
-            return Duration.zero();
-        }
-
-        return Duration.ofJavaDuration(java.time.Duration.between(firstTime, lastTime));
-    }
-
-    public Distance calculateElevationGain(List<WayPoint> points) {
-        if (points == null || points.size() < 2) {
-            return Distance.zero();
-        }
-
-        List<Double> nonEmptyElevations = points
-            .stream()
-            .filter(p -> p.getElevation().isPresent())
-            .map(p -> p.getElevation().get().doubleValue())
-            .toList();
-
-        Distance elevationGain = Distance.zero();
-        for (var i = 1; i < nonEmptyElevations.size(); i++) {
-            Double elevation1 = nonEmptyElevations.get(i - 1);
-            Double elevation2 = nonEmptyElevations.get(i);
-            double elevationDiff = elevation2 - elevation1;
-            elevationGain.addMeters(elevationDiff > 0 ? elevationDiff : 0.0);
-        }
-
-        return elevationGain;
-    }
-
     public MotionAndPausingTime calculateMotionAndPausingTime(List<WayPoint> points) {
         Duration totalMotionTime = Duration.zero();
         Duration totalPausingTime = Duration.zero();

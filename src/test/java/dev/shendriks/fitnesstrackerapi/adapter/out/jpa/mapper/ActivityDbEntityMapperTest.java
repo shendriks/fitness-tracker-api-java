@@ -178,8 +178,8 @@ class ActivityDbEntityMapperTest {
             .pausingTime(Duration.zero())
             .kilometerSpeeds(List.of())
             .gpsPositions(List.of(
-                new GPSPosition(Instant.parse("2025-08-01T09:30:00Z"), 0.0, 1.0, null),
-                new GPSPosition(Instant.parse("2025-08-01T09:45:00Z"), 0.1, 1.1, 10.0)
+                new GPSPosition(Instant.parse("2025-08-01T09:30:00Z"), 0.0, 1.0, null, Speed.ofMetersPerSecond(12.34)),
+                new GPSPosition(Instant.parse("2025-08-01T09:45:00Z"), 0.1, 1.1, 10.0, Speed.ofMetersPerSecond(23.45))
             ))
             .build();
         ImageData imageData = new ImageData("some-dummy-data".getBytes());
@@ -203,10 +203,12 @@ class ActivityDbEntityMapperTest {
         assertEquals(0.0, actualActivityDbEntity.getGpsPositions().getFirst().getLatitude());
         assertEquals(1.0, actualActivityDbEntity.getGpsPositions().getFirst().getLongitude());
         assertNull(actualActivityDbEntity.getGpsPositions().getFirst().getAltitude());
+        assertEquals(12.34, actualActivityDbEntity.getGpsPositions().getFirst().getSpeed().toMetersPerSecond(), Constant.EPSILON);
 
         assertEquals(0.1, actualActivityDbEntity.getGpsPositions().get(1).getLatitude());
         assertEquals(1.1, actualActivityDbEntity.getGpsPositions().get(1).getLongitude());
         assertEquals(10.0, actualActivityDbEntity.getGpsPositions().get(1).getAltitude());
+        assertEquals(23.45, actualActivityDbEntity.getGpsPositions().get(1).getSpeed().toMetersPerSecond(), Constant.EPSILON);
     }
 
     @Test
