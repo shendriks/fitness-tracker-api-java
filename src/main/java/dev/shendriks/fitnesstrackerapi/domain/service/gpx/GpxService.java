@@ -54,7 +54,7 @@ public class GpxService {
 
         WayPoint previousPoint = null;
         for (WayPoint wayPoint : wayPoints) {
-            Speed speed = Speed.zero();
+            Speed speed = null;
             if (previousPoint != null) {
                 Distance distance = distanceCalculator.calculateDistance(previousPoint, wayPoint);
                 Duration duration = calculateDuration(previousPoint, wayPoint);
