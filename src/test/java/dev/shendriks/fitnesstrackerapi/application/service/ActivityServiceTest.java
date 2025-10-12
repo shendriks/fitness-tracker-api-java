@@ -304,4 +304,73 @@ class ActivityServiceTest {
         assertEquals(activityUlid, activityDeletedEvent.activityTitle());
         verifyNoMoreInteractions(forAccessingActivities, gpxService);
     }
+
+    @Test
+    void getActivityStatsByUser_delegatesToPortAndReturnsMap() {
+        Instant start = Instant.parse("2024-01-01T00:00:00Z");
+        Instant end = Instant.parse("2025-01-01T00:00:00Z");
+
+        ActivityAggregation total = ActivityAggregation
+            .builder()
+            .count(3L)
+            .totalDistance(Distance.ofMeters(30000.0))
+            .totalDuration(Duration.ofSeconds(7200L))
+            .maxDistance(Distance.ofMeters(15000.0))
+            .maxDuration(Duration.ofSeconds(3600L))
+            .build();
+
+        ActivityTypeAggregation runningAgg = ActivityTypeAggregation
+            .builder()
+            .type(ActivityType.RUNNING)
+            .count(2L)
+            .totalDistance(Distance.ofMeters(20000.0))
+            .totalDuration(Duration.ofSeconds(4800L))
+            .maxDistance(Distance.ofMeters(12000.0))
+            .maxDuration(Duration.ofSeconds(3000L))
+            .build();
+
+        ActivityTypeAggregation cyclingAgg = ActivityTypeAggregation
+            .builder()
+            .type(ActivityType.CYCLING)
+            .count(1L)
+            .totalDistance(Distance.ofMeters(10000.0))
+            .totalDuration(Duration.ofSeconds(2400L))
+            .maxDistance(Distance.ofMeters(10000.0))
+            .maxDuration(Duration.ofSeconds(2400L))
+            .build();
+
+        ActivityAggregationMap expected = ActivityAggregationMap.create(total, List.of(runningAgg, cyclingAgg));
+        when(forAggregatingActivities.aggregateForUserInTimeRange(userId, start, end)).thenReturn(expected);
+
+        ActivityAggregationMap actual = service.getActivityStatsByUser(userId, start, end);
+
+        assertEquals(expected.getTotal(), actual.getTotal());
+        assertEquals(expected.getByType(ActivityType.RUNNING).totalDistance(), actual.getByType(ActivityType.RUNNING).totalDistance());
+        assertEquals(expected.getByType(ActivityType.CYCLING).count(), actual.getByType(ActivityType.CYCLING).count());
+
+        verify(forAggregatingActivities).aggregateForUserInTimeRange(userId, start, end);
+        verifyNoMoreInteractions(forAggregatingActivities);
+        verifyNoMoreInteractions(forAccessingActivities, gpxService, eventPublisher);
+    }
+
+    @Test
+    void getActivityStatsByUser_withNoData_returnsEmptyMap() {
+        Instant start = Instant.parse("2025-01-01T00:00:00Z");
+        Instant end = Instant.parse("2025-02-01T00:00:00Z");
+
+        ActivityAggregationMap empty = ActivityAggregationMap.create(ActivityAggregation.zero(), List.of());
+        when(forAggregatingActivities.aggregateForUserInTimeRange(userId, start, end)).thenReturn(empty);
+
+        ActivityAggregationMap actual = service.getActivityStatsByUser(userId, start, end);
+
+        assertEquals(0L, actual.getTotal().count());
+        assertEquals(Distance.zero(), actual.getTotal().totalDistance());
+        for (ActivityType type : ActivityType.values()) {
+            assertEquals(0L, actual.getByType(type).count());
+        }
+
+        verify(forAggregatingActivities).aggregateForUserInTimeRange(userId, start, end);
+        verifyNoMoreInteractions(forAggregatingActivities);
+        verifyNoMoreInteractions(forAccessingActivities, gpxService, eventPublisher);
+    }
 }

@@ -35,7 +35,7 @@ public class ActivityService implements
     CreateManualActivityUseCase,
     UpdateActivityUseCase,
     UploadActivityUseCase,
-    DeleteActivityUseCase, 
+    DeleteActivityUseCase,
     ShowActivityStatsUseCase {
     public static final int TRACK_PREVIEW_IMAGE_WIDTH = 200;
     public static final int TRACK_PREVIEW_IMAGE_HEIGHT = 150;

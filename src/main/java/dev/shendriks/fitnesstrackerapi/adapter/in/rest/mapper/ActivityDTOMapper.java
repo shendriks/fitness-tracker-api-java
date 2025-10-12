@@ -46,11 +46,11 @@ public abstract class ActivityDTOMapper {
     public Double mapDistance(Distance distance) {
         return distance != null ? distance.toMeters() : null;
     }
-    
+
     public Long mapDuration(Duration duration) {
         return duration != null ? duration.toSeconds() : null;
     }
-    
+
     public Double mapSpeed(Speed speed) {
         return speed != null ? speed.toMetersPerSecond() : null;
     }

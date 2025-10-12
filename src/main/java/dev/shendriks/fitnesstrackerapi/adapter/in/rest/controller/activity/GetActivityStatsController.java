@@ -1,6 +1,5 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.controller.activity;
 
-import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityDetailsResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto.activity.ActivityStatsResponseDTO;
 import dev.shendriks.fitnesstrackerapi.adapter.in.rest.mapper.ActivityDTOMapper;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.ShowActivityStatsUseCase;
