@@ -15,12 +15,24 @@ VALUES ('1st Activity', 'Upload your 1st activity', '01JYZZDSFHYDKDN0WBBMTGRRHR'
        ('Swim 10km in 2025', 'Complete this challenge by swimming 10km in 2025', '01K12K8CJZYT6GQYX3WBZX6C58',  '/images/trophies/swimming-10km.png', 'SWIMMING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Swim 20km in 2025', 'Complete this challenge by swimming 20km in 2025', '01K12K8HJAHRKD5W7DT9DDTEH5',  '/images/trophies/swimming-20km.png', 'SWIMMING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Swim 50km in 2025', 'Complete this challenge by swimming 50km in 2025', '01K12K8N81G3S501P9VHTBV1Z5',  '/images/trophies/swimming-50km.png', 'SWIMMING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 10km in 2025', 'Complete this challenge by walking 10km in 2025', '01K7C2NQDH2Z915ZGWXSVV0S6G',  '/images/trophies/walking-10km.png', 'WALKING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 20km in 2025', 'Complete this challenge by walking 20km in 2025', '01K7C2NXPZSC26FDABT6X4CDZH',  '/images/trophies/walking-20km.png', 'WALKING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 50km in 2025', 'Complete this challenge by walking 50km in 2025', '01K7C2P1ZFX7BS3AZTXVK2QW6C',  '/images/trophies/walking-50km.png', 'WALKING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 10km in 2025', 'Complete this challenge by cycling 10km in 2025', '01K7C2P70Z1GHN1E9B2KSC25RG',  '/images/trophies/cycling-10km.png', 'CYCLING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 20km in 2025', 'Complete this challenge by cycling 20km in 2025', '01K7C2PBR1K4K490VCVQBJB6AS',  '/images/trophies/cycling-20km.png', 'CYCLING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 50km in 2025', 'Complete this challenge by cycling 50km in 2025', '01K7C2PG89DHYH969D9TAH2965',  '/images/trophies/cycling-50km.png', 'CYCLING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Run 10km in 2026', 'Complete this challenge by running 10km in 2026', '01K35VY2M0EN0R552WDYQQQCMK',  '/images/trophies/running-10km', 'RUNNING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Run 20km in 2026', 'Complete this challenge by running 20km in 2026', '01K35VY9TC7CJ5SAHDWFGD408Y',  '/images/trophies/running-20km', 'RUNNING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Run 50km in 2026', 'Complete this challenge by running 50km in 2026', '01K35VYFN84YZJTDBV3RMYZYXV',  '/images/trophies/running-50km', 'RUNNING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Swim 10km in 2026', 'Complete this challenge by swimming 10km in 2026', '01K35VYMVPEDRS8T40W0V3HAXM',  '/images/trophies/swimming-10km.png', 'SWIMMING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
        ('Swim 20km in 2026', 'Complete this challenge by swimming 20km in 2026', '01K35VYXCCKEN1196E504RT75E',  '/images/trophies/swimming-20km.png', 'SWIMMING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-       ('Swim 50km in 2026', 'Complete this challenge by swimming 50km in 2026', '01K35VZ2SATRSPTNN160TY50MA',  '/images/trophies/swimming-50km.png', 'SWIMMING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00');
+       ('Swim 50km in 2026', 'Complete this challenge by swimming 50km in 2026', '01K35VZ2SATRSPTNN160TY50MA',  '/images/trophies/swimming-50km.png', 'SWIMMING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 10km in 2026', 'Complete this challenge by walking 10km in 2026', '01K7CDJ4N806TZJA88MHGN6DKR',  '/images/trophies/walking-10km.png', 'WALKING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 20km in 2026', 'Complete this challenge by walking 20km in 2026', '01K7CDJD1FAEME6A25QYNCQAQK',  '/images/trophies/walking-20km.png', 'WALKING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Walk 50km in 2026', 'Complete this challenge by walking 50km in 2026', '01K7CDJJ7R148EHMAV5TT0DCCV',  '/images/trophies/walking-50km.png', 'WALKING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 10km in 2026', 'Complete this challenge by cycling 10km in 2026', '01K7CDJPNWHC4XY27P0BFMTQP0',  '/images/trophies/cycling-10km.png', 'CYCLING', 'TOTAL_DISTANCE', 10000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 20km in 2026', 'Complete this challenge by cycling 20km in 2026', '01K7CDJTVFYSPMRV3A2VN1VCZP',  '/images/trophies/cycling-20km.png', 'CYCLING', 'TOTAL_DISTANCE', 20000, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
+       ('Cycle 50km in 2026', 'Complete this challenge by cycling 50km in 2026', '01K7CDJZ5E4EYENM499KWQXG88',  '/images/trophies/cycling-50km.png', 'CYCLING', 'TOTAL_DISTANCE', 50000, '2025-01-01 00:00:00', '2025-01-01 00:00:00');
 
 INSERT INTO milestone (id)
 SELECT id FROM achievement WHERE ulid = '01JYZZDSFHYDKDN0WBBMTGRRHR'
@@ -56,6 +68,18 @@ SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE u
 UNION ALL
 SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K12K8N81G3S501P9VHTBV1Z5'
 UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2NQDH2Z915ZGWXSVV0S6G'
+UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2NXPZSC26FDABT6X4CDZH'
+UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2P1ZFX7BS3AZTXVK2QW6C'
+UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2P70Z1GHN1E9B2KSC25RG'
+UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2PBR1K4K490VCVQBJB6AS'
+UNION ALL
+SELECT id, '2025-01-01 00:00:00', '2026-01-01 00:00:00' FROM achievement WHERE ulid = '01K7C2PG89DHYH969D9TAH2965'
+UNION ALL
 SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K35VY2M0EN0R552WDYQQQCMK'
 UNION ALL
 SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K35VY9TC7CJ5SAHDWFGD408Y'
@@ -66,4 +90,16 @@ SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE u
 UNION ALL
 SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K35VYXCCKEN1196E504RT75E'
 UNION ALL
-SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K35VZ2SATRSPTNN160TY50MA';
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K35VZ2SATRSPTNN160TY50MA'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJ4N806TZJA88MHGN6DKR'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJD1FAEME6A25QYNCQAQK'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJJ7R148EHMAV5TT0DCCV'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJPNWHC4XY27P0BFMTQP0'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJTVFYSPMRV3A2VN1VCZP'
+UNION ALL
+SELECT id, '2026-01-01 00:00:00', '2027-01-01 00:00:00' FROM achievement WHERE ulid = '01K7CDJZ5E4EYENM499KWQXG88';
