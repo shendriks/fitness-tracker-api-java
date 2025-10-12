@@ -41,6 +41,16 @@ public abstract class ActivityDTOMapper {
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")
     public abstract ActivityUploadData toActivityUploadData(ActivityUploadRequestDTO request);
 
+    public abstract ActivityStatsResponseDTO toActivityStatsResponse(ActivityAggregationMap map);
+
+    public Double mapDistance(Distance distance) {
+        return distance != null ? distance.toMeters() : null;
+    }
+    
+    public Long mapDuration(Duration duration) {
+        return duration != null ? duration.toSeconds() : null;
+    }
+    
     public Double mapSpeed(Speed speed) {
         return speed != null ? speed.toMetersPerSecond() : null;
     }
