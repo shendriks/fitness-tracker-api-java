@@ -7,6 +7,7 @@ import dev.shendriks.fitnesstrackerapi.application.exception.ActivityNotFoundExc
 import dev.shendriks.fitnesstrackerapi.application.exception.InvalidGPXFileException;
 import dev.shendriks.fitnesstrackerapi.application.port.in.activity.*;
 import dev.shendriks.fitnesstrackerapi.application.port.out.ForAccessingActivities;
+import dev.shendriks.fitnesstrackerapi.application.port.out.ForAggregatingActivities;
 import dev.shendriks.fitnesstrackerapi.domain.entity.Activity;
 import dev.shendriks.fitnesstrackerapi.domain.entity.ActivityDetails;
 import dev.shendriks.fitnesstrackerapi.domain.service.gpx.GpxService;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.InvalidObjectException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -33,11 +35,13 @@ public class ActivityService implements
     CreateManualActivityUseCase,
     UpdateActivityUseCase,
     UploadActivityUseCase,
-    DeleteActivityUseCase {
+    DeleteActivityUseCase,
+    ShowActivityStatsUseCase {
     public static final int TRACK_PREVIEW_IMAGE_WIDTH = 200;
     public static final int TRACK_PREVIEW_IMAGE_HEIGHT = 150;
 
     private final ForAccessingActivities forAccessingActivities;
+    private final ForAggregatingActivities forAggregatingActivities;
     private final ApplicationEventPublisher eventPublisher;
     private final GpxService gpxService;
     private final SpeedCalculator speedCalculator;
@@ -114,5 +118,10 @@ public class ActivityService implements
     public void deleteActivityForUser(UserId userId, ActivityUlid activityUlid) {
         forAccessingActivities.deleteForUser(userId, activityUlid);
         eventPublisher.publishEvent(new ActivityDeletedEvent(userId, activityUlid));
+    }
+
+    @Override
+    public ActivityAggregationMap getActivityStatsByUser(UserId id, Instant start, Instant end) {
+        return forAggregatingActivities.aggregateForUserInTimeRange(id, start, end);
     }
 }

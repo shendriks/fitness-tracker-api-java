@@ -12,8 +12,6 @@ import java.util.List;
 @Mapper(componentModel = "spring", imports = {Duration.class, Distance.class})
 public abstract class ActivityDTOMapper {
     @Mapping(target = "id", source = "ulid.value")
-    @Mapping(target = "duration", expression = "java(activity.duration().toSeconds())")
-    @Mapping(target = "distance", expression = "java(activity.distance().toMeters())")
     @Mapping(target = "averageSpeed", expression = "java(activity.averageSpeed().toMetersPerSecond())")
     @Mapping(target = "trackPreviewImage", expression = "java(activity.trackPreviewImage() != null ? activity.trackPreviewImage().toBase64String() : null)")
     public abstract ActivityResponseDTO toActivityResponse(Activity activity);
@@ -22,8 +20,6 @@ public abstract class ActivityDTOMapper {
     public abstract List<ActivityResponseDTO> toActivityResponses(List<Activity> activities);
 
     @Mapping(target = "id", source = "ulid.value")
-    @Mapping(target = "duration", expression = "java(activity.duration().toSeconds())")
-    @Mapping(target = "distance", expression = "java(activity.distance().toMeters())")
     @Mapping(target = "averageSpeed", expression = "java(activity.averageSpeed().toMetersPerSecond())")
     @Mapping(target = "elevationGain", expression = "java(activity.elevationGain() == null ? null : activity.elevationGain().toMeters())")
     @Mapping(target = "motionTime", expression = "java(activity.motionTime() == null ? null : activity.motionTime().toSeconds())")
@@ -40,6 +36,16 @@ public abstract class ActivityDTOMapper {
 
     @Mapping(target = "activityType", expression = "java(ActivityType.fromString(request.activityType()))")
     public abstract ActivityUploadData toActivityUploadData(ActivityUploadRequestDTO request);
+
+    public abstract ActivityStatsResponseDTO toActivityStatsResponse(ActivityAggregationMap map);
+
+    public Double mapDistance(Distance distance) {
+        return distance != null ? distance.toMeters() : null;
+    }
+
+    public Long mapDuration(Duration duration) {
+        return duration != null ? duration.toSeconds() : null;
+    }
 
     public Double mapSpeed(Speed speed) {
         return speed != null ? speed.toMetersPerSecond() : null;

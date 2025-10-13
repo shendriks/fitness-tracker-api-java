@@ -11,6 +11,7 @@ import java.util.List;
 public class ActivityAggregationMap {
     @Getter
     private final ActivityAggregation total;
+    @Getter
     private final HashMap<ActivityType, ActivityAggregation> byType;
 
     private ActivityAggregationMap(ActivityAggregation total, HashMap<ActivityType, ActivityAggregation> byTypeMap) {
