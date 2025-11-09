@@ -32,9 +32,7 @@ public class LeaveChallengeController {
 
     @Operation(summary = "Leave challenge")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204"
-        ),
+        @ApiResponse(responseCode = "204"),
         @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ApiErrorResponseDTO.class))),
         @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(schema = @Schema(implementation = ApiErrorResponseDTO.class))),
     })

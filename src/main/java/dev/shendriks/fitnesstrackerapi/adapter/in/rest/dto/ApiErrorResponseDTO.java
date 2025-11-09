@@ -1,6 +1,7 @@
 package dev.shendriks.fitnesstrackerapi.adapter.in.rest.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Collections;
 import java.util.List;
 

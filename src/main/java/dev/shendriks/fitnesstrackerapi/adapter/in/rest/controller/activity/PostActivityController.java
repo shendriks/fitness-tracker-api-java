@@ -11,7 +11,6 @@ import dev.shendriks.fitnesstrackerapi.domain.value.ActivityCreationData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -57,17 +56,8 @@ public class PostActivityController {
             required = true,
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ActivityCreateRequestDTO.class),
-                examples = @ExampleObject(value = """
-                        {
-                            "activityType": "running",
-                            "duration": 60,
-                            "title": "Morning Run",
-                            "description": "Some description.",
-                            "distance": 2500,
-                            "startDate": "2025-07-18T21:08:00+02:00"
-                        }
-                    """)))
+                schema = @Schema(implementation = ActivityCreateRequestDTO.class)
+            ))
         @RequestBody
         @Valid
         ActivityCreateRequestDTO request
