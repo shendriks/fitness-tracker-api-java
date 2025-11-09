@@ -10,10 +10,12 @@ import lombok.Builder;
 public record ActivityUpdateRequestDTO(
     @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)
-    @Schema(implementation = ActivityType.class)
+    @Schema(implementation = ActivityType.class, description = "The type of activity", example = "walking")
     String activityType,
     @NotBlank
+    @Schema(description = "The title of the activity", example = "Evening Walk", type = "string")
     String title,
+    @Schema(description = "Optional description of the activity", example = "Walked the dog around the neighborhood.", type = "string")
     String description
 ) {
 }

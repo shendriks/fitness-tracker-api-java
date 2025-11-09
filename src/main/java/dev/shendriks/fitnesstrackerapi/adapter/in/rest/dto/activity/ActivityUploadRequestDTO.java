@@ -13,13 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 public record ActivityUploadRequestDTO(
     @NotBlank
     @ValueOfEnum(enumClass = ActivityType.class)
-    @Schema(implementation = ActivityType.class)
+    @Schema(implementation = ActivityType.class, description = "The type of activity", example = "cycling")
     String activityType,
     @NotBlank
+    @Schema(description = "Title of the activity", example = "Evening Ride", type = "string")
     String title,
+    @Schema(description = "Optional description of the activity", example = "Chill ride along the river.", type = "string")
     String description,
     @NotNull
     @GPXFile
+    @Schema(description = "GPX file containing the recorded track", type = "string", format = "binary")
     MultipartFile gpxFile
 ) {
 }
