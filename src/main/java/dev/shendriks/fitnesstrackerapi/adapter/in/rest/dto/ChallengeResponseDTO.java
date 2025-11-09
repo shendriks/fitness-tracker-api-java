@@ -10,11 +10,11 @@ public record ChallengeResponseDTO(
     String name,
     @Schema(description = "Description of the challenge", example = "Run at least 100 km in January", type = "string")
     String description,
-    @Schema(description = "Start date/time of the challenge (RFC3339)", example = "2023-01-01T00:00:00Z", type = "string", format = "date-time")
+    @Schema(description = "Start timestamp of the challenge (RFC3339)", example = "2023-01-01T00:00:00Z", type = "string", format = "date-time")
     Instant startDate,
-    @Schema(description = "End date/time of the challenge (RFC3339)", example = "2023-01-31T23:59:59Z", type = "string", format = "date-time")
+    @Schema(description = "End timestamp (exclusive) of the challenge (RFC3339)", example = "2023-02-01T00:00:00Z", type = "string", format = "date-time")
     Instant endDate,
-    @Schema(description = "Path or URL to the challenge image", example = "/images/challenges/jan-distance.png", type = "string")
+    @Schema(description = "Path to the challenge image", example = "/images/challenges/jan-distance.png", type = "string")
     String imageFilePath,
     @Schema(description = "Whether the current user has joined this challenge", example = "true", type = "boolean")
     boolean hasUserJoined
