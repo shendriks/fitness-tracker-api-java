@@ -69,14 +69,8 @@ public class PatchActivityController {
             required = true,
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = ActivityUpdateRequestDTO.class),
-                examples = @ExampleObject(value = """
-                        {
-                            "activityType": "running",
-                            "title": "Morning Run",
-                            "description": "Some description."
-                        }
-                    """)))
+                schema = @Schema(implementation = ActivityUpdateRequestDTO.class)
+            ))
         @RequestBody @Valid ActivityUpdateRequestDTO request
     ) {
         ActivityUpdateData activityUpdateData = activityMapper.toActivityUpdateData(request);

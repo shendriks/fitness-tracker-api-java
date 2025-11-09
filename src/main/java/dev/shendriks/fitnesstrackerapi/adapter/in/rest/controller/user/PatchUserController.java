@@ -10,7 +10,6 @@ import dev.shendriks.fitnesstrackerapi.domain.value.UserUpdateData;
 import dev.shendriks.fitnesstrackerapi.infrastructure.openapi.OpenApiTagName;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -63,16 +62,8 @@ public class PatchUserController {
             required = true,
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = UserUpdateRequestDTO.class),
-                examples = @ExampleObject(value = """
-                        {
-                            "name": "John Doe",
-                            "email": "foo@bar.baz",
-                            "currentPassword": "Sup3rS3cr3tPa$$w0rd!",
-                            "newPassword": "An0th3rP4$$w0rd*",
-                            "accountType": "basic"
-                        }
-                    """))
+                schema = @Schema(implementation = UserUpdateRequestDTO.class)
+            )
         )
         UserUpdateRequestDTO request
     ) {
