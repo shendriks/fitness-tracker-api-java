@@ -34,7 +34,7 @@ public record ActivityCreateRequestDTO(
     @NotNull
     String description,
     @NotNull
-    @Schema(description = "The start date of the activity in RFC3339 format", example = "2022-01-01T00:00:00Z", type = "string", format = "date-time")
+    @Schema(description = "The start timestamp of the activity (RFC3339)", example = "2022-01-01T00:00:00Z", type = "string", format = "date-time")
     Instant startDate
 ) {
 }
