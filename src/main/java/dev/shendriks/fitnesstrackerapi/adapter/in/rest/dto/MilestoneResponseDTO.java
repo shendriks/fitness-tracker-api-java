@@ -9,7 +9,7 @@ public record MilestoneResponseDTO(
     String name,
     @Schema(description = "Description of the milestone", example = "Complete 10 activities in total", type = "string")
     String description,
-    @Schema(description = "Path or URL to the milestone image", example = "/images/milestones/10-activities.png", type = "string")
+    @Schema(description = "Path to the milestone image", example = "/images/milestones/10-activities.png", type = "string")
     String imageFilePath,
     @Schema(description = "Whether the user has completed this milestone", example = "false", type = "boolean")
     boolean isCompleted
