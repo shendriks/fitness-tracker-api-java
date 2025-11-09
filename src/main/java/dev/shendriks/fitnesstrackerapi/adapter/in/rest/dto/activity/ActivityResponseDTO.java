@@ -24,7 +24,7 @@ public record ActivityResponseDTO(
     String title,
     @Schema(description = "Description of the activity", example = "Short 5k around the office.", type = "string")
     String description,
-    @Schema(description = "Start date of the activity (RFC3339)", example = "2023-01-01T11:30:00Z", type = "string", format = "date-time")
+    @Schema(description = "Start timestamp of the activity (RFC3339)", example = "2023-01-01T11:30:00Z", type = "string", format = "date-time")
     Instant startDate,
     @Schema(
         description = "Base64-encoded track preview image",
