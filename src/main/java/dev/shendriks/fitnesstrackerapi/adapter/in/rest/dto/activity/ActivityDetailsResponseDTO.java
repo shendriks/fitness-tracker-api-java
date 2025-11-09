@@ -26,7 +26,7 @@ public record ActivityDetailsResponseDTO(
     String title,
     @Schema(description = "Description of the activity", example = "Nice and easy 10k around the park.", type = "string")
     String description,
-    @Schema(description = "Start date of the activity (RFC3339)", example = "2023-01-01T11:00:00Z", type = "string", format = "date-time")
+    @Schema(description = "Start timestamp of the activity (RFC3339)", example = "2023-01-01T11:00:00Z", type = "string", format = "date-time")
     Instant startDate,
     @ArraySchema(schema = @Schema(implementation = GPSPositionResponseDTO.class, description = "Recorded GPS positions for this activity"))
     List<GPSPositionResponseDTO> gpsPositions,
