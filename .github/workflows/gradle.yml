@@ -54,7 +54,7 @@ jobs:
           foo=${{ steps.jacoco.outputs.coverage }} && printf "COVERAGE=%.1f\n" "${foo}e2" >> $GITHUB_ENV
 
       - name: Update dynamic badge gist
-        uses: schneegans/dynamic-badges-action@v1.7.0
+        uses: schneegans/dynamic-badges-action@v1.8.0
         with:
           auth: ${{secrets.GIST_SECRET}}
           gistID: ${{secrets.GIST_ID}}
