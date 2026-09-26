@@ -5,6 +5,7 @@
 ![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fgist.githubusercontent.com%2Fshendriks%2F03eeb6afeb7203a9623921eeb46576b4%2Fraw%2Fcoverage.json)
 
 An API for tracking fitness activities built with Java and Spring Boot.
+Part of the [Fitness Tracker project](https://shendriks.dev/projects/fitness-tracker).
 
 ## What this API does
 This service provides REST endpoints to manage and analyze fitness activities (like runs or rides). Features include:
