@@ -49,4 +49,4 @@ The application will start on port 8080. Open Swagger UI at http://localhost:808
 * [Architecture Decision Log](./docs/adl/adl.md)
 
 ## Note
-⚠️ This project is still in development and is not yet ready for production use. Use at your own risk.
+⚠️ Side-project and self-education experiment. No longer actively developed and not production-ready. Use at your own risk.
