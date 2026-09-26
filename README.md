@@ -20,8 +20,6 @@ ready for production use.** The database used is H2, which is deleted on every r
 
 ## Related projects
 * A Nuxt Frontend: https://github.com/shendriks/fitness-tracker-ui-nuxt - use this as the UI that talks to this API.  
-* A meta repository: https://github.com/shendriks/fitness-tracker - use this to quickly spin up both the API and the 
-  frontend together with docker compose.
 
 ## Run locally (withouth docker)
 ### Prerequisites
@@ -44,9 +42,6 @@ The application will start on port 8080. Open Swagger UI at http://localhost:808
 # Integration and unit tests
 ./gradlew.bat check
 ```
-
-## Run locally with Docker Compose
-To quickly spin up the API and the frontend together with docker compose, use this meta repo: https://github.com/shendriks/fitness-tracker
 
 ## Further Documentation
 * [Architecture Documentation](./docs/architecture.md)
